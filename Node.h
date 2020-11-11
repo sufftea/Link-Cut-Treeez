@@ -63,7 +63,7 @@ public:
     /*
      * Stores graphical representation of the node
     */
-    GraphicsNodeItem * graphics;
+    GraphicsSolidNodeItem * graphics;
 
 
     /*
@@ -125,31 +125,30 @@ public:
     void calculate_depth();
 
     /*
-     * Sets all the child nodes's [relevant_to_parent_pos]
+     * Sets all the child nodes's relevant_to_parent_pos
      * in the tree by traversing them.
      *
      * Ignore the returned value, it is only needed for
      * the function itself.
     */
-    int alighn_graphics_nodes();
+    int align_graphics();
 
 
     /* ========== OPERATIONS FOR DRAWING THE TREE START =========== */
 
     /*
-     * Draws the node and its subtree on the given QGraphics scene [scene], by
-     * traversing the tree.
+     * Traverses the tree and updates the position of each subnode on the scene
      *
      * Each node is placed in respect to its offset relative to the parent [offset],
-     * and the depth of the subtree [solid_depth]. For the first node solid depth must
+     * and its depth [solid_depth]. For the first node solid depth must
      * be equal to zero.
      *
-     * Offset is measured in node widths (offset = 3 ~~ 3 * node_width) and can be used
+     * Offset is measured in node widths (offset = 3 is the same as 3 * node_width_px) and can be used
      * to move the tree horizontaly along the scene for displaying multiple trees.
      *
-     * Should be called for the root node in order to draw the entire solid tree.
+     * Should be called frome the root node in order to draw the entire solid tree.
     */
-    void traverse_and_draw(QGraphicsScene * scene, int offset, int solid_depth = 0);
+    void traverse_and_update_position(int offset, int solid_depth = 0);
 };
 
 

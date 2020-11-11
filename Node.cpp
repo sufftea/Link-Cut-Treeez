@@ -2,14 +2,14 @@
 
 Node::Node(int displayed_value)
 {
-    this->graphics = new GraphicsNodeItem(this, displayed_value);
+    this->graphics = new GraphicsSolidNodeItem(this, displayed_value);
 
     calculate_depth();
 }
 
 Node::Node(Node * parent, int displayed_value)
 {
-    this->graphics = new GraphicsNodeItem(this, displayed_value);
+    this->graphics = new GraphicsSolidNodeItem(this, displayed_value);
     calculate_depth();
 
     this->parent = parent;
@@ -114,49 +114,50 @@ void Node::calculate_depth()
     // maybe I'll use a descendant walkthrough for it.
 }
 
-int Node::alighn_graphics_nodes()
+int Node::align_graphics()
 {
     int offset = 1;
 
     if (this->is_left_child()) {
-        graphics->relative_to_parent_pos = -1;
+        graphics->relative_to_solid_parent_pos = -1;
 
         if (right != nullptr) {
-            graphics->relative_to_parent_pos -= right->alighn_graphics_nodes();
+            graphics->relative_to_solid_parent_pos -= right->align_graphics();
         }
         if (left != nullptr) {
-            offset += left->alighn_graphics_nodes();
+            offset += left->align_graphics();
         }
     } else if (this->is_right_child()) {
-        graphics->relative_to_parent_pos = 1;
+        graphics->relative_to_solid_parent_pos = 1;
 
         if (right != nullptr) {
-            graphics->relative_to_parent_pos += left->alighn_graphics_nodes();
+            graphics->relative_to_solid_parent_pos += left->align_graphics();
         }
         if (left != nullptr) {
-            offset += right->alighn_graphics_nodes();
+            offset += right->align_graphics();
         }
     } else if (this->is_solid_root()) {
         if (right != nullptr) {
-            right->alighn_graphics_nodes();
+            right->align_graphics();
         }
+        this->graphics->relative_to_solid_parent_pos = 0;
         if (left != nullptr) {
-            left->alighn_graphics_nodes();
+            left->align_graphics();
         }
     }
 
     return offset;
 }
 
-void Node::traverse_and_draw(QGraphicsScene *scene, int offset, int solid_depth)
+void Node::traverse_and_update_position(int offset, int solid_depth)
 {
-    this->graphics->update_position(scene, offset, solid_depth);
+    this->graphics->update_position(offset, solid_depth);
 
     if (left != nullptr) {
-        left->traverse_and_draw(scene, offset, solid_depth + 1);
+        left->traverse_and_update_position(offset, solid_depth + 1);
     }
     if (right != nullptr) {
-        right->traverse_and_draw(scene, offset, solid_depth + 1);
+        right->traverse_and_update_position(offset, solid_depth + 1);
     }
 }
 

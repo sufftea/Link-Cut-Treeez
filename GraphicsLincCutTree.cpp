@@ -14,11 +14,11 @@ void GraphicsLinkCutTree::update_scene()
 {
     for (Node * node: tree.nodes) {
         if (node->is_solid_root()) {
-            node->alighn_graphics_nodes();
+            node->align_graphics();
         }
     }
 
-    int offset = 0;
+    int current_offset = 0;
 
     // draw one splay tree and move offset to give enough spase for the next tree
     for (Node * root: tree.nodes) {
@@ -27,16 +27,16 @@ void GraphicsLinkCutTree::update_scene()
         }
 
         if (root->left != nullptr) {
-            offset += root->left->width;
+            current_offset += root->left->width;
         }
-        offset += 1;
+        current_offset += 1;
 
-        root->traverse_and_draw(this->scene, offset);
+        root->traverse_and_update_position(current_offset);
 
         if (root->right != nullptr) {
-            offset += root->right->width;
+            current_offset += root->right->width;
         }
-        offset += 1;
+        current_offset += 1;
     }
 }
 
