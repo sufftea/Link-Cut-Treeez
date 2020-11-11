@@ -48,7 +48,7 @@ private:
         enum Step {
             start_expose_v = 0,
             expose_v,
-            start_expose_u,
+            start_expose_to,
             expose_u,
             link
         };
@@ -57,10 +57,10 @@ private:
         OperationExpose * expose_operation;
 
         Node * v;
-        Node * u;
+        Node * to;
 
     public:
-        OperationLink(Node * v, Node * u);
+        OperationLink(Node * v, Node * to);
         ~OperationLink() override;
 
         bool make_step() override;

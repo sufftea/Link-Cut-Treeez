@@ -30,14 +30,24 @@ void MainWindow::on_pushButton_clicked()
 
     Node * a = tree->nodes[0];
     Node * b = tree->nodes[1];
+    Node * c = tree->nodes[2];
+    Node * d = tree->nodes[3];
+    Node * e = tree->nodes[4];
 
-    tree->start_link(a, b);
-    tree->finish_operation();
+//    tree->start_link(a, b);
+//    tree->finish_operation();
+    tree->link(a, b);
+    tree->link(c, b);
+
+
+
+//    tree->link()
+
 
     ui->labelSequence->setText(Sequence::get_text());
     Sequence::clear();
 
-    tree->start_expose(b);
+    tree->start_expose(c);
 }
 
 void MainWindow::on_pushButton_2_clicked()

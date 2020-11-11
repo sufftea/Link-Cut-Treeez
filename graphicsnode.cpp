@@ -52,8 +52,37 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
     // draw node's parent line
 
     if (this->my_node->is_solid_root()) {
-        // draw the path parent connection
-        // Ideally, make it not just a straight line
+        if (!this->my_node->is_abstract_root()) {
+            // draw the path parent connection
+            // Ideally, make it not just a straight line
+
+            QPointF a = QPoint(0, 0);
+            QPointF b = this->my_node->parent->graphics->pos() - this->pos();
+
+
+            QPoint offset(GraphicsSolidNodeItem::node_width_px / 2,
+                          GraphicsSolidNodeItem::node_width_px / 2);
+
+            a += offset;
+            b += offset;
+
+            QVector2D ab(b.x() - a.x(), b.y() - a.y());
+            QVector2D ba(a.x() - b.x(), a.y() - b.y());
+
+            ab.normalize();
+            ba.normalize();
+
+            ab *= GraphicsSolidNodeItem::node_width_px / 2;
+            ba *= GraphicsSolidNodeItem::node_width_px / 2;
+
+            a += ab.toPoint();
+            b += ba.toPoint();
+
+            QPen red_pen(Qt::red, 4, Qt::DotLine);
+            painter->setPen(red_pen);
+
+            painter->drawLine(QLineF(a, b));
+        }
     } else {
         // draw the edge connecting the node to it's parent
         QPointF a = QPoint(0, 0);
@@ -69,24 +98,18 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
         QVector2D ab(b.x() - a.x(), b.y() - a.y());
         QVector2D ba(a.x() - b.x(), a.y() - b.y());
 
-        qDebug() << "node: " << this->displayed_value;
-        qDebug() << "ab: " << ab;
-
         ab.normalize();
         ba.normalize();
 
         ab *= GraphicsSolidNodeItem::node_width_px / 2;
         ba *= GraphicsSolidNodeItem::node_width_px / 2;
 
-        qDebug() << "ab: " << ab;
-
         a += ab.toPoint();
         b += ba.toPoint();
 
         QPen black_pen(Qt::black);
         black_pen.setWidth(4);
-
-        qDebug() << "drawing edge: a: " << a << "\tb: " << b;
+        painter->setPen(black_pen);
 
         painter->drawLine(QLineF(a, b));
     }

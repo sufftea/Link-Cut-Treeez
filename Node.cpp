@@ -43,6 +43,65 @@ void Node::finish_operation()
     }
 }
 
+void Node::right_rotate()
+{
+    Node * p = this->parent;
+    if (this->is_left_child()) {
+        // widths
+        p->width -= this->width;
+        if (this->right != nullptr) {
+            p->width += this->right->width;
+        }
+
+        this->width = p->width + 1;
+        if (p->left != nullptr) {
+            this->width += p->left->width;
+        }
+
+
+        // pointers
+        p->left = this->right;
+        this->right = p;
+        this->parent = p->parent;
+        p->parent = this;
+    }
+}
+
+void Node::left_rotate()
+{
+    Node * p = this->parent;
+    if (this->is_right_child()) {
+        // widths
+        p->width -= this->width;
+        if (this->left != nullptr) {
+            p->width += this->left->width;
+        }
+
+        this->width = p->width + 1;
+        if (this->right != nullptr) {
+            this->width += this->right->width;
+        }
+
+
+        // pointers
+        p->right = this->left;
+        this->left = p;
+        this->parent = p->parent;
+        p->parent = this;
+    }
+}
+
+void Node::splay()
+{
+    while (!this->is_solid_root()) {
+        if (this->is_left_child()) {
+            right_rotate();
+        } else if (this->is_right_child()) {
+            left_rotate();
+        }
+    }
+}
+
 Node *Node::get_solid_root()
 {
     Node * current = this;
@@ -80,7 +139,7 @@ bool Node::is_abstract_root()
 
 bool Node::is_left_child()
 {
-    if (parent != nullptr) {
+    if (this->parent != nullptr) {
         return parent->left == this;
     }
     return false;
@@ -131,10 +190,10 @@ int Node::align_graphics()
         graphics->relative_to_solid_parent_pos = 1;
 
         if (right != nullptr) {
-            graphics->relative_to_solid_parent_pos += left->align_graphics();
+            graphics->relative_to_solid_parent_pos += right->align_graphics();
         }
         if (left != nullptr) {
-            offset += right->align_graphics();
+            offset += left->align_graphics();
         }
     } else if (this->is_solid_root()) {
         if (right != nullptr) {
@@ -164,54 +223,6 @@ void Node::traverse_and_update_position(int offset, int solid_depth)
 
 /* ========= SPLAY OPERATION ========= */
 
-void Node::OperationSplay::left_rotate()
-{
-    Node * p = v->parent;
-    if (v->is_right_child()) {
-        // widths
-        p->width -= v->width;
-        if (v->left != nullptr) {
-            p->width += v->left->width;
-        }
-
-        v->width = p->width + 1;
-        if (v->right != nullptr) {
-            v->width += v->right->width;
-        }
-
-
-        // pointers
-        p->right = v->left;
-        v->left = p;
-        v->parent = p->parent;
-        p->parent = v;
-    }
-}
-
-void Node::OperationSplay::right_rotate()
-{
-    Node * p = v->parent;
-    if (v->is_left_child()) {
-        // widths
-        p->width -= v->width;
-        if (v->right != nullptr) {
-            p->width += v->right->width;
-        }
-
-        v->width = p->width + 1;
-        if (p->left != nullptr) {
-            v->width += p->left->width;
-        }
-
-
-        // pointers
-        p->left = v->right;
-        v->right = p;
-        v->parent = p->parent;
-        p->parent = v;
-    }
-}
-
 Node::OperationSplay::OperationSplay(Node * v)
 {
     this->v = v;
@@ -232,7 +243,8 @@ Node::OperationSplay::~OperationSplay()
 bool Node::OperationSplay::make_step()
 {
     if (v->is_solid_root()) {
-        v->parent = path_parent;
+//        // needed for link-cut tree (or not)
+//        v->parent = path_parent;
 
         Sequence::add("Done!");
         return 0;
@@ -240,35 +252,34 @@ bool Node::OperationSplay::make_step()
 
     Node * p = v->parent;
 
-
     if (p->is_solid_root()) {
         if (v->is_left_child()) {
-            right_rotate();
+            v->right_rotate();
 
             Sequence::add("Zig right");
         } else if (v->is_right_child()) {
-            left_rotate();
+            v->left_rotate();
 
             Sequence::add("Zig left");
         }
     } else if (v->is_left_child() && p->is_left_child()) {
-        right_rotate();
-        right_rotate();
+        v->right_rotate();
+        v->right_rotate();
 
         Sequence::add("Zig-Zig right");
     } else if (v->is_right_child() && p->is_right_child()) {
-        left_rotate();
-        left_rotate();
+        v->left_rotate();
+        v->left_rotate();
 
         Sequence::add("Zig-Zig left");
     } else if (v->is_right_child() && p->is_left_child()) {
-        left_rotate();
-        right_rotate();
+        v->left_rotate();
+        v->right_rotate();
 
         Sequence::add("Zig-Zag right");
     } else if (v->is_left_child() && p->is_right_child()) {
-        right_rotate();
-        left_rotate();
+        v->right_rotate();
+        v->left_rotate();
 
         Sequence::add("Zig-Zag left");
     }

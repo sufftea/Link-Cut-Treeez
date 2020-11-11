@@ -12,7 +12,6 @@ LinkCutTree::LinkCutTree(int size)
 void LinkCutTree::link(Node * s_tree, Node * to)
 {
     if (s_tree->is_solid_root()) {
-//        nodes.push_back(s_tree->get_solid_root());
         s_tree->parent = to;
     } else {
         Node * root = s_tree->get_solid_root();
@@ -74,6 +73,8 @@ void LinkCutTree::finish_operation()
     }
 }
 
+// ================ STEP BY STEP EXPOSE ==================
+
 LinkCutTree::OperationExpose::OperationExpose(Node *v)
 {
     this->v = v;
@@ -133,11 +134,12 @@ bool LinkCutTree::OperationExpose::make_step()
 }
 
 
+// ================ STEP BY STEP LINK ==================
 
-LinkCutTree::OperationLink::OperationLink(Node *v, Node *w)
+LinkCutTree::OperationLink::OperationLink(Node *v, Node *to)
 {
     this->v = v;
-    this->u = w;
+    this->to = to;
 }
 
 LinkCutTree::OperationLink::~OperationLink()
@@ -159,19 +161,19 @@ bool LinkCutTree::OperationLink::make_step()
 
     else if (current_step == Step::expose_v) {
         if (!expose_operation->make_step()) {
-            current_step = Step::start_expose_u;
+            current_step = Step::start_expose_to;
 
             Sequence::step_out();
         }
     }
 
-    else if (current_step == Step::start_expose_u) {
+    else if (current_step == Step::start_expose_to) {
         delete expose_operation;
-        expose_operation = new OperationExpose(u);
+        expose_operation = new OperationExpose(to);
         current_step = Step::expose_u;
 
         Sequence::add("expose("
-                      + QString::number(u->graphics->displayed_value)
+                      + QString::number(to->graphics->displayed_value)
                       + ")");
         Sequence::step_in();
     }
@@ -186,9 +188,10 @@ bool LinkCutTree::OperationLink::make_step()
 
     else if (current_step == Step::link) {
         this->v->finish_operation();
-        this->u->finish_operation();
+        this->to->finish_operation();
 
-        u->parent = v;
+//        to->parent = v;
+        v->parent = to;
 
         Sequence::add("link parent");
 

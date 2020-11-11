@@ -29,10 +29,6 @@ private:
         Node * v;
         Node * path_parent;
 
-        void left_rotate();
-        void right_rotate();
-
-
     public:
         /* [v] is the node that we want to move to the root
          *
@@ -113,6 +109,9 @@ public:
 
     /* ========= INTSTANT OPERATIONS START ========= */
 
+    void right_rotate();
+    void left_rotate();
+    void splay();
     Node * get_solid_root();
     Node * get_abstart_root();
     Node * get_path_parent();
