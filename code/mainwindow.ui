@@ -54,7 +54,7 @@
          </font>
         </property>
         <property name="text">
-         <string>tset</string>
+         <string>1</string>
         </property>
        </widget>
       </item>
@@ -78,7 +78,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Step test</string>
+         <string>2</string>
         </property>
        </widget>
       </item>
