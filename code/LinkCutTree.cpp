@@ -77,7 +77,17 @@ void LinkCutTree::finish_operation()
 
 LinkCutTree::OperationExpose::OperationExpose(Node *v)
 {
+    Sequence::add("Expose( "
+                  + QString::number(v->graphics->displayed_value)
+                  + " ):");
+    Sequence::step_in();
     this->v = v;
+}
+
+LinkCutTree::OperationExpose::~OperationExpose()
+{
+    Sequence::add("expose finished!");
+    Sequence::step_out();
 }
 
 bool LinkCutTree::OperationExpose::make_step()
@@ -85,19 +95,12 @@ bool LinkCutTree::OperationExpose::make_step()
     if (current_step == Step::start_splaying_v) {
         v->start_splay();
         current_step = Step::splaying_v;
-
-        Sequence::add("splay("
-                      + QString::number(v->graphics->displayed_value)
-                      + ")");
-        Sequence::step_in();
     }
 
     else if (current_step == Step::splaying_v) {
         if (!v->make_step()) {
             pp = v->get_path_parent();
             current_step = Step::start_splaying_pp;
-
-            Sequence::step_out();
         }
     }
 
@@ -105,11 +108,6 @@ bool LinkCutTree::OperationExpose::make_step()
         if (pp != nullptr) {
             pp->start_splay();
             current_step = Step::splaying_pp;
-
-            Sequence::add("splay("
-                          + QString::number(pp->graphics->displayed_value)
-                          + ")");
-            Sequence::step_in();
         } else {
             return 0;
         }
@@ -118,8 +116,6 @@ bool LinkCutTree::OperationExpose::make_step()
     else if (current_step == Step::splaying_pp) {
         if (!pp->make_step()) {
             current_step = Step::cut_and_link;
-
-            Sequence::step_out();
         }
     }
 
@@ -133,7 +129,7 @@ bool LinkCutTree::OperationExpose::make_step()
 
         current_step = start_splaying_v;
 
-        Sequence::add("link right");
+        Sequence::add("connect v to it's path parent;");
     }
 
     return 1;
@@ -144,12 +140,21 @@ bool LinkCutTree::OperationExpose::make_step()
 
 LinkCutTree::OperationLink::OperationLink(Node *v, Node *to)
 {
+    Sequence::add("Link "
+                  + QString::number(v->graphics->displayed_value)
+                  + " to "
+                  + QString::number(to->graphics->displayed_value)
+                  + ":");
+    Sequence::step_in();
+
     this->v = v;
     this->to = to;
 }
 
 LinkCutTree::OperationLink::~OperationLink()
 {
+    Sequence::add("link finished!");
+    Sequence::step_out();
     delete this->expose_operation;
 }
 
@@ -158,11 +163,6 @@ bool LinkCutTree::OperationLink::make_step()
     if (current_step == Step::start_expose_v) {
         expose_operation = new OperationExpose(v);
         current_step = Step::expose_v;
-
-        Sequence::add("expose("
-                      + QString::number(v->graphics->displayed_value)
-                      + ")");
-        Sequence::step_in();
     }
 
     else if (current_step == Step::expose_v) {
@@ -177,11 +177,6 @@ bool LinkCutTree::OperationLink::make_step()
         delete expose_operation;
         expose_operation = new OperationExpose(to);
         current_step = Step::expose_u;
-
-        Sequence::add("expose("
-                      + QString::number(to->graphics->displayed_value)
-                      + ")");
-        Sequence::step_in();
     }
 
     else if (current_step == Step::expose_u) {
@@ -199,7 +194,10 @@ bool LinkCutTree::OperationLink::make_step()
 //        to->parent = v;
         v->parent = to;
 
-        Sequence::add("link parent");
+        Sequence::add("link "
+                      + QString::number(v->graphics->displayed_value)
+                      + " to "
+                      + QString::number(to->graphics->displayed_value));
 
         return 0;
     }

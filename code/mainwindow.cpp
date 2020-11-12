@@ -38,13 +38,13 @@ void MainWindow::on_pushButton_clicked()
     tree->link(b, a);
     tree->link(c, b);
     tree->link(d, c);
-    tree->link(e, c);
+    tree->link(e, d);
 
 
     ui->labelSequence->setText(Sequence::get_text());
     Sequence::clear();
 
-    tree->start_expose(d);
+    tree->start_expose(e);
 }
 
 void MainWindow::on_pushButton_2_clicked()

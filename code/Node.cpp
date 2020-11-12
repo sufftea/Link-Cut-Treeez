@@ -61,6 +61,11 @@ void Node::right_rotate()
 
         // pointers
         p->left = this->right;
+
+        if (this->right != nullptr) {
+            this->right->parent = p;
+        }
+
         this->right = p;
         this->parent = p->parent;
         p->parent = this;
@@ -193,7 +198,9 @@ int Node::align_graphics()
         graphics->relative_to_solid_parent_pos = -1;
 
         if (right != nullptr) {
-            graphics->relative_to_solid_parent_pos -= right->align_graphics();
+            int child_offset = right->align_graphics();
+            graphics->relative_to_solid_parent_pos -= child_offset;
+            offset += child_offset;
         }
         if (left != nullptr) {
             offset += left->align_graphics();
@@ -205,7 +212,9 @@ int Node::align_graphics()
             offset += right->align_graphics();
         }
         if (left != nullptr) {
-            graphics->relative_to_solid_parent_pos += left->align_graphics();
+            int child_offset = left->align_graphics();
+            graphics->relative_to_solid_parent_pos += child_offset;
+            offset -= child_offset;
         }
     } else if (this->is_solid_root()) {
         if (right != nullptr) {
@@ -237,28 +246,35 @@ void Node::traverse_and_update_position(int tree_offset, int solid_depth)
 
 Node::OperationSplay::OperationSplay(Node * v)
 {
+    Sequence::add("splay("
+                  + QString::number(v->graphics->displayed_value)
+                  + ")");
+    Sequence::step_in();
+
     this->v = v;
     this->path_parent = v->get_solid_root()->parent;
 }
 
 Node::OperationSplay::OperationSplay(Node * v, Node * tree_path_parent)
 {
+    Sequence::add("splay("
+                  + QString::number(v->graphics->displayed_value)
+                  + ")");
+    Sequence::step_in();
+
     this->v = v;
     path_parent = tree_path_parent;
 }
 
 Node::OperationSplay::~OperationSplay()
 {
-
+    Sequence::add("Splay finished!");
+    Sequence::step_out();
 }
 
 bool Node::OperationSplay::make_step()
 {
     if (v->is_solid_root()) {
-//        // needed for link-cut tree (or not)
-//        v->parent = path_parent;
-
-        Sequence::add("Done!");
         return 0;
     }
 

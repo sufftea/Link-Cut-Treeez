@@ -37,7 +37,7 @@ private:
 
     public:
         OperationExpose(Node * v);
-        ~OperationExpose() override {}
+        ~OperationExpose() override;
 
         bool make_step() override;
     };

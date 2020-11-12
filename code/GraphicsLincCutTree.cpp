@@ -20,6 +20,7 @@ void GraphicsLinkCutTree::update_scene()
 
     int current_offset = 0;
 
+
     // draw one splay tree and move offset to give enough spase for the next tree
     for (Node * root: tree.nodes) {
         if (!root->is_solid_root()) {

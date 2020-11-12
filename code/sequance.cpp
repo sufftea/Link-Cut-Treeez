@@ -24,7 +24,7 @@ void Sequence::step_out()
 
 void Sequence::add(const QString &action)
 {
-    text += QString("\t").repeated(in) + action + "\n";
+    text += QString("   ").repeated(in) + action + "\n";
 }
 
 void Sequence::clear()
