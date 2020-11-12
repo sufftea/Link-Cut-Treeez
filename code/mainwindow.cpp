@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    graphics_tree = new GraphicsLinkCutTree(5);
+    graphics_tree = new GraphicsLinkCutTree(6);
     tree = & graphics_tree->tree;
 
     ui->graphicsView->setScene(graphics_tree->scene);
@@ -33,18 +33,21 @@ void MainWindow::on_pushButton_clicked()
     Node * c = tree->nodes[2];
     Node * d = tree->nodes[3];
     Node * e = tree->nodes[4];
+    Node * f = tree->nodes[5];
 
 
     tree->link(b, a);
     tree->link(c, b);
-    tree->link(d, c);
-    tree->link(e, d);
+    tree->link(d, e);
+    tree->link(f, e);
+    tree->link(e, b);
 
-
-    ui->labelSequence->setText(Sequence::get_text());
+    tree->start_expose(c);
+    tree->finish_operation();
     Sequence::clear();
+    graphics_tree->update_scene();
 
-    tree->start_expose(e);
+    tree->start_expose(f);
 }
 
 void MainWindow::on_pushButton_2_clicked()

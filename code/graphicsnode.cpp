@@ -90,6 +90,7 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
             painter->setPen(red_pen);
 
             painter->drawLine(QLineF(a, b));
+            painter->drawText(b, "A");
         }
     } else {
         // draw the edge connecting the node to it's parent

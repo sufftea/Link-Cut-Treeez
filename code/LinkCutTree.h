@@ -116,7 +116,7 @@ public:
 
     /* ========= INTSTANT OPERATIONS START ========= */
 
-    void link(Node * s_tree, Node * to); // DONE
+    void link(Node * v, Node * to); // DONE
     Node * get_abstract_root(); // DONE
 };
 

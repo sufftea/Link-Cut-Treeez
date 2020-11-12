@@ -67,7 +67,12 @@ void Node::right_rotate()
         }
 
         this->right = p;
+
+        if (p->is_child()) {
+            p->parent->left = this;
+        }
         this->parent = p->parent;
+
         p->parent = this;
     }
 }
@@ -96,7 +101,12 @@ void Node::left_rotate()
         }
 
         this->left = p;
+
+        if (p->is_child()) {
+            p->parent->left = this;
+        }
         this->parent = p->parent;
+
         p->parent = this;
     }
 }

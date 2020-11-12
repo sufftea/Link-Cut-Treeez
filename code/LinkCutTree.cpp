@@ -9,15 +9,14 @@ LinkCutTree::LinkCutTree(int size)
     }
 }
 
-void LinkCutTree::link(Node * s_tree, Node * to)
+void LinkCutTree::link(Node * v, Node * to)
 {
-    if (s_tree->is_solid_root()) {
-        s_tree->parent = to;
+    if (v->is_solid_root()) {
+        v->parent = to;
     } else {
-        Node * root = s_tree->get_solid_root();
+        // TODO: must splay the node instead;
+        Node * root = v->get_solid_root();
         root->parent = to;
-
-        qDebug() << "Node passed to link() is not a root. The actual root has been linked";
     }
 }
 
