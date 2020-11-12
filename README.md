@@ -1,4 +1,4 @@
-﻿# Link-Cut-Treeez
+# Link-Cut-Treeez
 
 ## На данный момент есть:
   - Само link-cut дерево
@@ -24,3 +24,6 @@
 
 # Первые успехи
 ![Alt text](pics/first_success.png?raw=true "Title")
+
+
+
