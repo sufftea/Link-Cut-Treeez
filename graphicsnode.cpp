@@ -13,12 +13,20 @@ GraphicsSolidNodeItem::GraphicsSolidNodeItem(int relative_to_parent_pos, Node *m
     this->relative_to_solid_parent_pos = relative_to_parent_pos;
 }
 
-void GraphicsSolidNodeItem::update_position(int offset, int solid_depth)
+void GraphicsSolidNodeItem::update_position(int tree_offset, int solid_depth)
 {
-    int node_x = (offset + this->relative_to_solid_parent_pos) * GraphicsSolidNodeItem::node_width_px;
+    int node_x = 0;
     int node_y = solid_depth * GraphicsSolidNodeItem::node_width_px;
-    node_x -= GraphicsSolidNodeItem::node_width_px / 2;
-    node_y -= GraphicsSolidNodeItem::node_width_px / 2;
+
+    if (my_node->is_child()) {
+        node_x = my_node->parent->graphics->pos().x()
+                + relative_to_solid_parent_pos * GraphicsSolidNodeItem::node_width_px;
+    } else {
+        node_x = tree_offset * GraphicsSolidNodeItem::node_width_px;
+    }
+
+//    node_x -= GraphicsSolidNodeItem::node_width_px / 2;
+//    node_y -= GraphicsSolidNodeItem::node_width_px / 2;
 
     this->setPos(node_x, node_y);
 }
@@ -34,7 +42,7 @@ QRectF GraphicsSolidNodeItem::boundingRect() const
 void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     QPen black_pen(Qt::black);
-    black_pen.setWidth(5);
+    black_pen.setWidth(3);
     painter->setPen(black_pen);
 
 
@@ -78,7 +86,7 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
             a += ab.toPoint();
             b += ba.toPoint();
 
-            QPen red_pen(Qt::red, 4, Qt::DotLine);
+            QPen red_pen(Qt::red, 2, Qt::DotLine);
             painter->setPen(red_pen);
 
             painter->drawLine(QLineF(a, b));
@@ -108,7 +116,7 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
         b += ba.toPoint();
 
         QPen black_pen(Qt::black);
-        black_pen.setWidth(4);
+        black_pen.setWidth(2);
         painter->setPen(black_pen);
 
         painter->drawLine(QLineF(a, b));

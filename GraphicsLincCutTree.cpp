@@ -38,6 +38,8 @@ void GraphicsLinkCutTree::update_scene()
         }
         current_offset += 1;
     }
+
+    this->scene->update();
 }
 
 

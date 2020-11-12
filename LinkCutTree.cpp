@@ -125,6 +125,12 @@ bool LinkCutTree::OperationExpose::make_step()
 
     else if (current_step == Step::cut_and_link) {
         pp->right = v;
+
+        pp->width += v->width;
+        if (pp->left != nullptr) {
+            pp->width += pp->left->width;
+        }
+
         current_step = start_splaying_v;
 
         Sequence::add("link right");

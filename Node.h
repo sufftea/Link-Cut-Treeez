@@ -119,6 +119,7 @@ public:
     bool is_abstract_root();
     bool is_left_child();
     bool is_right_child();
+    bool is_child();
 
     int set_subtrees_width();
     void calculate_depth();
@@ -147,7 +148,7 @@ public:
      *
      * Should be called frome the root node in order to draw the entire solid tree.
     */
-    void traverse_and_update_position(int offset, int solid_depth = 0);
+    void traverse_and_update_position(int tree_offset, int solid_depth = 0);
 };
 
 

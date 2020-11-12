@@ -85,6 +85,11 @@ void Node::left_rotate()
 
         // pointers
         p->right = this->left;
+
+        if (this->left != nullptr) {
+            this->left->parent = p;
+        }
+
         this->left = p;
         this->parent = p->parent;
         p->parent = this;
@@ -153,6 +158,13 @@ bool Node::is_right_child()
     return false;
 }
 
+bool Node::is_child()
+{
+    return parent != nullptr
+            && (parent->left == this
+                || parent->right == this);
+}
+
 int Node::set_subtrees_width()
 {
     this->width = 1;
@@ -190,10 +202,10 @@ int Node::align_graphics()
         graphics->relative_to_solid_parent_pos = 1;
 
         if (right != nullptr) {
-            graphics->relative_to_solid_parent_pos += right->align_graphics();
+            offset += right->align_graphics();
         }
         if (left != nullptr) {
-            offset += left->align_graphics();
+            graphics->relative_to_solid_parent_pos += left->align_graphics();
         }
     } else if (this->is_solid_root()) {
         if (right != nullptr) {
@@ -208,15 +220,15 @@ int Node::align_graphics()
     return offset;
 }
 
-void Node::traverse_and_update_position(int offset, int solid_depth)
+void Node::traverse_and_update_position(int tree_offset, int solid_depth)
 {
-    this->graphics->update_position(offset, solid_depth);
+    this->graphics->update_position(tree_offset, solid_depth);
 
     if (left != nullptr) {
-        left->traverse_and_update_position(offset, solid_depth + 1);
+        left->traverse_and_update_position(tree_offset, solid_depth + 1);
     }
     if (right != nullptr) {
-        right->traverse_and_update_position(offset, solid_depth + 1);
+        right->traverse_and_update_position(tree_offset, solid_depth + 1);
     }
 }
 
