@@ -76,9 +76,9 @@ void LinkCutTree::finish_operation()
 
 LinkCutTree::OperationExpose::OperationExpose(Node *v)
 {
-    Sequence::add("Expose( "
+    Sequence::add("Expose("
                   + QString::number(v->graphics->displayed_value)
-                  + " ):");
+                  + "):");
     Sequence::step_in();
     this->v = v;
 }
@@ -120,11 +120,6 @@ bool LinkCutTree::OperationExpose::make_step()
 
     else if (current_step == Step::cut_and_link) {
         pp->right = v;
-
-        pp->width += v->width;
-        if (pp->left != nullptr) {
-            pp->width += pp->left->width;
-        }
 
         current_step = start_splaying_v;
 

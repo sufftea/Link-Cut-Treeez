@@ -470,19 +470,7 @@ Node::OperationSplay::OperationSplay(Node * v)
     Sequence::step_in();
 
     this->v = v;
-//    this->path_parent = v->get_solid_root()->parent;
 }
-
-//Node::OperationSplay::OperationSplay(Node * v, Node * tree_path_parent)
-//{
-//    Sequence::add("splay("
-//                  + QString::number(v->graphics->displayed_value)
-//                  + ")");
-//    Sequence::step_in();
-
-//    this->v = v;
-//    path_parent = tree_path_parent;
-//}
 
 Node::OperationSplay::~OperationSplay()
 {

@@ -45,11 +45,11 @@ void MainWindow::on_pushButton_clicked()
 
     tree->start_expose(e);
     tree->finish_operation();
-    Sequence::clear();
     graphics_tree->update_scene();
+    Sequence::clear();
+    ui->labelSequence->setText(Sequence::get_text());
 
     tree->start_expose(f);
-    ui->labelSequence->setText(Sequence::get_text());
 }
 
 void MainWindow::on_pushButton_2_clicked()
