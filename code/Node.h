@@ -109,8 +109,17 @@ public:
 
     /* ========= INTSTANT OPERATIONS START ========= */
 
-    void right_rotate();
-    void left_rotate();
+//    void right_rotate();
+//    void left_rotate();
+    bool try_zig_left();
+    bool try_zig_right();
+
+    bool try_zig_zig_left();
+    bool try_zig_zig_right();
+
+    bool try_zig_zag_left();
+    bool try_zig_zag_right();
+
     void splay();
     Node * get_solid_root();
     Node * get_abstart_root();
@@ -131,7 +140,7 @@ public:
      * Ignore the returned value, it is only needed for
      * the function itself.
     */
-    int align_graphics();
+//    int align_graphics();
 
 
     /* ========== OPERATIONS FOR DRAWING THE TREE START =========== */
@@ -148,7 +157,7 @@ public:
      *
      * Should be called frome the root node in order to draw the entire solid tree.
     */
-    void traverse_and_update_position(int tree_offset, int solid_depth = 0);
+    void traverse_and_update_position(int & offset, int solid_depth = 0);
 };
 
 

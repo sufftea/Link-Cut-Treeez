@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     tree = & graphics_tree->tree;
 
     ui->graphicsView->setScene(graphics_tree->scene);
+    ui->graphicsView->setRenderHints(QPainter::RenderHint::Antialiasing);
 }
 
 MainWindow::~MainWindow()
@@ -38,16 +39,17 @@ void MainWindow::on_pushButton_clicked()
 
     tree->link(b, a);
     tree->link(c, b);
-    tree->link(d, e);
-    tree->link(f, e);
-    tree->link(e, b);
+    tree->link(d, c);
+    tree->link(e, d);
+    tree->link(f, d);
 
-    tree->start_expose(c);
+    tree->start_expose(e);
     tree->finish_operation();
     Sequence::clear();
     graphics_tree->update_scene();
 
     tree->start_expose(f);
+    ui->labelSequence->setText(Sequence::get_text());
 }
 
 void MainWindow::on_pushButton_2_clicked()

@@ -43,82 +43,338 @@ void Node::finish_operation()
     }
 }
 
-void Node::right_rotate()
-{
-    Node * p = this->parent;
-    if (this->is_left_child()) {
-        // widths
-        p->width -= this->width;
-        if (this->right != nullptr) {
-            p->width += this->right->width;
-        }
-
-        this->width = p->width + 1;
-        if (p->left != nullptr) {
-            this->width += p->left->width;
-        }
-
-
-        // pointers
-        p->left = this->right;
-
-        if (this->right != nullptr) {
-            this->right->parent = p;
-        }
-
-        this->right = p;
-
-        if (p->is_child()) {
-            p->parent->left = this;
-        }
-        this->parent = p->parent;
-
-        p->parent = this;
-    }
-}
-
-void Node::left_rotate()
+bool Node::try_zig_left()
 {
     Node * p = this->parent;
     if (this->is_right_child()) {
-        // widths
-        p->width -= this->width;
-        if (this->left != nullptr) {
-            p->width += this->left->width;
-        }
+/*
 
-        this->width = p->width + 1;
-        if (this->right != nullptr) {
-            this->width += this->right->width;
-        }
+        g                                   g
+        *                                   *
+        *                                   *
+        p                                   v - this
+       *  *              -->              *  *
+      *     *                           *     *
+     A        v - this                p        C
+             * *                     * *
+            *   *                   *   *
+           B     C                 A     B
 
+*/
 
-        // pointers
-        p->right = this->left;
+        Node * B = this->left;
+        Node * g = p->parent;
 
-        if (this->left != nullptr) {
-            this->left->parent = p;
+        p->right = B;
+        if (B != nullptr) {
+            B->parent = p;
         }
 
         this->left = p;
-
-        if (p->is_child()) {
-            p->parent->left = this;
-        }
-        this->parent = p->parent;
-
         p->parent = this;
+
+        this->parent = g;
+        if (g != nullptr) {
+            if (g->left == p) {
+                g->left = this;
+            } else if (g->right == p) {
+                g->right = this;
+            }
+        }
+
+        return true;
     }
+
+    return false;
 }
+
+bool Node::try_zig_right()
+{
+    Node * p = this->parent;
+    if (this->is_left_child()) {
+/*
+
+              g                     g
+              *                     *
+              *                     *
+              p                     v - this
+            *  *                   *  *
+          *     *         -->     *     *
+ this - v        C               A        p
+       * *                               * *
+      *   *                             *   *
+     A     B                           B     C
+
+*/
+
+        Node * B = this->right;
+        Node * g = p->parent;
+
+        p->left = B;
+        if (B != nullptr) {
+            B->parent = p;
+        }
+
+        this->right = p;
+        p->parent = this;
+
+        this->parent = g;
+        if (g != nullptr) {
+            if (g->left == p) {
+                g->left = this;
+            } else if (g->right == p) {
+                g->right = this;
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+bool Node::try_zig_zig_left()
+{
+
+/*
+
+      gg                                     gg
+      *                                      *
+      *                                      *
+      g                                      v - this
+     *  *                                  *  *
+    *     *                              *     *
+   A        p                          p        D
+           *  *         -->          *  *
+          *     *                  *     *
+         B        v - this       g        C
+                 * *            * *
+                *   *          *   *
+               C     D        A     B
+
+
+*/
+    Node * p = this->parent;
+    if (this->is_right_child() && p->is_right_child()) {
+        Node * g = p->parent;
+        Node * gg = g->parent;
+
+        Node * B = p->left;
+        Node * C = this->left;
+
+        g->right = B;
+        if (B != nullptr) {
+            B->parent = g;
+        }
+
+        p->left = g;
+        g->parent = p;
+
+        p->right = C;
+        if (C != nullptr) {
+            C->parent = p;
+        }
+
+        this->left = p;
+        p->parent = this;
+
+        this->parent = gg;
+        if (gg != nullptr) {
+            if (gg->left == g) {
+                gg->left = this;
+            } else if (gg->right == g) {
+                gg->right = this;
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+bool Node::try_zig_zig_right()
+{
+/*
+                 gg            gg
+                 *             *
+                 *             *
+                 g             v
+               *  *           *  *
+             *     *         *     *
+           p        D       A        p
+         *  *          -->          *  *
+       *     *                     *     *
+     v        C                   B        g
+    * *                                   * *
+   *   *                                 *   *
+  A     B                               C     D
+
+
+*/
+    Node * p = this->parent;
+    if (this->is_left_child() && p->is_left_child()) {
+        Node * g = p->parent;
+        Node * gg = g->parent;
+        Node * B = this->right;
+        Node * C = p->right;
+
+        g->left = C;
+        if (C != nullptr) {
+            C->parent = g;
+        }
+
+        p->right = g;
+        g->parent = p;
+        p->left = B;
+        if (B != nullptr) {
+            B->parent = p;
+        }
+
+        this->right = p;
+        p->parent = this;
+
+        this->parent = gg;
+        if (gg != nullptr) {
+            if (gg->left == g) {
+                gg->left = this;
+            } else if (gg->right == g) {
+                gg->right = this;
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+bool Node::try_zig_zag_left()
+{
+/*
+
+       gg                                gg
+       *                                 *
+       *                                 *
+       g                                 v - this
+      *    *                            *  *
+     *         *                      *      *
+    A              p      -->       g          p
+                 *  *              * *        * *
+               *     *            *   *      *   *
+             v        D          A     B    C     D
+            * *
+           *   *
+          B     C
+*/
+
+    Node * p = this->parent;
+    if (this->is_left_child() && p->is_right_child()) {
+        Node * g = p->parent;
+        Node * gg = g->parent;
+        Node * B = this->left;
+        Node * C = this->right;
+
+        g->right = B;
+        if (B != nullptr) {
+            B->parent = g;
+        }
+
+        p->left = C;
+        if (C != nullptr) {
+            C->parent = p;
+        }
+
+        this->left = g;
+        g->parent = this;
+
+        this->right = p;
+        p->parent = this;
+
+        this->parent = gg;
+        if (gg != nullptr) {
+            if (gg->left == g) {
+                gg->left = this;
+            } else if (gg->right == g) {
+                gg->right = this;
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+bool Node::try_zig_zag_right()
+{
+/*
+
+                 gg                     gg
+                 *                      *
+                 *                      *
+                 g                      v - this
+              *   *                    *  *
+          *        *                 *      *
+      p             D    -->       p          g
+     *  *                         * *        * *
+    *     *                      *   *      *   *
+   A        v - this            A     B    C     D
+           * *
+          *   *
+         B     C
+
+*/
+    Node * p = this->parent;
+    if (this->is_right_child() && p->is_left_child()) {
+        Node * g = p->parent;
+        Node * gg = g->parent;
+        Node * B = this->left;
+        Node * C = this->right;
+
+        p->right = B;
+        if (B != nullptr) {
+            B->parent = p;
+        }
+
+        g->left = C;
+        if (C != nullptr) {
+            C->parent = g;
+        }
+
+        this->left = p;
+        p->parent = this;
+
+        this->right = g;
+        g->parent = this;
+
+        this->parent = gg;
+        if (gg != nullptr) {
+            if (gg->left == g) {
+                gg->left = this;
+            } else if (gg->right == g) {
+                gg->right = this;
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
 
 void Node::splay()
 {
     while (!this->is_solid_root()) {
-        if (this->is_left_child()) {
-            right_rotate();
-        } else if (this->is_right_child()) {
-            left_rotate();
-        }
+        if (try_zig_zag_left()) continue;
+        if (try_zig_zag_right()) continue;
+
+        if (try_zig_zig_left()) continue;
+        if (try_zig_zig_right()) continue;
+
+        if (try_zig_left()) continue;
+        if (try_zig_right()) continue;
     }
 }
 
@@ -196,58 +452,20 @@ int Node::set_subtrees_width()
 
 void Node::calculate_depth()
 {
-    // I have no idea how to implement this for now
-    // maybe I'll use a descendant walkthrough for it.
+
 }
 
-int Node::align_graphics()
-{
-    int offset = 1;
-
-    if (this->is_left_child()) {
-        graphics->relative_to_solid_parent_pos = -1;
-
-        if (right != nullptr) {
-            int child_offset = right->align_graphics();
-            graphics->relative_to_solid_parent_pos -= child_offset;
-            offset += child_offset;
-        }
-        if (left != nullptr) {
-            offset += left->align_graphics();
-        }
-    } else if (this->is_right_child()) {
-        graphics->relative_to_solid_parent_pos = 1;
-
-        if (right != nullptr) {
-            offset += right->align_graphics();
-        }
-        if (left != nullptr) {
-            int child_offset = left->align_graphics();
-            graphics->relative_to_solid_parent_pos += child_offset;
-            offset -= child_offset;
-        }
-    } else if (this->is_solid_root()) {
-        if (right != nullptr) {
-            right->align_graphics();
-        }
-        this->graphics->relative_to_solid_parent_pos = 0;
-        if (left != nullptr) {
-            left->align_graphics();
-        }
-    }
-
-    return offset;
-}
-
-void Node::traverse_and_update_position(int tree_offset, int solid_depth)
-{
-    this->graphics->update_position(tree_offset, solid_depth);
-
+void Node::traverse_and_update_position(int & offset, int solid_depth)
+{ 
     if (left != nullptr) {
-        left->traverse_and_update_position(tree_offset, solid_depth + 1);
+        left->traverse_and_update_position(offset, solid_depth + 1);
     }
+
+    this->graphics->update_position(offset, solid_depth);
+    offset++;
+
     if (right != nullptr) {
-        right->traverse_and_update_position(tree_offset, solid_depth + 1);
+        right->traverse_and_update_position(offset, solid_depth + 1);
     }
 }
 
@@ -288,39 +506,64 @@ bool Node::OperationSplay::make_step()
         return 0;
     }
 
-    Node * p = v->parent;
+//    Node * p = v->parent;
 
-    if (p->is_solid_root()) {
-        if (v->is_left_child()) {
-            v->right_rotate();
-
-            Sequence::add("Zig right");
-        } else if (v->is_right_child()) {
-            v->left_rotate();
-
-            Sequence::add("Zig left");
-        }
-    } else if (v->is_left_child() && p->is_left_child()) {
-        v->right_rotate();
-        v->right_rotate();
-
-        Sequence::add("Zig-Zig right");
-    } else if (v->is_right_child() && p->is_right_child()) {
-        v->left_rotate();
-        v->left_rotate();
-
-        Sequence::add("Zig-Zig left");
-    } else if (v->is_right_child() && p->is_left_child()) {
-        v->left_rotate();
-        v->right_rotate();
-
-        Sequence::add("Zig-Zag right");
-    } else if (v->is_left_child() && p->is_right_child()) {
-        v->right_rotate();
-        v->left_rotate();
-
+    if (v->try_zig_zag_left()) {
         Sequence::add("Zig-Zag left");
+        return 1;
     }
+    if (v->try_zig_zag_right()) {
+        Sequence::add("Zig-Zag right");
+        return 1;
+    }
+    if (v->try_zig_zig_left()) {
+        Sequence::add("Zig-Zig left");
+        return 1;
+    }
+    if (v->try_zig_zig_right()) {
+        Sequence::add("Zig-Zig right");
+        return 1;
+    }
+
+    if (v->try_zig_left()) {
+        Sequence::add("Zig left");
+        return 1;
+    }
+    if (v->try_zig_right()) {
+        Sequence::add("Zig right");
+        return 1;
+    }
+//    if (p->is_solid_root()) {
+//        if (v->is_left_child()) {
+//            v->try_zig_right();
+
+//            Sequence::add("Zig right");
+//        } else if (v->is_right_child()) {
+//            v->try_zig_left();
+
+//            Sequence::add("Zig left");
+//        }
+//    } else if (v->is_left_child() && p->is_left_child()) {
+//        v->try_zig_right();
+//        v->try_zig_right();
+
+//        Sequence::add("Zig-Zig right");
+//    } else if (v->is_right_child() && p->is_right_child()) {
+//        v->try_zig_left();
+//        v->try_zig_left();
+
+//        Sequence::add("Zig-Zig left");
+//    } else if (v->is_right_child() && p->is_left_child()) {
+//        v->try_zig_left();
+//        v->try_zig_right();
+
+//        Sequence::add("Zig-Zag right");
+//    } else if (v->is_left_child() && p->is_right_child()) {
+//        v->try_zig_right();
+//        v->try_zig_left();
+
+//        Sequence::add("Zig-Zag left");
+//    }
 
     return 1;
 }

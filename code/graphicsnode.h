@@ -31,7 +31,7 @@ public:
     /*
      * Draws the node on the given QGraphicsScene [scene]
     */
-    void update_position(int tree_offset, int solid_depth);
+    void update_position(int node_offset, int solid_depth);
 
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
