@@ -6,6 +6,7 @@
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsScene>
 #include <QGraphicsLineItem>
+#include "animation.h"
 
 class Node;
 
@@ -13,7 +14,11 @@ class Node;
 class GraphicsSolidNodeItem : public QGraphicsItem
 {
 private:
-    QPoint last_pos = QPoint(0, 0);
+    QPointF last_pos = QPointF(0, 0);
+    QPointF next_pos = QPointF(0, 0);
+
+    Animation movement_anim;
+    Animation selection_anim;
 
 public:
     static const int node_width_px = 50;
@@ -32,6 +37,8 @@ public:
      * Draws the node on the given QGraphicsScene [scene]
     */
     void update_position(int node_offset, int solid_depth);
+    void animate();
+    void set_movement_easing_curve(std::function<double(double)> f);
 
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;

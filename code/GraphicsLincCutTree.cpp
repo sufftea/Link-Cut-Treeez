@@ -8,6 +8,17 @@ GraphicsLinkCutTree::GraphicsLinkCutTree(int size)
     for (Node * node : tree.nodes) {
         scene->addItem(node->graphics);
     }
+
+//    QtConcurrent::run(this, &GraphicsLinkCutTree::animation_loop);
+    animation_timer = new QTimer;
+    animation_timer->setInterval(20);
+    connect(animation_timer, SIGNAL(timeout()), this, SLOT(animate_scene()));
+    animation_timer->start();
+}
+
+GraphicsLinkCutTree::~GraphicsLinkCutTree()
+{
+    delete scene;
 }
 
 void GraphicsLinkCutTree::update_scene()
@@ -25,4 +36,20 @@ void GraphicsLinkCutTree::update_scene()
     }
 
     this->scene->update();
+}
+
+void GraphicsLinkCutTree::set_movement_easing_curve(std::function<double (double)> f)
+{
+    for (Node * node : tree.nodes) {
+        node->graphics->set_movement_easing_curve(f);
+    }
+}
+
+void GraphicsLinkCutTree::animate_scene()
+{
+    for (Node * node : tree.nodes) {
+        node->graphics->animate();
+    }
+
+    scene->update();
 }

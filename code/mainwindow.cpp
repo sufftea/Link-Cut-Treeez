@@ -8,7 +8,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     graphics_tree = new GraphicsLinkCutTree(6);
+    graphics_tree->set_movement_easing_curve(Animation::ease_out_cubic);
+
     tree = & graphics_tree->tree;
+
 
     ui->graphicsView->setScene(graphics_tree->scene);
     ui->graphicsView->setRenderHints(QPainter::RenderHint::Antialiasing);

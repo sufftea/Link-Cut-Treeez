@@ -1,6 +1,7 @@
 #include "graphicsnode.h"
 #include "Node.h"
 
+
 GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, int displayed_value)
 {
     this->my_node = my_node;
@@ -18,7 +19,27 @@ void GraphicsSolidNodeItem::update_position(int node_offset, int solid_depth)
     int node_x = node_offset * GraphicsSolidNodeItem::node_width_px;
     int node_y = solid_depth * GraphicsSolidNodeItem::node_width_px;
 
-    this->setPos(node_x, node_y);
+    this->last_pos = this->pos();
+    this->next_pos = QPointF(node_x, node_y);
+
+    if (this->pos() != next_pos) {
+        movement_anim.start();
+    }
+}
+
+void GraphicsSolidNodeItem::animate()
+{
+    // animate the position
+    if (movement_anim.get_is_active()) {
+        double v = movement_anim.get_value();
+        QPointF m = (next_pos - last_pos) * v;
+        this->setPos(last_pos + m);
+    }
+}
+
+void GraphicsSolidNodeItem::set_movement_easing_curve(std::function<double (double)> f)
+{
+    this->movement_anim.set_easing_curve(f);
 }
 
 
@@ -80,7 +101,11 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
             painter->setPen(red_pen);
 
             painter->drawLine(QLineF(a, b));
-            painter->drawText(b, "A");
+
+//            // draw arrow
+//            QPolygon head_arrow({QPoint(0, 0),
+//                                 QPoint(5, 10),
+//                                 QPoint(-5, 10),});
         }
     } else {
         // draw the edge connecting the node to it's parent

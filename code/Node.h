@@ -27,16 +27,16 @@ private:
     {
     private:
         Node * v;
-//        Node * path_parent;
 
     public:
-        /* [v] is the node that we want to move to the root
+        /*
+         * [v] is the node that we want to move to the root
          *
          * [tree_path_parent] -- path parent of the tree that contains
          * the node [v], if not specified, will be found by calling
-         * v->get_root() which will be slower. */
+         * v->get_root() which will be slower.
+        */
         OperationSplay(Node * v);
-//        OperationSplay(Node * v, Node * tree_path_parent);
         ~OperationSplay() override;
 
         bool make_step() override;

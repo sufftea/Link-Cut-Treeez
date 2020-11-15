@@ -19,6 +19,7 @@ SOURCES += \
     GraphicsLincCutTree.cpp \
     LinkCutTree.cpp \
     Node.cpp \
+    animation.cpp \
     graphicsnode.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     LinkCutTree.h \
     Node.h \
     StepByStepOperation.h \
+    animation.h \
     graphicsnode.h \
     mainwindow.h \
     sequence.h
