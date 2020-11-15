@@ -85,7 +85,7 @@
          </font>
         </property>
         <property name="text">
-         <string>click one time</string>
+         <string>setup</string>
         </property>
        </widget>
       </item>
@@ -109,7 +109,7 @@
          </font>
         </property>
         <property name="text">
-         <string>click many times</string>
+         <string>make a step</string>
         </property>
        </widget>
       </item>
