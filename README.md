@@ -24,6 +24,5 @@
 
 # Первые успехи
 ![](pics/progress_so_far.gif?raw=true "Title")
-![](pics/first_success.png?raw=true "Title")
 
 
