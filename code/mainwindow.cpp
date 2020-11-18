@@ -30,7 +30,7 @@ void MainWindow::showEvent(QShowEvent *)
 
 void MainWindow::on_pushButton_clicked()
 {
-    graphics_tree->update_scene();
+//    graphics_tree->update_scene();
 
     Node * a = tree->nodes[0];
     Node * b = tree->nodes[1];

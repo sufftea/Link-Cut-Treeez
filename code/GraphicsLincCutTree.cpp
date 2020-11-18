@@ -9,7 +9,6 @@ GraphicsLinkCutTree::GraphicsLinkCutTree(int size)
         scene->addItem(node->graphics);
     }
 
-//    QtConcurrent::run(this, &GraphicsLinkCutTree::animation_loop);
     animation_timer = new QTimer;
     animation_timer->setInterval(20);
     connect(animation_timer, SIGNAL(timeout()), this, SLOT(animate_scene()));

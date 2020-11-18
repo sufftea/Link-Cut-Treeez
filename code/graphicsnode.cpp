@@ -8,12 +8,6 @@ GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, int displayed_value
     this->displayed_value = displayed_value;
 }
 
-GraphicsSolidNodeItem::GraphicsSolidNodeItem(int relative_to_parent_pos, Node *my_node, int displayed_value)
-    : GraphicsSolidNodeItem(my_node, displayed_value)
-{
-    this->relative_to_solid_parent_pos = relative_to_parent_pos;
-}
-
 void GraphicsSolidNodeItem::update_position(int node_offset, int solid_depth)
 {
     int node_x = node_offset * GraphicsSolidNodeItem::node_width_px;
@@ -40,6 +34,13 @@ void GraphicsSolidNodeItem::animate()
 void GraphicsSolidNodeItem::set_movement_easing_curve(std::function<double (double)> f)
 {
     this->movement_anim.set_easing_curve(f);
+}
+
+
+QVector<QPoint> GraphicsSolidNodeItem::find_path(GraphicsSolidNodeItem *to, QGraphicsScene *scene)
+{
+
+    return {};
 }
 
 
