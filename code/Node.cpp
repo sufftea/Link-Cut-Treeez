@@ -1,18 +1,22 @@
 #include "Node.h"
 
 Node::Node(int displayed_value)
-{
-    this->graphics = new GraphicsSolidNodeItem(this, displayed_value);
+    : graphics(this)
+{   
+    this->displayed_value = displayed_value;
 
     calculate_depth();
 }
 
 Node::Node(Node * parent, int displayed_value)
+    : Node(displayed_value)
 {
-    this->graphics = new GraphicsSolidNodeItem(this, displayed_value);
-    calculate_depth();
-
     this->parent = parent;
+}
+
+Node::~Node()
+{
+    finish_operation(); // also deletes [current_operation]
 }
 
 void Node::start_splay()
@@ -449,7 +453,7 @@ int Node::traverse_and_update_position(int offset, int solid_depth)
     }
     offset += width;
 
-    this->graphics->update_position(offset, solid_depth);
+    graphics.update_position(offset, solid_depth);
     offset += 1;
 
     if (right != nullptr) {
@@ -465,7 +469,7 @@ int Node::traverse_and_update_position(int offset, int solid_depth)
 Node::OperationSplay::OperationSplay(Node * v)
 {
     Sequence::add("splay("
-                  + QString::number(v->graphics->displayed_value)
+                  + QString::number(v->displayed_value)
                   + ")");
     Sequence::step_in();
 

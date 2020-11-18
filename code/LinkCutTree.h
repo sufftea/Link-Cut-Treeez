@@ -73,7 +73,7 @@ public:
     QVector<Node*> nodes;
 
 
-    LinkCutTree(int size); // DONE
+    LinkCutTree();
 
 
 
@@ -90,7 +90,7 @@ public:
      * finished immediately using finish_operation() function; after
      * that, the new operation will be started;
     */
-    void start_expose(Node * v); // DONE (almost)
+    void start_expose(Node * v); // DONE
     void start_link(Node * v, Node * u); // DONE
     void start_cut(Node * v);
 
@@ -118,6 +118,7 @@ public:
 
     void link(Node * v, Node * to); // DONE
     Node * get_abstract_root(); // DONE
+    void init(int size); // DONE
 };
 
 

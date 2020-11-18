@@ -29,7 +29,7 @@ private:
     Ui::MainWindow *ui;
 
 
-    GraphicsLinkCutTree * graphics_tree;
+    GraphicsLinkCutTree graphics_tree;
     LinkCutTree * tree;
 };
 #endif // MAINWINDOW_H

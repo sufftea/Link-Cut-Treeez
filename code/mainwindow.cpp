@@ -7,13 +7,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    graphics_tree = new GraphicsLinkCutTree(6);
-    graphics_tree->set_movement_easing_curve(Animation::ease_out_cubic);
+    graphics_tree.set_movement_easing_curve(Animation::ease_out_cubic);
+    tree = & graphics_tree.tree;
 
-    tree = & graphics_tree->tree;
-
-
-    ui->graphicsView->setScene(graphics_tree->scene);
+    ui->graphicsView->setScene(graphics_tree.scene);
     ui->graphicsView->setRenderHints(QPainter::RenderHint::Antialiasing);
 }
 
@@ -30,7 +27,7 @@ void MainWindow::showEvent(QShowEvent *)
 
 void MainWindow::on_pushButton_clicked()
 {
-//    graphics_tree->update_scene();
+    graphics_tree.init(6);
 
     Node * a = tree->nodes[0];
     Node * b = tree->nodes[1];
@@ -48,7 +45,7 @@ void MainWindow::on_pushButton_clicked()
 
     tree->start_expose(e);
     tree->finish_operation();
-    graphics_tree->update_scene();
+    graphics_tree.update_scene();
     Sequence::clear();
     ui->labelSequence->setText(Sequence::get_text());
 
@@ -58,6 +55,6 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_pushButton_2_clicked()
 {
     tree->make_step();
-    graphics_tree->update_scene();
+    graphics_tree.update_scene();
     ui->labelSequence->setText(Sequence::get_text());
 }

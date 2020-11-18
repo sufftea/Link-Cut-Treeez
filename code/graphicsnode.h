@@ -4,10 +4,9 @@
 #include <QGraphicsItem>
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
-//#include <QGraphicsScene>
 #include <QGraphicsLineItem>
 
-#include "GraphicsLinkCutTree.h"
+//#include "GraphicsLinkCutTree.h"
 #include "animation.h"
 
 class Node;
@@ -23,16 +22,14 @@ private:
     Animation selection_anim;
 
     Node * my_node = nullptr;
-
+    GraphicsSolidNodeItem * graphics_tree;
 
 public:
     static const int node_width_px = 50;
 
-    // 1 ~ element_width_px
-    int displayed_value = 0;
 
-
-    GraphicsSolidNodeItem(Node * my_node, int displayed_value);
+    GraphicsSolidNodeItem(Node * my_node);
+    ~GraphicsSolidNodeItem() override;
 
 
     /*

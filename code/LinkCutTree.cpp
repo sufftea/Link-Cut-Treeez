@@ -1,12 +1,9 @@
 #include "LinkCutTree.h"
 
 
-LinkCutTree::LinkCutTree(int size)
+LinkCutTree::LinkCutTree()
 {
-    nodes.reserve(size);
-    for (int i = 0; i < size; i++) {
-        nodes.push_back(new Node(i));
-    }
+
 }
 
 void LinkCutTree::link(Node * v, Node * to)
@@ -30,6 +27,21 @@ Node *LinkCutTree::get_abstract_root()
         return n;
     } else {
         return nullptr;
+    }
+}
+
+void LinkCutTree::init(int size)
+{
+    if (nodes.size() > 0) {
+        for (Node * node : nodes) {
+            delete node;
+        }
+        nodes.clear();
+    }
+
+    nodes.reserve(size);
+    for (int i = 0; i < size; i++) {
+        nodes.push_back(new Node(i));
     }
 }
 
@@ -77,7 +89,7 @@ void LinkCutTree::finish_operation()
 LinkCutTree::OperationExpose::OperationExpose(Node *v)
 {
     Sequence::add("Expose("
-                  + QString::number(v->graphics->displayed_value)
+                  + QString::number(v->displayed_value)
                   + "):");
     Sequence::step_in();
     this->v = v;
@@ -135,9 +147,9 @@ bool LinkCutTree::OperationExpose::make_step()
 LinkCutTree::OperationLink::OperationLink(Node *v, Node *to)
 {
     Sequence::add("Link "
-                  + QString::number(v->graphics->displayed_value)
+                  + QString::number(v->displayed_value)
                   + " to "
-                  + QString::number(to->graphics->displayed_value)
+                  + QString::number(to->displayed_value)
                   + ":");
     Sequence::step_in();
 
@@ -189,9 +201,9 @@ bool LinkCutTree::OperationLink::make_step()
         v->parent = to;
 
         Sequence::add("link "
-                      + QString::number(v->graphics->displayed_value)
+                      + QString::number(v->displayed_value)
                       + " to "
-                      + QString::number(to->graphics->displayed_value));
+                      + QString::number(to->displayed_value));
 
         return 0;
     }

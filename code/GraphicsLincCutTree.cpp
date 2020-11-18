@@ -1,13 +1,8 @@
 #include "GraphicsLinkCutTree.h"
 
-GraphicsLinkCutTree::GraphicsLinkCutTree(int size)
-    : tree(size)
+GraphicsLinkCutTree::GraphicsLinkCutTree()
 {
     scene = new QGraphicsScene;
-
-    for (Node * node : tree.nodes) {
-        scene->addItem(node->graphics);
-    }
 
     animation_timer = new QTimer;
     animation_timer->setInterval(20);
@@ -37,17 +32,25 @@ void GraphicsLinkCutTree::update_scene()
     this->scene->update();
 }
 
+void GraphicsLinkCutTree::init(int size)
+{
+    tree.init(size);
+    for (Node * node : tree.nodes) {
+        scene->addItem(&node->graphics);
+    }
+}
+
 void GraphicsLinkCutTree::set_movement_easing_curve(std::function<double (double)> f)
 {
     for (Node * node : tree.nodes) {
-        node->graphics->set_movement_easing_curve(f);
+        node->graphics.set_movement_easing_curve(f);
     }
 }
 
 void GraphicsLinkCutTree::animate_scene()
 {
     for (Node * node : tree.nodes) {
-        node->graphics->animate();
+        node->graphics.animate();
     }
 
     scene->update();

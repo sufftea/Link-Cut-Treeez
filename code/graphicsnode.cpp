@@ -2,10 +2,14 @@
 #include "Node.h"
 
 
-GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, int displayed_value)
+GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node)
 {
     this->my_node = my_node;
-    this->displayed_value = displayed_value;
+}
+
+GraphicsSolidNodeItem::~GraphicsSolidNodeItem()
+{
+
 }
 
 void GraphicsSolidNodeItem::update_position(int node_offset, int solid_depth)
@@ -64,7 +68,7 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
 
     painter->drawText(this->boundingRect(),
                       Qt::AlignHCenter | Qt::AlignVCenter,
-                      QString::number(this->displayed_value));
+                      QString::number(my_node->displayed_value));
 
     painter->drawEllipse(this->boundingRect());
 
@@ -77,7 +81,7 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
             // Ideally, make it not just a straight line
 
             QPointF a = QPoint(0, 0);
-            QPointF b = this->my_node->parent->graphics->pos() - this->pos();
+            QPointF b = this->my_node->parent->graphics.pos() - this->pos();
 
 
             QPoint offset(GraphicsSolidNodeItem::node_width_px / 2,
@@ -111,7 +115,7 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
     } else {
         // draw the edge connecting the node to it's parent
         QPointF a = QPoint(0, 0);
-        QPointF b = this->my_node->parent->graphics->pos() - this->pos();
+        QPointF b = this->my_node->parent->graphics.pos() - this->pos();
 
 
         QPoint offset(GraphicsSolidNodeItem::node_width_px / 2,

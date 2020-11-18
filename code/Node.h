@@ -53,15 +53,17 @@ public:
     Node * parent = nullptr;
     Node * left = nullptr;
     Node * right = nullptr;
+    int displayed_value = 0;
 
     /*
      * Stores graphical representation of the node
     */
-    GraphicsSolidNodeItem * graphics;
+    GraphicsSolidNodeItem graphics;
 
 
     Node(int displayed_value = 0);
     Node(Node * parent, int displayed_value = 0);
+    ~Node();
 
 
     /* ========= STEP BY STEP OPERATIONS START ========= */
