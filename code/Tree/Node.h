@@ -5,7 +5,7 @@
 #include <QVector2D>
 
 #include "StepByStepOperation.h"
-#include "graphicsnode.h"
+#include "Tree/Graphics/graphicsnode.h"
 #include "sequence.h"
 
 

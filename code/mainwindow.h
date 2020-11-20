@@ -2,9 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "GraphicsLinkCutTree.h"
-#include "Node.h"
-#include "sequence.h"
+#include "Tree/Graphics/GraphicsLinkCutTree.h"
+#include "Tree/Node.h"
+#include "Tree/sequence.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

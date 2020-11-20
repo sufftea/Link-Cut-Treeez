@@ -16,29 +16,29 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    GraphicsLinkCutTree.cpp \
-    LinkCutTree.cpp \
-    Node.cpp \
-    animation.cpp \
-    graphicsnode.cpp \
+    Tree/LinkCutTree.cpp \
+    Tree/Node.cpp \
+    Tree/sequance.cpp \
+    Tree/Graphics/GraphicsLinkCutTree.cpp \
+    Tree/Graphics/animation.cpp \
+    Tree/Graphics/graphicsnode.cpp \
+    Tree/Graphics/pathfind.cpp \
     main.cpp \
-    mainwindow.cpp \
-    pathfind.cpp \
-    sequance.cpp
+    mainwindow.cpp
 
 HEADERS += \
-    GraphicsLinkCutTree.h \
-    LinkCutTree.h \
-    Node.h \
-    StepByStepOperation.h \
-    animation.h \
-    graphicsnode.h \
-    mainwindow.h \
-    pathfind.h \
-    sequence.h
+    Tree/LinkCutTree.h \
+    Tree/Node.h \
+    Tree/StepByStepOperation.h \
+    Tree/sequence.h \
+    Tree/Graphics/GraphicsLinkCutTree.h \
+    Tree/Graphics/animation.h \
+    Tree/Graphics/graphicsnode.h \
+    Tree/Graphics/pathfind.h \
+    mainwindow.h
 
 FORMS += \
-    mainwindow.ui
+    Rsc/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

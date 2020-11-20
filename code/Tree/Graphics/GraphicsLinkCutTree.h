@@ -5,8 +5,8 @@
 #include <QGraphicsScene>
 #include <QTimer>
 
-#include "LinkCutTree.h"
-#include "sequence.h"
+#include "Tree/LinkCutTree.h"
+#include "Tree/sequence.h"
 
 
 class GraphicsLinkCutTree : public QObject
