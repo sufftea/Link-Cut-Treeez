@@ -74,6 +74,7 @@ public:
 
 
     LinkCutTree();
+    ~LinkCutTree();
 
 
 

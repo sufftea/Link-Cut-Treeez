@@ -6,6 +6,15 @@ LinkCutTree::LinkCutTree()
 
 }
 
+LinkCutTree::~LinkCutTree()
+{
+    for (Node * node : nodes) {
+        delete node;
+    }
+
+    delete current_operation;
+}
+
 void LinkCutTree::link(Node * v, Node * to)
 {
     if (v->is_solid_root()) {

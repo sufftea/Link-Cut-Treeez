@@ -29,27 +29,24 @@ void MainWindow::on_pushButton_clicked()
 {
     graphics_tree.init(6);
 
-    Node * a = tree->nodes[0];
-    Node * b = tree->nodes[1];
-    Node * c = tree->nodes[2];
-    Node * d = tree->nodes[3];
-    Node * e = tree->nodes[4];
-    Node * f = tree->nodes[5];
+    auto & nodes = tree->nodes;
 
+    tree->link(nodes[0], nodes[1]);
+    tree->link(nodes[2], nodes[1]);
+    tree->link(nodes[3], nodes[2]);
+    tree->link(nodes[4], nodes[3]);
 
-    tree->link(b, a);
-    tree->link(c, b);
-    tree->link(d, c);
-    tree->link(e, d);
-    tree->link(f, d);
-
-    tree->start_expose(e);
+    tree->start_expose(nodes[4]);
     tree->finish_operation();
+
+    tree->link(nodes[5], nodes[3]);
+
     graphics_tree.update_scene();
+
     Sequence::clear();
+    tree->start_expose(nodes[5]);
     ui->labelSequence->setText(Sequence::get_text());
 
-    tree->start_expose(f);
 }
 
 void MainWindow::on_pushButton_2_clicked()

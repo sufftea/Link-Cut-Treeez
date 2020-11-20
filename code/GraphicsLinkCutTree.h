@@ -8,6 +8,7 @@
 #include "LinkCutTree.h"
 #include "sequence.h"
 
+
 class GraphicsLinkCutTree : public QObject
 {
     Q_OBJECT

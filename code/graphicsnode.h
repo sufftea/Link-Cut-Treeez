@@ -5,9 +5,10 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsLineItem>
+#include <QHash>
 
-//#include "GraphicsLinkCutTree.h"
 #include "animation.h"
+#include "pathfind.h"
 
 class Node;
 
@@ -22,24 +23,21 @@ private:
     Animation selection_anim;
 
     Node * my_node = nullptr;
-    GraphicsSolidNodeItem * graphics_tree;
+    QGraphicsScene * my_scene = nullptr;
+
 
 public:
     static const int node_width_px = 50;
 
 
-    GraphicsSolidNodeItem(Node * my_node);
+    GraphicsSolidNodeItem(Node * my_node, QGraphicsScene * my_scene = nullptr);
     ~GraphicsSolidNodeItem() override;
 
 
-    /*
-     * Draws the node on the given QGraphicsScene [scene]
-    */
     void update_position(int node_offset, int solid_depth);
     void animate();
     void set_movement_easing_curve(std::function<double(double)> f);
-    QVector<QPoint> find_path(GraphicsSolidNodeItem * to, QGraphicsScene * scene);
-
+    void set_my_scene(QGraphicsScene * scene);
 
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
