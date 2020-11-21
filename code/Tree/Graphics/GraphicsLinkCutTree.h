@@ -6,7 +6,7 @@
 #include <QTimer>
 
 #include "Tree/LinkCutTree.h"
-#include "Tree/sequence.h"
+#include "Helpers/Sequance.h"
 
 
 class GraphicsLinkCutTree : public QObject

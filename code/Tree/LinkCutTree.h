@@ -4,8 +4,8 @@
 #include <QVector>
 #include <QDebug>
 #include "Node.h"
-#include "StepByStepOperation.h"
-#include "sequence.h"
+#include "Helpers/StepByStepOperation.h"
+#include "Helpers/Sequance.h"
 
 /*
 abstract tree -- the big tree with selected paths that

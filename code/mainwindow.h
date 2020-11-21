@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "Tree/Graphics/GraphicsLinkCutTree.h"
 #include "Tree/Node.h"
-#include "Tree/sequence.h"
+#include "Helpers/Sequance.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

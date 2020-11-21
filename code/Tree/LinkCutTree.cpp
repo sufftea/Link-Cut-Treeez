@@ -1,4 +1,4 @@
-#include "LinkCutTree.h"
+#include "Tree/LinkCutTree.h"
 
 
 LinkCutTree::LinkCutTree()

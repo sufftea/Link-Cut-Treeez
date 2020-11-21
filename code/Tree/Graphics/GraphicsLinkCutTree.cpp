@@ -1,4 +1,4 @@
-#include "GraphicsLinkCutTree.h"
+#include "Tree/Graphics/GraphicsLinkCutTree.h"
 
 GraphicsLinkCutTree::GraphicsLinkCutTree()
 {

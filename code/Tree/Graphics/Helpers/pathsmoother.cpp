@@ -1,4 +1,4 @@
-#include "pathsmoother.h"
+#include "Tree/Graphics/Helpers/PathSmoother.h"
 #include <QtMath>
 
 

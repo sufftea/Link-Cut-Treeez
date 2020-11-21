@@ -1,4 +1,4 @@
-#include "Tree/Graphics/graphicsnode.h"
+#include "Tree/Graphics/GraphicsSolidNodeItem.h"
 #include "Tree/Node.h"
 
 

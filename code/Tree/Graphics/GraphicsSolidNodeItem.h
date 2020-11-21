@@ -7,9 +7,9 @@
 #include <QGraphicsLineItem>
 #include <QHash>
 
-#include "Tree/Graphics/Helpers/animation.h"
-#include "Tree/Graphics/Helpers/pathfind.h"
-#include "Tree/Graphics/Helpers/pathsmoother.h"
+#include "Tree/Graphics/Helpers/Animation.h"
+#include "Tree/Graphics/Helpers/PathCreator.h"
+#include "Tree/Graphics/Helpers/PathSmoother.h"
 
 class Node;
 

@@ -4,9 +4,9 @@
 #include <QGraphicsScene>
 #include <QVector2D>
 
-#include "StepByStepOperation.h"
-#include "Tree/Graphics/graphicsnode.h"
-#include "sequence.h"
+#include "Helpers/StepByStepOperation.h"
+#include "Tree/Graphics/GraphicsSolidNodeItem.h"
+#include "Helpers/Sequance.h"
 
 
 /*

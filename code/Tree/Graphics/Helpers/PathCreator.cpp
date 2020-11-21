@@ -1,6 +1,6 @@
-#include "pathfind.h"
-#include "Tree/Graphics/graphicsnode.h"
-#include "Tree/Graphics/Helpers/pathsmoother.h"
+#include "Tree/Graphics/Helpers/PathCreator.h"
+#include "Tree/Graphics/GraphicsSolidNodeItem.h"
+#include "Tree/Graphics/Helpers/PathSmoother.h"
 
 int PathCreator::step_length_px = 37;
 
