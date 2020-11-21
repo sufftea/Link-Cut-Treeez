@@ -12,8 +12,6 @@ GraphicsLinkCutTree::GraphicsLinkCutTree()
 
 GraphicsLinkCutTree::~GraphicsLinkCutTree()
 {
-    qDebug() << "graphics tree destructor";
-
     animation_timer->stop();
     delete animation_timer;
 
@@ -42,6 +40,8 @@ void GraphicsLinkCutTree::init(int size)
     scene->clear();
     tree.init(size);
     for (Node * node : tree.nodes) {
+        node->graphics = new GraphicsSolidNodeItem(node);
+
         scene->addItem(node->graphics);
         node->graphics->set_my_scene(this->scene);
     }

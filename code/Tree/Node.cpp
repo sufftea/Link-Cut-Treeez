@@ -3,7 +3,7 @@
 Node::Node(int displayed_value)
 {   
     this->displayed_value = displayed_value;
-    this->graphics = new GraphicsSolidNodeItem(this);
+//    this->graphics = new GraphicsSolidNodeItem(this);
 
     calculate_depth();
 }
