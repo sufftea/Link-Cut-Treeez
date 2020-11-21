@@ -7,6 +7,7 @@
 #include <QGraphicsScene>
 #include <QVector2D>
 #include <QDebug>
+#include <QGraphicsItem>
 
 
 inline uint qHash (const QPoint & key)
@@ -31,7 +32,6 @@ class Pathfind
         Cell() {}
     };
 
-    static int cell_size_px;
 
     // puts [cell] into [opened] if the cell is not closed
     // and the new cell is better than the one inside [opened]
@@ -40,16 +40,16 @@ class Pathfind
     static void add_to_open(const Cell &cell,
                             QHash<QPoint, Cell> *opened,
                             QHash<QPoint, Cell> *closed,
-                            QGraphicsScene *scene);
+                            QGraphicsScene *scene,
+                            QPoint startingPoint);
 
 public:
+    static int step_length_px;
 
 
-    static QVector<QPoint> find_path(QPoint from,
-                                     QPoint targ,
-                                     QGraphicsScene * scene);
-
-    static void set_cell_size_px(int px);
+    static QList<QPointF> find_path(QPoint from,
+                                    QPoint targ,
+                                    QGraphicsScene * scene);
 };
 
 #endif // PATHFIND_H

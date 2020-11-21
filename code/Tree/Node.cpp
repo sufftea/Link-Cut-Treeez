@@ -4,8 +4,6 @@ Node::Node(int displayed_value)
 {   
     this->displayed_value = displayed_value;
 //    this->graphics = new GraphicsSolidNodeItem(this);
-
-    calculate_depth();
 }
 
 Node::Node(Node * parent, int displayed_value)
@@ -439,29 +437,6 @@ bool Node::is_child()
     return parent != nullptr
             && (parent->left == this
                 || parent->right == this);
-}
-
-void Node::calculate_depth()
-{
-
-}
-
-int Node::traverse_and_update_position(int offset, int solid_depth)
-{
-    int width = 0;
-    if (left != nullptr) {
-        width += left->traverse_and_update_position(offset, solid_depth + 1);
-    }
-    offset += width;
-
-    graphics->update_position(offset, solid_depth);
-    offset += 1;
-
-    if (right != nullptr) {
-        width += right->traverse_and_update_position(offset, solid_depth + 1);
-    }
-
-    return width + 1;
 }
 
 

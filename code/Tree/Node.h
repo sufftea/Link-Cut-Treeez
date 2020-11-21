@@ -116,22 +116,6 @@ public:
     bool is_left_child();
     bool is_right_child();
     bool is_child();
-
-    void calculate_depth();
-
-
-    /* ========== OPERATIONS FOR DRAWING THE TREE START =========== */
-
-    /*
-     * Traverses the tree and updates the position of each its child on the scene.
-     * Returns the width of the tree.
-     *
-     * Offset is measured in node widths (offset = 3 is the same as 3 * node_width_px) and can be used
-     * to move the tree horizontaly along the scene for displaying multiple trees.
-     *
-     * Should be called frome the root node in order to draw the entire solid tree.
-    */
-    int traverse_and_update_position(int offset, int solid_depth = 0);
 };
 
 

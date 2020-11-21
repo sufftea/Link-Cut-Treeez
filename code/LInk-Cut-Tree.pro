@@ -16,25 +16,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Tree/Graphics/Helpers/pathsmoother.cpp \
     Tree/LinkCutTree.cpp \
     Tree/Node.cpp \
     Tree/sequance.cpp \
     Tree/Graphics/GraphicsLinkCutTree.cpp \
-    Tree/Graphics/animation.cpp \
+    Tree/Graphics/Helpers/animation.cpp \
     Tree/Graphics/graphicsnode.cpp \
-    Tree/Graphics/pathfind.cpp \
+    Tree/Graphics/Helpers/pathfind.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    Tree/Graphics/Helpers/pathsmoother.h \
     Tree/LinkCutTree.h \
     Tree/Node.h \
     Tree/StepByStepOperation.h \
     Tree/sequence.h \
     Tree/Graphics/GraphicsLinkCutTree.h \
-    Tree/Graphics/animation.h \
+    Tree/Graphics/Helpers/animation.h \
     Tree/Graphics/graphicsnode.h \
-    Tree/Graphics/pathfind.h \
+    Tree/Graphics/Helpers/pathfind.h \
     mainwindow.h
 
 FORMS += \

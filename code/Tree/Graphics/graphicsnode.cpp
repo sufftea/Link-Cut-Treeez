@@ -46,6 +46,24 @@ void GraphicsSolidNodeItem::set_my_scene(QGraphicsScene *scene)
     this->my_scene = scene;
 }
 
+int GraphicsSolidNodeItem::traverse_and_update_position(int offset, int solid_depth)
+{
+    int width = 0;
+    if (my_node->left != nullptr) {
+        width += my_node->left->graphics->traverse_and_update_position(offset, solid_depth + 1);
+    }
+    offset += width;
+
+    this->update_position(offset, solid_depth);
+    offset += 1;
+
+    if (my_node->right != nullptr) {
+        width += my_node->right->graphics->traverse_and_update_position(offset, solid_depth + 1);
+    }
+
+    return width + 1;
+}
+
 
 
 
@@ -107,26 +125,17 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
             painter->setPen(red_pen);
 
 
-//            draw path parent pointer
-                    QVector<QPoint> path = Pathfind::find_path(this->pos().toPoint() + offset,
-                                                               this->my_node->parent->graphics->pos().toPoint() + offset,
-                                                               my_scene);
-            if (path.size() >= 3) {
-                QPainterPath painter_path(path[0]);
-
-                for (int i = 2; i < path.size(); ++i) {
-                    // only if there's a corner
-                    if (path[i-2].x() != path[i].x() && path[i-2].y() != path[i].y()) {
-                        painter_path.quadTo(path[i-1], path[i]);
-                    } else {
-                        painter_path.lineTo(path[i]);
-                    }
+            //            draw path parent pointer
+            QList<QPointF> path = Pathfind::find_path(this->pos().toPoint() + offset,
+                                                       this->my_node->parent->graphics->pos().toPoint() + offset,
+                                                       my_scene);
+            if (path.length() >= 2) {
+                if (path.length() >= 3) {
+                    path.pop_back();
                 }
-
+                QPainterPath painter_path = PathSmoother::generateSmoothCurve(path);
                 painter_path.translate(-this->pos());
                 painter->drawPath(painter_path);
-            } else if (path.size() == 2) {
-                painter->drawLine(path[0] - this->pos().toPoint(), path[1] - this->pos().toPoint());
             }
         }
     } else {

@@ -27,19 +27,22 @@ void MainWindow::showEvent(QShowEvent *)
 
 void MainWindow::on_pushButton_clicked()
 {
-    graphics_tree.init(6);
+    graphics_tree.init(8);
 
     auto & nodes = tree->nodes;
 
     tree->link(nodes[0], nodes[1]);
     tree->link(nodes[2], nodes[1]);
-    tree->link(nodes[3], nodes[2]);
+    tree->link(nodes[3], nodes[0]);
     tree->link(nodes[4], nodes[3]);
+    tree->link(nodes[5], nodes[4]);
+    tree->link(nodes[6], nodes[2]);
+    tree->link(nodes[7], nodes[5]);
 
-    tree->start_expose(nodes[4]);
+    tree->start_expose(nodes[6]);
     tree->finish_operation();
-
-    tree->link(nodes[5], nodes[3]);
+//    tree->start_expose(nodes[5]);
+//    tree->finish_operation();
 
     graphics_tree.update_scene();
 

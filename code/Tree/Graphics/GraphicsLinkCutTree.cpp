@@ -28,7 +28,7 @@ void GraphicsLinkCutTree::update_scene()
             continue;
         }
 
-        current_offset += root->traverse_and_update_position(current_offset);
+        current_offset += root->graphics->traverse_and_update_position(current_offset);
         current_offset += 2;
     }
 

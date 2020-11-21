@@ -1,15 +1,19 @@
 #include "pathfind.h"
+#include "Tree/Graphics/graphicsnode.h"
 
-int Pathfind::cell_size_px = 35;
+int Pathfind::step_length_px = 24;
 
 
 void Pathfind::add_to_open(const Cell &cell,
                            QHash<QPoint, Cell> *opened,
                            QHash<QPoint, Cell> *closed,
-                           QGraphicsScene * scene)
+                           QGraphicsScene * scene, QPoint startingPoint)
 {
-    if (scene->itemAt(cell.pos, QTransform()) != nullptr) {
-        return;
+    QGraphicsItem * obst = scene->itemAt(cell.pos, QTransform());
+    if (obst != nullptr) {
+        if (QVector2D(obst->pos() - startingPoint).length() > GraphicsSolidNodeItem::node_width_px) {
+            return;
+        }
     }
 
     if ( ! closed->contains(cell.pos)) {
@@ -24,7 +28,7 @@ void Pathfind::add_to_open(const Cell &cell,
     }
 }
 
-QVector<QPoint> Pathfind::find_path(QPoint from, QPoint targ, QGraphicsScene *scene)
+QList<QPointF> Pathfind::find_path(QPoint from, QPoint targ, QGraphicsScene *scene)
 {
     QHash<QPoint, Cell> opened;
     QHash<QPoint, Cell> closed;
@@ -32,7 +36,6 @@ QVector<QPoint> Pathfind::find_path(QPoint from, QPoint targ, QGraphicsScene *sc
     opened.insert(from, Cell(from, from, targ, 0));
     bool target_found_flag = false;
 
-//    qDebug() << "from: " << from << "\tto: " << targ;
 
     while (!opened.isEmpty() && !target_found_flag) {
         Cell curr = opened.begin().value();
@@ -44,35 +47,37 @@ QVector<QPoint> Pathfind::find_path(QPoint from, QPoint targ, QGraphicsScene *sc
             }
         }
 
-//        qDebug() << "\tcurr: " << curr.pos;
-
         // to prevent infinite loop
         if (curr.f > 40) {
             opened.remove(curr.pos);
             break;
         }
 
+        // I added some randomization (+-2) in an attempt
+        // to prevent different paths from overlapping with
+        // each other.
+        // They still might but that's more unlikely.
         QVector<QPoint> neighbours = {
-            curr.pos + QPoint( cell_size_px,  0),
-//            curr.pos + QPoint( cell_size_px,  cell_size_px),
-            curr.pos + QPoint( 0,             cell_size_px),
-//            curr.pos + QPoint(-cell_size_px,  cell_size_px),
-            curr.pos + QPoint(-cell_size_px,  0),
-//            curr.pos + QPoint(-cell_size_px, -cell_size_px),
-            curr.pos + QPoint( 0,            -cell_size_px),
-//            curr.pos + QPoint( cell_size_px, -cell_size_px)
+            curr.pos + QPoint( step_length_px,  2),
+            curr.pos + QPoint( 2,             step_length_px),
+            curr.pos + QPoint(-step_length_px,  -2),
+            curr.pos + QPoint( -2,            -step_length_px),
+            curr.pos + QPoint( step_length_px / 2 + 2,  step_length_px / 2 - 2),
+            curr.pos + QPoint(-step_length_px / 2 - 2, -step_length_px / 2 + 2),
+            curr.pos + QPoint(-step_length_px / 2 - 2,  step_length_px / 2 - 2),
+            curr.pos + QPoint( step_length_px / 2 + 2, -step_length_px / 2 + 2),
         };
 
         for (QPoint nei : neighbours) {
-            if (QVector2D(nei - targ).length() < cell_size_px) {
+            if (QVector2D(nei - targ).length() < GraphicsSolidNodeItem::node_width_px) {
                 target_found_flag = true;
                 closed[targ] = Cell(targ, curr.pos, targ, curr.f + 1);
-                break;
             }
 
             add_to_open(Cell(nei, curr.pos, targ, curr.f + 1),
                         &opened, &closed,
-                        scene);
+                        scene,
+                        from);
         }
 
         opened.remove(curr.pos);
@@ -80,30 +85,25 @@ QVector<QPoint> Pathfind::find_path(QPoint from, QPoint targ, QGraphicsScene *sc
     }
 
 
-//    qDebug() << "restore the path";
     // restore the path
-    QVector<QPoint> path;
+    QList<QPointF> path;
     if (closed.contains(targ)) {
         QPoint curr_pos = closed[targ].pos;
-//        qDebug() << "\tcurrent: " << curr_pos;
-        while (QVector2D(curr_pos - from).length() >= cell_size_px) {
+
+        // maybe?? QVector2D(curr_pos - from).length() >= GraphicsSolidNodeItem::node_width_px
+        while (curr_pos != from) {
             path.push_back(curr_pos);
             curr_pos = closed[curr_pos].prev;
         }
+
         path.push_back(from);
     } else {
-//        qDebug() << "\tdirect path";
         path.push_back(targ);
         path.push_back(from);
     }
 
 
     return path;
-}
-
-void Pathfind::set_cell_size_px(int px)
-{
-    cell_size_px = px;
 }
 
 Pathfind::Cell::Cell(QPoint pos, QPoint prev, QPoint targ, int f)
