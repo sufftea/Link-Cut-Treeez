@@ -15,8 +15,8 @@ GraphicsSolidNodeItem::~GraphicsSolidNodeItem()
 
 void GraphicsSolidNodeItem::update_position(int node_offset, int solid_depth)
 {
-    int node_x = node_offset * GraphicsSolidNodeItem::node_width_px;
-    int node_y = solid_depth * GraphicsSolidNodeItem::node_width_px;
+    int node_x = node_offset * GraphicsSolidNodeItem::node_size_px;
+    int node_y = solid_depth * GraphicsSolidNodeItem::node_size_px;
 
     this->last_pos = this->pos();
     this->next_pos = QPointF(node_x, node_y);
@@ -69,9 +69,11 @@ int GraphicsSolidNodeItem::traverse_and_update_position(int offset, int solid_de
 
 QRectF GraphicsSolidNodeItem::boundingRect() const
 {
-    return QRectF(0, 0,
-                  GraphicsSolidNodeItem::node_width_px,
-                  GraphicsSolidNodeItem::node_width_px);
+    int r = node_size_px;
+    int b = node_bound_size_px;
+    return QRectF(-(b - r) / 2, -(b - r) / 2,
+                  r + (b - r) / 2,
+                  r + (b - r) / 2);
 }
 
 void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
@@ -85,11 +87,11 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
     font.setPixelSize(25);
     painter->setFont(font);
 
-    painter->drawText(this->boundingRect(),
+    painter->drawText(QRect(0, 0, node_size_px, node_size_px),
                       Qt::AlignHCenter | Qt::AlignVCenter,
                       QString::number(my_node->displayed_value));
 
-    painter->drawEllipse(this->boundingRect());
+    painter->drawEllipse(QRect(0, 0, node_size_px, node_size_px));
 
 
     // draw node's parent line
@@ -103,8 +105,8 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
             QPointF b = this->my_node->parent->graphics->pos() - this->pos();
 
 
-            QPoint offset(GraphicsSolidNodeItem::node_width_px / 2,
-                          GraphicsSolidNodeItem::node_width_px / 2);
+            QPoint offset(GraphicsSolidNodeItem::node_size_px / 2,
+                          GraphicsSolidNodeItem::node_size_px / 2);
 
             a += offset;
             b += offset;
@@ -115,8 +117,8 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
             ab.normalize();
             ba.normalize();
 
-            ab *= GraphicsSolidNodeItem::node_width_px / 2;
-            ba *= GraphicsSolidNodeItem::node_width_px / 2;
+            ab *= GraphicsSolidNodeItem::node_size_px / 2;
+            ba *= GraphicsSolidNodeItem::node_size_px / 2;
 
             a += ab.toPoint();
             b += ba.toPoint();
@@ -129,10 +131,10 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
             QList<QPointF> path = Pathfind::find_path(this->pos().toPoint() + offset,
                                                        this->my_node->parent->graphics->pos().toPoint() + offset,
                                                        my_scene);
-            if (path.length() >= 2) {
-                if (path.length() >= 3) {
-                    path.pop_back();
-                }
+            if (path.length() >= 3) {
+//                if (path.length() >= 3) {
+//                    path.pop_back();
+//                }
                 QPainterPath painter_path = PathSmoother::generateSmoothCurve(path);
                 painter_path.translate(-this->pos());
                 painter->drawPath(painter_path);
@@ -144,8 +146,8 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
         QPointF b = this->my_node->parent->graphics->pos() - this->pos();
 
 
-        QPoint offset(GraphicsSolidNodeItem::node_width_px / 2,
-                      GraphicsSolidNodeItem::node_width_px / 2);
+        QPoint offset(GraphicsSolidNodeItem::node_size_px / 2,
+                      GraphicsSolidNodeItem::node_size_px / 2);
 
         a += offset;
         b += offset;
@@ -156,8 +158,8 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
         ab.normalize();
         ba.normalize();
 
-        ab *= GraphicsSolidNodeItem::node_width_px / 2;
-        ba *= GraphicsSolidNodeItem::node_width_px / 2;
+        ab *= GraphicsSolidNodeItem::node_size_px / 2;
+        ba *= GraphicsSolidNodeItem::node_size_px / 2;
 
         a += ab.toPoint();
         b += ba.toPoint();

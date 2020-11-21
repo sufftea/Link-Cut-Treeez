@@ -28,7 +28,8 @@ private:
 
 
 public:
-    static const int node_width_px = 50;
+    static const int node_size_px = 50;
+    static const int node_bound_size_px = 100;
 
 
     GraphicsSolidNodeItem(Node * my_node, QGraphicsScene * my_scene = nullptr);

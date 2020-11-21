@@ -1,7 +1,7 @@
 #include "pathfind.h"
 #include "Tree/Graphics/graphicsnode.h"
 
-int Pathfind::step_length_px = 24;
+int Pathfind::step_length_px = 15;
 
 
 void Pathfind::add_to_open(const Cell &cell,
@@ -11,7 +11,7 @@ void Pathfind::add_to_open(const Cell &cell,
 {
     QGraphicsItem * obst = scene->itemAt(cell.pos, QTransform());
     if (obst != nullptr) {
-        if (QVector2D(obst->pos() - startingPoint).length() > GraphicsSolidNodeItem::node_width_px) {
+        if (QVector2D(obst->pos() - startingPoint).length() > GraphicsSolidNodeItem::node_bound_size_px) {
             return;
         }
     }
@@ -59,17 +59,17 @@ QList<QPointF> Pathfind::find_path(QPoint from, QPoint targ, QGraphicsScene *sce
         // They still might but that's more unlikely.
         QVector<QPoint> neighbours = {
             curr.pos + QPoint( step_length_px,  2),
-            curr.pos + QPoint( 2,             step_length_px),
+            curr.pos + QPoint( 2             , step_length_px),
             curr.pos + QPoint(-step_length_px,  -2),
-            curr.pos + QPoint( -2,            -step_length_px),
+            curr.pos + QPoint( -2            , -step_length_px),
             curr.pos + QPoint( step_length_px / 2 + 2,  step_length_px / 2 - 2),
             curr.pos + QPoint(-step_length_px / 2 - 2, -step_length_px / 2 + 2),
             curr.pos + QPoint(-step_length_px / 2 - 2,  step_length_px / 2 - 2),
-            curr.pos + QPoint( step_length_px / 2 + 2, -step_length_px / 2 + 2),
+            curr.pos + QPoint( step_length_px / 2 + 2, -step_length_px / 2 + 2)
         };
 
         for (QPoint nei : neighbours) {
-            if (QVector2D(nei - targ).length() < GraphicsSolidNodeItem::node_width_px) {
+            if (QVector2D(nei - targ).length() < GraphicsSolidNodeItem::node_bound_size_px) {
                 target_found_flag = true;
                 closed[targ] = Cell(targ, curr.pos, targ, curr.f + 1);
             }
@@ -90,9 +90,11 @@ QList<QPointF> Pathfind::find_path(QPoint from, QPoint targ, QGraphicsScene *sce
     if (closed.contains(targ)) {
         QPoint curr_pos = closed[targ].pos;
 
-        // maybe?? QVector2D(curr_pos - from).length() >= GraphicsSolidNodeItem::node_width_px
+        int i = 1;
         while (curr_pos != from) {
-            path.push_back(curr_pos);
+            if (i++ % 3) {
+                path.push_back(curr_pos);
+            }
             curr_pos = closed[curr_pos].prev;
         }
 
