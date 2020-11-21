@@ -8,6 +8,7 @@ LinkCutTree::LinkCutTree()
 
 LinkCutTree::~LinkCutTree()
 {
+    qDebug() << "link cut tree destructor";
     for (Node * node : nodes) {
         delete node;
     }

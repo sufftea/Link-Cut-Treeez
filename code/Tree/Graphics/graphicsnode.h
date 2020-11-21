@@ -39,6 +39,8 @@ public:
     void set_movement_easing_curve(std::function<double(double)> f);
     void set_my_scene(QGraphicsScene * scene);
 
+
+
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 };

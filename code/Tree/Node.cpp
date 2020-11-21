@@ -1,9 +1,9 @@
 #include "Node.h"
 
 Node::Node(int displayed_value)
-    : graphics(this)
 {   
     this->displayed_value = displayed_value;
+    this->graphics = new GraphicsSolidNodeItem(this);
 
     calculate_depth();
 }
@@ -17,6 +17,7 @@ Node::Node(Node * parent, int displayed_value)
 Node::~Node()
 {
     finish_operation(); // also deletes [current_operation]
+//    delete graphics;
 }
 
 void Node::start_splay()
@@ -453,7 +454,7 @@ int Node::traverse_and_update_position(int offset, int solid_depth)
     }
     offset += width;
 
-    graphics.update_position(offset, solid_depth);
+    graphics->update_position(offset, solid_depth);
     offset += 1;
 
     if (right != nullptr) {

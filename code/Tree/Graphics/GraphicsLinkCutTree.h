@@ -18,16 +18,17 @@ class GraphicsLinkCutTree : public QObject
 
 public:   
     GraphicsLinkCutTree();
-    virtual ~GraphicsLinkCutTree();
+    ~GraphicsLinkCutTree();
+
 
     QGraphicsScene * scene;
-    LinkCutTree tree = LinkCutTree();
+    LinkCutTree tree;
 
     void update_scene();
     void init(int size);
-    void set_movement_easing_curve(std::function<double(double)> f);
+    void set_animation_easing_curve(std::function<double(double)> f);
 
-public slots:
+private slots:
     void animate_scene();
 };
 

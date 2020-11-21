@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    graphics_tree.set_movement_easing_curve(Animation::ease_out_cubic);
+    graphics_tree.set_animation_easing_curve(Animation::ease_out_cubic);
     tree = & graphics_tree.tree;
 
     ui->graphicsView->setScene(graphics_tree.scene);
@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    qDebug() << "mainwindow destructor";
     delete ui;
 }
 

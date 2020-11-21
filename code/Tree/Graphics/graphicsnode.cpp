@@ -1,5 +1,5 @@
-#include "graphicsnode.h"
-#include "Node.h"
+#include "Tree/Graphics/graphicsnode.h"
+#include "Tree/Node.h"
 
 
 GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, QGraphicsScene *my_scene)
@@ -82,7 +82,7 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
             // Ideally, make it not just a straight line
 
             QPointF a = QPoint(0, 0);
-            QPointF b = this->my_node->parent->graphics.pos() - this->pos();
+            QPointF b = this->my_node->parent->graphics->pos() - this->pos();
 
 
             QPoint offset(GraphicsSolidNodeItem::node_width_px / 2,
@@ -106,35 +106,33 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
             QPen red_pen(Qt::red, 2, Qt::DotLine);
             painter->setPen(red_pen);
 
-//            painter->drawLine(QLineF(a, b));
-
 
             // draw path parent pointer
-            QVector<QPoint> path = Pathfind::find_path(this->pos().toPoint() + offset,
-                                                       this->my_node->parent->graphics.pos().toPoint() + offset,
-                                                       my_scene);
-            if (path.size() >= 3) {
-                QPainterPath painter_path(path[0]);
+            //            QVector<QPoint> path = Pathfind::find_path(this->pos().toPoint() + offset,
+            //                                                       this->my_node->parent->graphics.pos().toPoint() + offset,
+            //                                                       my_scene);
+            //            if (path.size() >= 3) {
+            //                QPainterPath painter_path(path[0]);
 
-                for (int i = 2; i < path.size(); ++i) {
-                    // only if there's a corner
-                    if (path[i-2].x() != path[i].x() && path[i-2].y() != path[i].y()) {
-                        painter_path.quadTo(path[i-1], path[i]);
-                    } else {
-                        painter_path.lineTo(path[i]);
-                    }
-                }
+            //                for (int i = 2; i < path.size(); ++i) {
+            //                    // only if there's a corner
+            //                    if (path[i-2].x() != path[i].x() && path[i-2].y() != path[i].y()) {
+            //                        painter_path.quadTo(path[i-1], path[i]);
+            //                    } else {
+            //                        painter_path.lineTo(path[i]);
+            //                    }
+            //                }
 
-                painter_path.translate(-this->pos());
-                painter->drawPath(painter_path);
-            } else if (path.size() == 2) {
-                painter->drawLine(path[0] - this->pos().toPoint(), path[1] - this->pos().toPoint());
-            }
+            //                painter_path.translate(-this->pos());
+            //                painter->drawPath(painter_path);
+            //            } else if (path.size() == 2) {
+            //                painter->drawLine(path[0] - this->pos().toPoint(), path[1] - this->pos().toPoint());
+            //            }
         }
     } else {
         // draw the edge connecting the node to it's parent
         QPointF a = QPoint(0, 0);
-        QPointF b = this->my_node->parent->graphics.pos() - this->pos();
+        QPointF b = this->my_node->parent->graphics->pos() - this->pos();
 
 
         QPoint offset(GraphicsSolidNodeItem::node_width_px / 2,

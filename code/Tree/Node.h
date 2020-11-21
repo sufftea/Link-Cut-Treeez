@@ -58,7 +58,7 @@ public:
     /*
      * Stores graphical representation of the node
     */
-    GraphicsSolidNodeItem graphics;
+    GraphicsSolidNodeItem *graphics;
 
 
     Node(int displayed_value = 0);
