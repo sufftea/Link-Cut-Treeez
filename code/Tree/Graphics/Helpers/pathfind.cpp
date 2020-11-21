@@ -1,13 +1,14 @@
 #include "pathfind.h"
 #include "Tree/Graphics/graphicsnode.h"
+#include "Tree/Graphics/Helpers/pathsmoother.h"
 
-int Pathfind::step_length_px = 15;
+int PathCreator::step_length_px = 37;
 
 
-void Pathfind::add_to_open(const Cell &cell,
+void PathCreator::add_to_open(const Cell &cell,
                            QHash<QPoint, Cell> *opened,
                            QHash<QPoint, Cell> *closed,
-                           QGraphicsScene * scene, QPoint startingPoint)
+                           const QGraphicsScene * scene, QPoint startingPoint)
 {
     QGraphicsItem * obst = scene->itemAt(cell.pos, QTransform());
     if (obst != nullptr) {
@@ -28,7 +29,7 @@ void Pathfind::add_to_open(const Cell &cell,
     }
 }
 
-QList<QPointF> Pathfind::find_path(QPoint from, QPoint targ, QGraphicsScene *scene)
+QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsScene *scene, int skip_points)
 {
     QHash<QPoint, Cell> opened;
     QHash<QPoint, Cell> closed;
@@ -58,14 +59,14 @@ QList<QPointF> Pathfind::find_path(QPoint from, QPoint targ, QGraphicsScene *sce
         // each other.
         // They still might but that's more unlikely.
         QVector<QPoint> neighbours = {
-            curr.pos + QPoint( step_length_px,  2),
-            curr.pos + QPoint( 2             , step_length_px),
-            curr.pos + QPoint(-step_length_px,  -2),
-            curr.pos + QPoint( -2            , -step_length_px),
-            curr.pos + QPoint( step_length_px / 2 + 2,  step_length_px / 2 - 2),
-            curr.pos + QPoint(-step_length_px / 2 - 2, -step_length_px / 2 + 2),
-            curr.pos + QPoint(-step_length_px / 2 - 2,  step_length_px / 2 - 2),
-            curr.pos + QPoint( step_length_px / 2 + 2, -step_length_px / 2 + 2)
+            curr.pos + QPoint( step_length_px,  4),
+            curr.pos + QPoint( 4             , step_length_px),
+            curr.pos + QPoint(-step_length_px,  -4),
+            curr.pos + QPoint( -4            , -step_length_px),
+            curr.pos + QPoint( step_length_px / 2 + 4,  step_length_px / 2 - 4),
+            curr.pos + QPoint(-step_length_px / 2 - 4, -step_length_px / 2 + 4),
+            curr.pos + QPoint(-step_length_px / 2 - 4,  step_length_px / 2 - 4),
+            curr.pos + QPoint( step_length_px / 2 + 4, -step_length_px / 2 + 4)
         };
 
         for (QPoint nei : neighbours) {
@@ -90,9 +91,9 @@ QList<QPointF> Pathfind::find_path(QPoint from, QPoint targ, QGraphicsScene *sce
     if (closed.contains(targ)) {
         QPoint curr_pos = closed[targ].pos;
 
-        int i = 1;
+        int i = 0;
         while (curr_pos != from) {
-            if (i++ % 3) {
+            if ( ! (i++ % (skip_points + 1)) ) {
                 path.push_back(curr_pos);
             }
             curr_pos = closed[curr_pos].prev;
@@ -105,10 +106,19 @@ QList<QPointF> Pathfind::find_path(QPoint from, QPoint targ, QGraphicsScene *sce
     }
 
 
-    return path;
+//    if (! path.isEmpty()) {
+//        path.removeFirst();
+//    }
+
+    if (path.length() < 2) {
+        QPainterPath path(targ);
+        path.lineTo(from);
+        return path;
+    }
+    return PathSmoother::generateSmoothCurve(path);
 }
 
-Pathfind::Cell::Cell(QPoint pos, QPoint prev, QPoint targ, int f)
+PathCreator::Cell::Cell(QPoint pos, QPoint prev, QPoint targ, int f)
 {
     this->pos = pos;
     this->prev = prev;
@@ -118,7 +128,7 @@ Pathfind::Cell::Cell(QPoint pos, QPoint prev, QPoint targ, int f)
     this->h = g + f;
 }
 
-Pathfind::Cell::Cell(QPoint pos, QPoint prev, int g, int f, int h)
+PathCreator::Cell::Cell(QPoint pos, QPoint prev, int g, int f, int h)
 {
     this->pos = pos;
     this->prev = prev;

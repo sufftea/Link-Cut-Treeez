@@ -16,7 +16,7 @@ inline uint qHash (const QPoint & key)
 }
 
 
-class Pathfind
+class PathCreator
 {
     struct Cell {
         QPoint pos = QPoint(-1, -1);
@@ -40,16 +40,17 @@ class Pathfind
     static void add_to_open(const Cell &cell,
                             QHash<QPoint, Cell> *opened,
                             QHash<QPoint, Cell> *closed,
-                            QGraphicsScene *scene,
+                            const QGraphicsScene *scene,
                             QPoint startingPoint);
 
 public:
     static int step_length_px;
 
 
-    static QList<QPointF> find_path(QPoint from,
+    static QPainterPath create_path(QPoint from,
                                     QPoint targ,
-                                    QGraphicsScene * scene);
+                                    const QGraphicsScene *scene,
+                                    int drop_points = 0);
 };
 
 #endif // PATHFIND_H
