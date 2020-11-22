@@ -28,6 +28,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    Helpers/Colors.h \
     Tree/Graphics/Helpers/PathSmoother.h \
     Tree/LinkCutTree.h \
     Tree/Node.h \

@@ -31,25 +31,26 @@ void MainWindow::on_pushButton_clicked()
 
     auto & nodes = tree->nodes;
 
-    tree->link(nodes[0], nodes[1]);
+    tree->link(nodes[0], nodes[5]);
     tree->link(nodes[2], nodes[1]);
-    tree->link(nodes[3], nodes[0]);
+    tree->link(nodes[3], nodes[2]);
     tree->link(nodes[4], nodes[3]);
     tree->link(nodes[5], nodes[4]);
     tree->link(nodes[6], nodes[2]);
-    tree->link(nodes[7], nodes[5]);
+    tree->link(nodes[7], nodes[0]);
 
-    tree->start_expose(nodes[6]);
+    tree->start_expose(nodes[5]);
     tree->finish_operation();
-//    tree->start_expose(nodes[5]);
-//    tree->finish_operation();
+
+
+    tree->start_expose(nodes[3]);
+    tree->finish_operation();
 
     graphics_tree.update_scene();
 
     Sequence::clear();
-    tree->start_expose(nodes[5]);
+    tree->start_expose(nodes[7]);
     ui->labelSequence->setText(Sequence::get_text());
-
 }
 
 void MainWindow::on_pushButton_2_clicked()

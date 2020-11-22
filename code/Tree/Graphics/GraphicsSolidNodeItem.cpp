@@ -1,5 +1,6 @@
 #include "Tree/Graphics/GraphicsSolidNodeItem.h"
 #include "Tree/Node.h"
+#include "Helpers/Colors.h"
 
 
 GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, QGraphicsScene *my_scene)
@@ -14,15 +15,15 @@ GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, QGraphicsScene *my_
     QPainter painter(&pix_node);
 //    painter.fillRect(pix_node.rect(), QBrush(Qt::TransparentMode));
     painter.setRenderHint(QPainter::RenderHint::Antialiasing);
-    QPen black_pen(Qt::black);
-    black_pen.setWidth(3);
-    painter.setPen(black_pen);
+    QPen white_pen(MyColors::white);
+    white_pen.setWidth(3);
+    painter.setPen(white_pen);
 
     QFont font;
     font.setPixelSize(25);
     painter.setFont(font);
 
-    painter.setBrush(QBrush(QColor(52, 114, 200)));
+    painter.setBrush(MyColors::blue);
     painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
 
     painter.drawText(QRect(0, 0, node_size_px, node_size_px),
@@ -52,7 +53,7 @@ void GraphicsSolidNodeItem::animate()
 {
     // animate the position
     if (movement_anim.get_is_active()) {
-        double v = movement_anim.get_value();
+        qreal v = movement_anim.get_value();
         QPointF m = (next_pos - last_pos) * v;
         this->setPos(last_pos + m);
     }
@@ -99,9 +100,9 @@ QRectF GraphicsSolidNodeItem::boundingRect() const
 
 void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    QPen black_pen(Qt::black);
-    black_pen.setWidth(3);
-    painter->setPen(black_pen);
+    QPen white_pen(MyColors::white);
+    white_pen.setWidth(3);
+    painter->setPen(white_pen);
 
     // draw node's parent line
     // either just a parant edge [2] or a path-parent pointer [1]
@@ -109,20 +110,39 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
         if (!this->my_node->is_abstract_root()) {
             // draw the path-parent pointer
 
-            QPen red_pen(Qt::red);
+            QPen red_pen(MyColors::red);
             red_pen.setStyle(Qt::DotLine);
-            red_pen.setWidth(2);
+            red_pen.setWidth(3);
             painter->setPen(red_pen);
 
             QPoint offset(GraphicsSolidNodeItem::node_size_px / 2,
                           GraphicsSolidNodeItem::node_size_px / 2);
 
-            QPainterPath path = PathCreator::create_path(this->pos().toPoint() + offset,
+            QPainterPath path_parent_path = PathCreator::create_path(this->pos().toPoint() + offset,
                                                          this->my_node->parent->graphics->pos().toPoint() + offset,
                                                          my_scene,
-                                                         2);
-            path.translate(-this->pos());
-            painter->drawPath(path);
+                                                         3);
+            path_parent_path.translate(-this->pos());
+            painter->drawPath(path_parent_path);
+
+            // draw an arrow at the end of the path
+            red_pen.setStyle(Qt::PenStyle::SolidLine);
+            painter->setPen(red_pen);
+            painter->setBrush(MyColors::red);
+
+            QPolygonF arrow({
+                              QPointF(-13, 0),
+                              QPointF(0, -5),
+                              QPointF(0, 5)
+                          });
+
+            qreal angle = -path_parent_path.angleAtPercent(0);
+            QMatrix rot;
+            rot.rotate(angle);
+            arrow = rot.map(arrow);
+
+            arrow.translate(path_parent_path.elementAt(0));
+            painter->drawPolygon(arrow);
         }
     } else {
         // draw the edge
@@ -152,6 +172,5 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
 
     // draw the node
     painter->drawPixmap(0, 0, this->pix_node);
-
 }
 

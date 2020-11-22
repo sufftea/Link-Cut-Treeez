@@ -2,7 +2,7 @@
 #include "Tree/Graphics/GraphicsSolidNodeItem.h"
 #include "Tree/Graphics/Helpers/PathSmoother.h"
 
-int PathCreator::step_length_px = 37;
+int PathCreator::step_length_px = 25;
 
 
 void PathCreator::add_to_open(const Cell &cell,
@@ -12,7 +12,7 @@ void PathCreator::add_to_open(const Cell &cell,
 {
     QGraphicsItem * obst = scene->itemAt(cell.pos, QTransform());
     if (obst != nullptr) {
-        if (QVector2D(obst->pos() - startingPoint).length() > GraphicsSolidNodeItem::node_bound_size_px) {
+        if (!is_inside(cell.pos, startingPoint, GraphicsSolidNodeItem::node_bound_size_px / 2)) {
             return;
         }
     }
@@ -29,6 +29,11 @@ void PathCreator::add_to_open(const Cell &cell,
     }
 }
 
+bool PathCreator::is_inside(QPoint point, QPoint item_pos, int item_size)
+{
+    return QVector2D(point - item_pos).length() < item_size;
+}
+
 QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsScene *scene, int skip_points)
 {
     QHash<QPoint, Cell> opened;
@@ -41,23 +46,23 @@ QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsS
     while (!opened.isEmpty() && !target_found_flag) {
         Cell curr = opened.begin().value();
 
-        // cell with minimal h cost
+        // find cell with minimal h-cost
         for (const Cell &c : opened) {
             if (c.h < curr.h || (c.h == curr.h && c.g < curr.g)) {
                 curr = c;
             }
         }
 
-        // to prevent infinite loop
-        if (curr.f > 40) {
-            opened.remove(curr.pos);
+        // restriction for the maximum path length
+        // in case there's no possible path
+        if (closed.size() > 200) {
             break;
         }
 
         // I added some randomization (+-2) in an attempt
         // to prevent different paths from overlapping with
         // each other.
-        // They still might but that's more unlikely.
+        // They still can, but that's more unlikely.
         QVector<QPoint> neighbours = {
             curr.pos + QPoint( step_length_px,  4),
             curr.pos + QPoint( 4             , step_length_px),
@@ -70,7 +75,7 @@ QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsS
         };
 
         for (QPoint nei : neighbours) {
-            if (QVector2D(nei - targ).length() < GraphicsSolidNodeItem::node_bound_size_px) {
+            if (is_inside(nei, targ, GraphicsSolidNodeItem::node_size_px)) {
                 target_found_flag = true;
                 closed[targ] = Cell(targ, curr.pos, targ, curr.f + 1);
             }
@@ -97,6 +102,10 @@ QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsS
                 path.push_back(curr_pos);
             }
             curr_pos = closed[curr_pos].prev;
+
+            if (i > 70) {
+                break;
+            }
         }
 
         path.push_back(from);
@@ -106,16 +115,29 @@ QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsS
     }
 
 
-//    if (! path.isEmpty()) {
-//        path.removeFirst();
-//    }
+    if (path.length() >= 2) {
+        // path must should stop some distance away
+        // from the node it leads to.
 
-    if (path.length() < 2) {
-        QPainterPath path(targ);
-        path.lineTo(from);
-        return path;
+        QPointF a = targ;
+        QPointF b = path[1];
+
+        QVector2D offset(b - a);
+        offset.normalize();
+        offset *= GraphicsSolidNodeItem::node_size_px / 2 + 13;
+
+        a += offset.toPointF();
+
+        path[0] = a;
+    } else {
+        QPainterPath painter_path(targ);
+        painter_path.lineTo(from);
+
+        return painter_path;
     }
-    return PathSmoother::generateSmoothCurve(path);
+
+    QPainterPath res = PathSmoother::generateSmoothCurve(path);
+    return res;
 }
 
 PathCreator::Cell::Cell(QPoint pos, QPoint prev, QPoint targ, int f)

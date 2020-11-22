@@ -9,29 +9,29 @@
 
 class Animation
 {
-    double t = 1;
-    double inc = 0.1;
+    qreal t = 1;
+    qreal inc = 0.1;
     bool is_inversed = false;
     bool is_active = false;
-    std::function<double(double)> easing_curve = Animation::linear;
+    std::function<qreal(qreal)> easing_curve = Animation::linear;
 
 
 public: 
     Animation();
 
-    double get_value(bool dont_increment = false);
+    qreal get_value(bool dont_increment = false);
     void set_reversed(bool is_reversed);
-    void set_easing_curve(std::function<double(double)> easing_curve);
+    void set_easing_curve(std::function<qreal(qreal)> easing_curve);
     void start();
     void stop();
     bool get_is_active();
 
 
     // easing curves
-    static double linear(double t);
-    static double ease_out_cubic(double t);
-    static double ease_in(double t);
-    static double ease_in_out(double t);
+    static qreal linear(qreal t);
+    static qreal ease_out_cubic(qreal t);
+    static qreal ease_in(qreal t);
+    static qreal ease_in_out(qreal t);
 };
 
 #endif // ANIMATION_H

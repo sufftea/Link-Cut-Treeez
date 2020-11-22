@@ -43,6 +43,12 @@ class PathCreator
                             const QGraphicsScene *scene,
                             QPoint startingPoint);
 
+    // checks if [point] is inside a node with the
+    // position of [item_pos]. point is considered inside
+    // a node if the distance between them is less than
+    // node's size;
+    static bool is_inside(QPoint point, QPoint item_pos, int item_size);
+
 public:
     static int step_length_px;
 

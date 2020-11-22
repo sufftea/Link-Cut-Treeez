@@ -1,8 +1,10 @@
 #include "Tree/Graphics/GraphicsLinkCutTree.h"
+#include "Helpers/Colors.h"
 
 GraphicsLinkCutTree::GraphicsLinkCutTree()
 {
     scene = new QGraphicsScene;
+    scene->setBackgroundBrush(QBrush(MyColors::black));
 
     animation_timer = new QTimer;
     animation_timer->setInterval(20);
