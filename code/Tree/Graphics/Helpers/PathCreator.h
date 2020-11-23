@@ -37,7 +37,7 @@ class PathCreator
     // and the new cell is better than the one inside [opened]
     // and the new cell doesn`t intersect anonther objecn
     // on the scene
-    static void add_to_open(const Cell &cell,
+    static void add_to_opened(const Cell &cell,
                             QHash<QPoint, Cell> *opened,
                             QHash<QPoint, Cell> *closed,
                             const QGraphicsScene *scene,

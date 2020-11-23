@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui_main->setupUi(ui_base->main_ui_frame);
 
 
-    // connect stuff that qt does't want to
+    // connect slots that qt does't want to
     connect(ui_main->pushButtonMakeStep, SIGNAL(clicked()), this, SLOT(on_pushButtonMakeStepClicked()));
     connect(ui_main->pushButtonReset, SIGNAL(clicked()), this, SLOT(on_pushButtonResetClicked()));
     connect(ui_main->horizontalSliderAnimationSpeed, SIGNAL(valueChanged(int)),
@@ -67,10 +67,19 @@ void MainWindow::showEvent(QShowEvent *)
 
 }
 
+void MainWindow::mousePressEvent(QMouseEvent *e)
+{
+    QGraphicsView * gw = ui_base->graphicsView;
+    QPoint pos = gw->mapToScene(gw->mapFromParent(e->pos())).toPoint();
+
+    GraphicsSolidNodeItem * node_g = graphics_tree.solid_node_at(pos);
+    // TODO
+}
+
 void MainWindow::on_pushButtonMakeStepClicked()
 {
     tree->make_step();
-    ui_main->labelSequence->setText(Sequence::get_text());
+    ui_main->labelSequence->setText(SequanceLog::get_text());
     graphics_tree.update_scene();
 }
 
@@ -94,17 +103,17 @@ void MainWindow::init()
     tree->link(nodes[3], nodes[2]);
     tree->link(nodes[4], nodes[3]);
     tree->link(nodes[5], nodes[4]);
-    tree->link(nodes[6], nodes[0]);
-    tree->link(nodes[7], nodes[6]);
+    tree->link(nodes[6], nodes[5]);
+    tree->link(nodes[7], nodes[4]);
 
-    tree->start_expose(nodes[5]);
+    tree->start_expose(nodes[6]);
     tree->finish_operation();
     tree->start_expose(nodes[3]);
     tree->finish_operation();
 
     graphics_tree.update_scene();
 
-    Sequence::clear();
+    SequanceLog::clear();
     tree->start_expose(nodes[7]);
-    ui_main->labelSequence->setText(Sequence::get_text());
+    ui_main->labelSequence->setText(SequanceLog::get_text());
 }

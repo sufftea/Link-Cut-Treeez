@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QLayout>
+#include <QMouseEvent>
 
 #include "Tree/Graphics/GraphicsLinkCutTree.h"
 #include "Tree/Node.h"
@@ -25,11 +26,14 @@ public:
 private slots:
     void showEvent(QShowEvent *) override;
 
+    void mousePressEvent(QMouseEvent *e) override;
+
     void on_pushButtonMakeStepClicked();
 
     void on_horizontalSliderAnimationSpeedValueChanged(int value);
 
     void on_pushButtonResetClicked();
+
 
 private:
     Ui::MainWindow *ui_base;

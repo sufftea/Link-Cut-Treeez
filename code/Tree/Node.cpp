@@ -444,18 +444,18 @@ bool Node::is_child()
 
 Node::OperationSplay::OperationSplay(Node * v)
 {
-    Sequence::add("splay("
+    SequanceLog::add("splay("
                   + QString::number(v->displayed_value)
                   + ")");
-    Sequence::step_in();
+    SequanceLog::step_in();
 
     this->v = v;
 }
 
 Node::OperationSplay::~OperationSplay()
 {
-    Sequence::add("Splay finished!");
-    Sequence::step_out();
+    SequanceLog::add("Splay finished!");
+    SequanceLog::step_out();
 }
 
 bool Node::OperationSplay::make_step()
@@ -465,28 +465,28 @@ bool Node::OperationSplay::make_step()
     }
 
     if (v->try_zig_zag_left()) {
-        Sequence::add("Zig-Zag left");
+        SequanceLog::add("Zig-Zag left");
         return 1;
     }
     if (v->try_zig_zag_right()) {
-        Sequence::add("Zig-Zag right");
+        SequanceLog::add("Zig-Zag right");
         return 1;
     }
     if (v->try_zig_zig_left()) {
-        Sequence::add("Zig-Zig left");
+        SequanceLog::add("Zig-Zig left");
         return 1;
     }
     if (v->try_zig_zig_right()) {
-        Sequence::add("Zig-Zig right");
+        SequanceLog::add("Zig-Zig right");
         return 1;
     }
 
     if (v->try_zig_left()) {
-        Sequence::add("Zig left");
+        SequanceLog::add("Zig left");
         return 1;
     }
     if (v->try_zig_right()) {
-        Sequence::add("Zig right");
+        SequanceLog::add("Zig right");
         return 1;
     }
 

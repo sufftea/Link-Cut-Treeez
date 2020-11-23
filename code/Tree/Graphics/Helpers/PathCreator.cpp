@@ -5,10 +5,11 @@
 int PathCreator::step_length_px = 25;
 
 
-void PathCreator::add_to_open(const Cell &cell,
-                           QHash<QPoint, Cell> *opened,
-                           QHash<QPoint, Cell> *closed,
-                           const QGraphicsScene * scene, QPoint startingPoint)
+void PathCreator::add_to_opened(const Cell &cell,
+                                QHash<QPoint, Cell> *opened,
+                                QHash<QPoint, Cell> *closed,
+                                const QGraphicsScene * scene,
+                                QPoint startingPoint)
 {
     QGraphicsItem * obst = scene->itemAt(cell.pos, QTransform());
     if (obst != nullptr) {
@@ -44,34 +45,31 @@ QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsS
 
 
     while (!opened.isEmpty() && !target_found_flag) {
-        Cell curr = opened.begin().value();
-
         // find cell with minimal h-cost
+        Cell curr = opened.begin().value();
         for (const Cell &c : opened) {
             if (c.h < curr.h || (c.h == curr.h && c.g < curr.g)) {
                 curr = c;
             }
         }
 
-        // restriction for the maximum path length
-        // in case there's no possible path
         if (closed.size() > 200) {
+            closed[targ] = Cell(targ, curr.pos, targ, curr.f + 1);
             break;
         }
 
         // I added some randomization (+-2) in an attempt
         // to prevent different paths from overlapping with
         // each other.
-        // They still can, but that's more unlikely.
         QVector<QPoint> neighbours = {
-            curr.pos + QPoint( step_length_px,  4),
-            curr.pos + QPoint( 4             , step_length_px),
-            curr.pos + QPoint(-step_length_px,  -4),
-            curr.pos + QPoint( -4            , -step_length_px),
-            curr.pos + QPoint( step_length_px / 2 + 4,  step_length_px / 2 - 4),
-            curr.pos + QPoint(-step_length_px / 2 - 4, -step_length_px / 2 + 4),
-            curr.pos + QPoint(-step_length_px / 2 - 4,  step_length_px / 2 - 4),
-            curr.pos + QPoint( step_length_px / 2 + 4, -step_length_px / 2 + 4)
+            curr.pos + QPoint( step_length_px,  2),
+            curr.pos + QPoint( 2             , step_length_px),
+            curr.pos + QPoint(-step_length_px,  -2),
+            curr.pos + QPoint( -2            , -step_length_px),
+//            curr.pos + QPoint( step_length_px / 2 + 0,  step_length_px / 2 - 0),
+//            curr.pos + QPoint(-step_length_px / 2 - 0, -step_length_px / 2 + 0),
+//            curr.pos + QPoint(-step_length_px / 2 - 0,  step_length_px / 2 - 0),
+//            curr.pos + QPoint( step_length_px / 2 + 0, -step_length_px / 2 + 0)
         };
 
         for (QPoint nei : neighbours) {
@@ -80,10 +78,10 @@ QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsS
                 closed[targ] = Cell(targ, curr.pos, targ, curr.f + 1);
             }
 
-            add_to_open(Cell(nei, curr.pos, targ, curr.f + 1),
-                        &opened, &closed,
-                        scene,
-                        from);
+            add_to_opened(Cell(nei, curr.pos, targ, curr.f + 1),
+                          &opened, &closed,
+                          scene,
+                          from);
         }
 
         opened.remove(curr.pos);
@@ -91,50 +89,39 @@ QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsS
     }
 
 
+
     // restore the path
     QList<QPointF> path;
-    if (closed.contains(targ)) {
-        QPoint curr_pos = closed[targ].pos;
+    path.push_back(targ);
 
-        int i = 0;
-        while (curr_pos != from) {
-            if ( ! (i++ % (skip_points + 1)) ) {
-                path.push_back(curr_pos);
-            }
-            curr_pos = closed[curr_pos].prev;
-
-            if (i > 70) {
-                break;
-            }
+    QPoint curr_pos = closed[targ].prev;
+    int i = 0;
+    while (curr_pos != from) {
+        if ( ! (i++ % (skip_points + 1)) ) {
+            path.push_back(curr_pos);
         }
 
-        path.push_back(from);
-    } else {
-        path.push_back(targ);
-        path.push_back(from);
+        curr_pos = closed[curr_pos].prev;
+
+        if (i > 70) {
+            break;
+        }
     }
+    path.push_back(from);
 
 
-    if (path.length() >= 2) {
-        // path must should stop some distance away
-        // from the node it leads to.
+    // path must should stop some distance away
+    // from the node it leads to.
+    QPointF a = targ;
+    QPointF b = path[1];
 
-        QPointF a = targ;
-        QPointF b = path[1];
+    QVector2D offset(b - a);
+    offset.normalize();
+    offset *= GraphicsSolidNodeItem::node_size_px / 2 + 13;
 
-        QVector2D offset(b - a);
-        offset.normalize();
-        offset *= GraphicsSolidNodeItem::node_size_px / 2 + 13;
+    a += offset.toPointF();
 
-        a += offset.toPointF();
-
-        path[0] = a;
-    } else {
-        QPainterPath painter_path(targ);
-        painter_path.lineTo(from);
-
-        return painter_path;
-    }
+    path[0] = a;
 
     QPainterPath res = PathSmoother::generateSmoothCurve(path);
     return res;

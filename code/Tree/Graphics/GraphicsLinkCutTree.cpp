@@ -71,6 +71,27 @@ bool GraphicsLinkCutTree::set_animation_speed(qreal p)
     return true;
 }
 
+GraphicsSolidNodeItem *GraphicsLinkCutTree::solid_node_at(QPoint pos)
+{
+    if (tree.nodes.size() == 0) return  nullptr;
+
+    GraphicsSolidNodeItem * res = nullptr;
+    qreal closest_dist = 99999999;
+    for (auto node : tree.nodes) {
+        qreal dist = QVector2D(node->graphics->pos() - pos).length();
+        if (dist < closest_dist) {
+            closest_dist = dist;
+            res = node->graphics;
+        }
+    }
+
+    if (closest_dist > GraphicsSolidNodeItem::node_size_px) {
+        return nullptr;
+    }
+
+    return res;
+}
+
 void GraphicsLinkCutTree::animate_scene()
 {
     for (Node * node : tree.nodes) {

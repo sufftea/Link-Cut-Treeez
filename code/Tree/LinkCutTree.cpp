@@ -99,22 +99,25 @@ void LinkCutTree::finish_operation()
 
 LinkCutTree::OperationExpose::OperationExpose(Node *v)
 {
-    Sequence::add("Expose("
+    SequanceLog::add("Expose("
                   + QString::number(v->displayed_value)
                   + "):");
-    Sequence::step_in();
+    SequanceLog::step_in();
     this->v = v;
 }
 
 LinkCutTree::OperationExpose::~OperationExpose()
 {
-    Sequence::add("expose finished!");
-    Sequence::step_out();
+    SequanceLog::add("expose finished!");
+    SequanceLog::step_out();
 }
 
 bool LinkCutTree::OperationExpose::make_step()
 {
     if (current_step == Step::start_splaying_v) {
+        v->right = nullptr;
+        SequanceLog::add("get rid of right subtree for " + QString::number(v->displayed_value));
+
         v->start_splay();
         current_step = Step::splaying_v;
     }
@@ -146,7 +149,7 @@ bool LinkCutTree::OperationExpose::make_step()
 
         current_step = start_splaying_v;
 
-        Sequence::add("connect v to it's path parent;");
+        SequanceLog::add("connect v to it's path parent;");
     }
 
     return 1;
@@ -157,12 +160,12 @@ bool LinkCutTree::OperationExpose::make_step()
 
 LinkCutTree::OperationLink::OperationLink(Node *v, Node *to)
 {
-    Sequence::add("Link "
+    SequanceLog::add("Link "
                   + QString::number(v->displayed_value)
                   + " to "
                   + QString::number(to->displayed_value)
                   + ":");
-    Sequence::step_in();
+    SequanceLog::step_in();
 
     this->v = v;
     this->to = to;
@@ -170,8 +173,8 @@ LinkCutTree::OperationLink::OperationLink(Node *v, Node *to)
 
 LinkCutTree::OperationLink::~OperationLink()
 {
-    Sequence::add("link finished!");
-    Sequence::step_out();
+    SequanceLog::add("link finished!");
+    SequanceLog::step_out();
     delete this->expose_operation;
 }
 
@@ -186,7 +189,7 @@ bool LinkCutTree::OperationLink::make_step()
         if (!expose_operation->make_step()) {
             current_step = Step::start_expose_to;
 
-            Sequence::step_out();
+            SequanceLog::step_out();
         }
     }
 
@@ -200,7 +203,7 @@ bool LinkCutTree::OperationLink::make_step()
         if (!expose_operation->make_step()) {
             current_step = Step::link;
 
-            Sequence::step_out();
+            SequanceLog::step_out();
         }
     }
 
@@ -211,7 +214,7 @@ bool LinkCutTree::OperationLink::make_step()
 //        to->parent = v;
         v->parent = to;
 
-        Sequence::add("link "
+        SequanceLog::add("link "
                       + QString::number(v->displayed_value)
                       + " to "
                       + QString::number(to->displayed_value));

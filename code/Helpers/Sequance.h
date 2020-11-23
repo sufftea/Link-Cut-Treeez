@@ -4,14 +4,14 @@
 #include <QString>
 #include <QDebug>
 
-class Sequence
+class SequanceLog
 {
     static QString text;
     static int in;
 
 public:
 
-    Sequence();
+    SequanceLog();
 
     static void step_in();
     static void step_out();
@@ -20,7 +20,6 @@ public:
 
     static void clear();
 
-//    const QString & get_text();
     static const QString & get_text();
 };
 

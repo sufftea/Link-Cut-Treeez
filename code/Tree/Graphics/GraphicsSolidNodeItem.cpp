@@ -101,8 +101,9 @@ QRectF GraphicsSolidNodeItem::boundingRect() const
 void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     QPen white_pen(MyColors::white);
-    white_pen.setWidth(3);
+    white_pen.setWidth(5);
     painter->setPen(white_pen);
+
 
     // draw node's parent line
     // either just a parant edge [2] or a path-parent pointer [1]
@@ -110,10 +111,13 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
         if (!this->my_node->is_abstract_root()) {
             // draw the path-parent pointer
 
-            QPen red_pen(MyColors::red);
-            red_pen.setStyle(Qt::DotLine);
-            red_pen.setWidth(3);
-            painter->setPen(red_pen);
+            QPen red_dot_pen(MyColors::red);
+            red_dot_pen.setStyle(Qt::DotLine);
+            red_dot_pen.setWidth(5);
+
+            QPen eraser(MyColors::black);
+            eraser.setWidth(12);
+            eraser.setStyle(Qt::PenStyle::SolidLine);
 
             QPoint offset(GraphicsSolidNodeItem::node_size_px / 2,
                           GraphicsSolidNodeItem::node_size_px / 2);
@@ -123,11 +127,15 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
                                                          my_scene,
                                                          3);
             path_parent_path.translate(-this->pos());
+
+            painter->setPen(eraser);
+            painter->drawPath(path_parent_path);
+            painter->setPen(red_dot_pen);
             painter->drawPath(path_parent_path);
 
             // draw an arrow at the end of the path
-            red_pen.setStyle(Qt::PenStyle::SolidLine);
-            painter->setPen(red_pen);
+            red_dot_pen.setStyle(Qt::PenStyle::SolidLine);
+            painter->setPen(red_dot_pen);
             painter->setBrush(MyColors::red);
 
             QPolygonF arrow({
