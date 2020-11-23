@@ -175,7 +175,10 @@ LinkCutTree::OperationLink::~OperationLink()
 {
     SequanceLog::add("link finished!");
     SequanceLog::step_out();
-    delete this->expose_operation;
+
+    if (expose_operation != nullptr) {
+        delete expose_operation;
+    }
 }
 
 bool LinkCutTree::OperationLink::make_step()
@@ -189,12 +192,12 @@ bool LinkCutTree::OperationLink::make_step()
         if (!expose_operation->make_step()) {
             current_step = Step::start_expose_to;
 
-            SequanceLog::step_out();
+            delete expose_operation;
+            expose_operation = nullptr;
         }
     }
 
     else if (current_step == Step::start_expose_to) {
-        delete expose_operation;
         expose_operation = new OperationExpose(to);
         current_step = Step::expose_u;
     }
@@ -203,7 +206,8 @@ bool LinkCutTree::OperationLink::make_step()
         if (!expose_operation->make_step()) {
             current_step = Step::link;
 
-            SequanceLog::step_out();
+            delete expose_operation;
+            expose_operation = nullptr;
         }
     }
 

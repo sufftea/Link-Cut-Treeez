@@ -29,6 +29,7 @@ public:
     void set_animation_easing_curve(std::function<double(double)> f);
     bool set_animation_speed(qreal p);
     GraphicsSolidNodeItem * solid_node_at(QPoint pos);
+    void unselect_all_nodes();
 
 private slots:
     void animate_scene();

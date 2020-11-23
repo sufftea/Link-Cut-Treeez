@@ -17,9 +17,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     // connect slots that qt does't want to
     connect(ui_main->pushButtonMakeStep, SIGNAL(clicked()), this, SLOT(on_pushButtonMakeStepClicked()));
+    connect(ui_main->pushButtonEndOperation, SIGNAL(clicked()), this, SLOT(on_pushButtonEndOperationClicked()));
     connect(ui_main->pushButtonReset, SIGNAL(clicked()), this, SLOT(on_pushButtonResetClicked()));
+
     connect(ui_main->horizontalSliderAnimationSpeed, SIGNAL(valueChanged(int)),
             this, SLOT(on_horizontalSliderAnimationSpeedValueChanged(int)));
+
+    connect(ui_main->pushButtonCut, SIGNAL(clicked()), this, SLOT(on_pushButtonCutClicked()));
+    connect(ui_main->pushButtonLink, SIGNAL(clicked()), this, SLOT(on_pushButtonLinkClicked()));
+    connect(ui_main->pushButtonExpose, SIGNAL(clicked()), this, SLOT(on_pushButtonExposeClicked()));
 
 
     // create a layout
@@ -39,6 +45,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui_base->graphicsView->setScene(graphics_tree.scene);
     ui_base->graphicsView->setRenderHints(QPainter::RenderHint::Antialiasing);
     ui_main->horizontalSliderAnimationSpeed->setValue(50);
+
+    selected_nodes.reserve(3);
+
+    ui_main->pushButtonCut->setEnabled(false);
+    ui_main->pushButtonLink->setEnabled(false);
+    ui_main->pushButtonExpose->setEnabled(false);
 
 
     // set background tiling for the graphicsview
@@ -72,8 +84,34 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
     QGraphicsView * gw = ui_base->graphicsView;
     QPoint pos = gw->mapToScene(gw->mapFromParent(e->pos())).toPoint();
 
-    GraphicsSolidNodeItem * node_g = graphics_tree.solid_node_at(pos);
-    // TODO
+    GraphicsSolidNodeItem * graphics_node = graphics_tree.solid_node_at(pos);
+
+    if (graphics_node != nullptr) {
+        if (graphics_node->get_selection_type() == GraphicsSolidNodeItem::SelectionType::no_selection) {
+            graphics_node->set_selection_type(GraphicsSolidNodeItem::SelectionType::user_selected);
+            selected_nodes << graphics_node;
+        } else if (graphics_node->get_selection_type() == GraphicsSolidNodeItem::SelectionType::user_selected) {
+            graphics_node->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+            selected_nodes.removeOne(graphics_node);
+        }
+
+        if (selected_nodes.size() == 0) {
+            ui_main->pushButtonCut->setEnabled(false);
+            ui_main->pushButtonLink->setEnabled(false);
+            ui_main->pushButtonExpose->setEnabled(false);
+        } else if (selected_nodes.size() == 1) {
+            ui_main->pushButtonCut->setEnabled(true);
+            ui_main->pushButtonLink->setEnabled(false);
+            ui_main->pushButtonExpose->setEnabled(true);
+        } else if (selected_nodes.size() == 2) {
+            ui_main->pushButtonCut->setEnabled(false);
+            ui_main->pushButtonLink->setEnabled(true);
+            ui_main->pushButtonExpose->setEnabled(false);
+        } else if (selected_nodes.size() == 3) {
+            selected_nodes.first()->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+            selected_nodes.pop_front();
+        }
+    }
 }
 
 void MainWindow::on_pushButtonMakeStepClicked()
@@ -96,24 +134,61 @@ void MainWindow::on_pushButtonResetClicked()
 void MainWindow::init()
 {
     graphics_tree.init(8);
-    auto & nodes = tree->nodes;
-
-    tree->link(nodes[0], nodes[2]);
-    tree->link(nodes[2], nodes[1]);
-    tree->link(nodes[3], nodes[2]);
-    tree->link(nodes[4], nodes[3]);
-    tree->link(nodes[5], nodes[4]);
-    tree->link(nodes[6], nodes[5]);
-    tree->link(nodes[7], nodes[4]);
-
-    tree->start_expose(nodes[6]);
-    tree->finish_operation();
-    tree->start_expose(nodes[3]);
-    tree->finish_operation();
-
     graphics_tree.update_scene();
 
     SequanceLog::clear();
-    tree->start_expose(nodes[7]);
     ui_main->labelSequence->setText(SequanceLog::get_text());
+
+    selected_nodes.clear();
+}
+
+void MainWindow::on_pushButtonExposeClicked()
+{
+    if (selected_nodes.size() == 1) {
+        SequanceLog::clear();
+
+        tree->start_expose(selected_nodes[0]->my_node);
+
+        ui_main->labelSequence->setText(SequanceLog::get_text());
+
+        for (GraphicsSolidNodeItem * node : selected_nodes) {
+            node->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        }
+        selected_nodes.clear();
+
+        ui_main->pushButtonCut->setEnabled(false);
+        ui_main->pushButtonLink->setEnabled(false);
+        ui_main->pushButtonExpose->setEnabled(false);
+    }
+}
+
+void MainWindow::on_pushButtonCutClicked()
+{
+
+}
+
+void MainWindow::on_pushButtonLinkClicked()
+{
+    if (selected_nodes.size() == 2) {
+        SequanceLog::clear();
+
+        tree->start_link(selected_nodes[0]->my_node, selected_nodes[1]->my_node);
+
+        ui_main->labelSequence->setText(SequanceLog::get_text());
+
+        for (GraphicsSolidNodeItem * node : selected_nodes) {
+            node->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        }
+        selected_nodes.clear();
+
+        ui_main->pushButtonCut->setEnabled(false);
+        ui_main->pushButtonLink->setEnabled(false);
+        ui_main->pushButtonExpose->setEnabled(false);
+    }
+}
+
+void MainWindow::on_pushButtonEndOperationClicked()
+{
+    tree->finish_operation();
+    graphics_tree.update_scene();
 }

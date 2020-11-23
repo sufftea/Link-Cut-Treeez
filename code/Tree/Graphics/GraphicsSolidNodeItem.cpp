@@ -3,32 +3,14 @@
 #include "Helpers/Colors.h"
 
 
+
 GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, QGraphicsScene *my_scene)
     : pix_node(QSize(node_size_px, node_size_px))
 {
     this->my_node = my_node;
     this->my_scene = my_scene;
 
-
-    pix_node.fill(Qt::transparent);
-
-    QPainter painter(&pix_node);
-//    painter.fillRect(pix_node.rect(), QBrush(Qt::TransparentMode));
-    painter.setRenderHint(QPainter::RenderHint::Antialiasing);
-    QPen white_pen(MyColors::white);
-    white_pen.setWidth(3);
-    painter.setPen(white_pen);
-
-    QFont font;
-    font.setPixelSize(25);
-    painter.setFont(font);
-
-    painter.setBrush(MyColors::blue);
-    painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
-
-    painter.drawText(QRect(0, 0, node_size_px, node_size_px),
-                      Qt::AlignHCenter | Qt::AlignVCenter,
-                      QString::number(my_node->displayed_value));
+    update_pix();
 }
 
 GraphicsSolidNodeItem::~GraphicsSolidNodeItem()
@@ -67,6 +49,55 @@ void GraphicsSolidNodeItem::set_movement_easing_curve(std::function<double (doub
 void GraphicsSolidNodeItem::set_my_scene(QGraphicsScene *scene)
 {
     this->my_scene = scene;
+}
+
+void GraphicsSolidNodeItem::set_selection_type(GraphicsSolidNodeItem::SelectionType type)
+{
+    if (this->selection != type) {
+        this->selection = type;
+        update_pix();
+    }
+}
+
+GraphicsSolidNodeItem::SelectionType GraphicsSolidNodeItem::get_selection_type()
+{
+    return this->selection;
+}
+
+void GraphicsSolidNodeItem::update_pix()
+{
+    pix_node.fill(Qt::transparent);
+
+    QPainter painter(&pix_node);
+    painter.setRenderHint(QPainter::RenderHint::Antialiasing);
+    QPen white_pen(MyColors::white);
+    white_pen.setWidth(3);
+    painter.setPen(white_pen);
+
+    QFont font;
+    font.setPixelSize(25);
+    painter.setFont(font);
+
+
+    if (this->selection == SelectionType::no_selection) {
+        painter.setBrush(MyColors::blue);
+        painter.drawEllipse(QRect(5, 5, node_size_px - 10, node_size_px - 10));
+    } else if (this->selection == SelectionType::user_selected) {
+        painter.setBrush(MyColors::red);
+        painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
+    } else if (this->selection == SelectionType::selection0) {
+        painter.setBrush(MyColors::red);
+        painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
+    } else if (this->selection == SelectionType::selection1) {
+        painter.setBrush(MyColors::red);
+        painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
+    }
+
+
+    painter.drawText(QRect(0, 0, node_size_px, node_size_px),
+                      Qt::AlignHCenter | Qt::AlignVCenter,
+                      QString::number(my_node->displayed_value));
+
 }
 
 int GraphicsSolidNodeItem::traverse_and_update_position(int offset, int solid_depth)

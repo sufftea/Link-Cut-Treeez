@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QLayout>
 #include <QMouseEvent>
+#include <QQueue>
 
 #include "Tree/Graphics/GraphicsLinkCutTree.h"
 #include "Tree/Node.h"
@@ -35,6 +36,14 @@ private slots:
     void on_pushButtonResetClicked();
 
 
+    void on_pushButtonExposeClicked();
+
+    void on_pushButtonCutClicked();
+
+    void on_pushButtonLinkClicked();
+
+    void on_pushButtonEndOperationClicked();
+
 private:
     Ui::MainWindow *ui_base;
     Ui::Frame *ui_main;
@@ -42,7 +51,7 @@ private:
 
     GraphicsLinkCutTree graphics_tree;
     LinkCutTree * tree;
-
+    QQueue<GraphicsSolidNodeItem*> selected_nodes;
 
     void init();
 };

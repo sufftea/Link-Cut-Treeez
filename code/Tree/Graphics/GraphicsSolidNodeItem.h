@@ -16,15 +16,25 @@ class Node;
 
 class GraphicsSolidNodeItem : public QGraphicsItem
 {
+public:
+    enum class SelectionType
+    {
+        no_selection = 0,
+        user_selected,
+        selection0,
+        selection1,
+    };
+
 private:
     QPointF last_pos = QPointF(0, 0);
     QPointF next_pos = QPointF(0, 0);
 
 
-    Node * my_node = nullptr;
     QGraphicsScene * my_scene = nullptr;
-
     QPixmap pix_node;
+
+    SelectionType selection = SelectionType::no_selection;
+
 
 public:
     static const int node_size_px = 60;
@@ -32,6 +42,8 @@ public:
 
     Animation movement_anim;
     Animation selection_anim;
+
+    Node * my_node = nullptr;
 
 
     GraphicsSolidNodeItem(Node * my_node, QGraphicsScene * my_scene = nullptr);
@@ -42,6 +54,10 @@ public:
     void animate();
     void set_movement_easing_curve(std::function<double(double)> f);
     void set_my_scene(QGraphicsScene * scene);
+    void set_selection_type(SelectionType type);
+    SelectionType get_selection_type();
+    void update_pix();
+
 
     /*
      * Traverses the tree and updates the position for each node of the tree

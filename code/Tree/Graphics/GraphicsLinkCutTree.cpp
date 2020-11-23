@@ -75,6 +75,10 @@ GraphicsSolidNodeItem *GraphicsLinkCutTree::solid_node_at(QPoint pos)
 {
     if (tree.nodes.size() == 0) return  nullptr;
 
+    // move pos by an offset
+    pos.rx() -= GraphicsSolidNodeItem::node_size_px / 2;
+    pos.ry() -= GraphicsSolidNodeItem::node_size_px / 2;
+
     GraphicsSolidNodeItem * res = nullptr;
     qreal closest_dist = 99999999;
     for (auto node : tree.nodes) {
@@ -90,6 +94,13 @@ GraphicsSolidNodeItem *GraphicsLinkCutTree::solid_node_at(QPoint pos)
     }
 
     return res;
+}
+
+void GraphicsLinkCutTree::unselect_all_nodes()
+{
+    for (Node * node : tree.nodes) {
+        node->graphics->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+    }
 }
 
 void GraphicsLinkCutTree::animate_scene()
