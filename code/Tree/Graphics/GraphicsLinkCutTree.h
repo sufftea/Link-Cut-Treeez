@@ -27,6 +27,7 @@ public:
     void update_scene();
     void init(int size);
     void set_animation_easing_curve(std::function<double(double)> f);
+    bool set_animation_speed(qreal p);
 
 private slots:
     void animate_scene();

@@ -4,7 +4,7 @@
 GraphicsLinkCutTree::GraphicsLinkCutTree()
 {
     scene = new QGraphicsScene;
-    scene->setBackgroundBrush(QBrush(MyColors::black));
+//    scene->setBackgroundBrush(QBrush(MyColors::black));
 
     animation_timer = new QTimer;
     animation_timer->setInterval(20);
@@ -54,6 +54,21 @@ void GraphicsLinkCutTree::set_animation_easing_curve(std::function<double (doubl
     for (Node * node : tree.nodes) {
         node->graphics->set_movement_easing_curve(f);
     }
+}
+
+bool GraphicsLinkCutTree::set_animation_speed(qreal p)
+{
+    if (p <= 0 || p > 1) {
+        return false;
+    }
+    qreal max_inc = 0.2;
+    qreal inc = max_inc * p;
+
+    for (Node * node : tree.nodes) {
+        node->graphics->movement_anim.set_increment(inc);
+    }
+
+    return true;
 }
 
 void GraphicsLinkCutTree::animate_scene()

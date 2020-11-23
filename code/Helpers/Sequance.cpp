@@ -1,4 +1,4 @@
-#include "sequence.h"
+#include "Helpers/Sequance.h"
 
 QString Sequence::text = "";
 int Sequence::in = 0;

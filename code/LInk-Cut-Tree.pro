@@ -41,6 +41,7 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
+    MainUI.ui \
     Rsc/mainwindow.ui
 
 # Default rules for deployment.

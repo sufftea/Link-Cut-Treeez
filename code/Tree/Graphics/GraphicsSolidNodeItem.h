@@ -20,8 +20,6 @@ private:
     QPointF last_pos = QPointF(0, 0);
     QPointF next_pos = QPointF(0, 0);
 
-    Animation movement_anim;
-    Animation selection_anim;
 
     Node * my_node = nullptr;
     QGraphicsScene * my_scene = nullptr;
@@ -31,6 +29,9 @@ private:
 public:
     static const int node_size_px = 60;
     static const int node_bound_size_px = 120;
+
+    Animation movement_anim;
+    Animation selection_anim;
 
 
     GraphicsSolidNodeItem(Node * my_node, QGraphicsScene * my_scene = nullptr);

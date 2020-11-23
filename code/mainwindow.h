@@ -2,12 +2,16 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLayout>
+
 #include "Tree/Graphics/GraphicsLinkCutTree.h"
 #include "Tree/Node.h"
 #include "Helpers/Sequance.h"
 
+
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui { class MainWindow;
+               class Frame; }
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -21,15 +25,21 @@ public:
 private slots:
     void showEvent(QShowEvent *) override;
 
-    void on_pushButton_clicked();
+    void on_pushButtonMakeStepClicked();
 
-    void on_pushButton_2_clicked();
+    void on_horizontalSliderAnimationSpeedValueChanged(int value);
+
+    void on_pushButtonResetClicked();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow *ui_base;
+    Ui::Frame *ui_main;
 
 
     GraphicsLinkCutTree graphics_tree;
     LinkCutTree * tree;
+
+
+    void init();
 };
 #endif // MAINWINDOW_H

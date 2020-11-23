@@ -41,6 +41,16 @@ void Animation::set_easing_curve(std::function<qreal(qreal)> easing_curve)
     this->easing_curve = easing_curve;
 }
 
+bool Animation::set_increment(qreal inc)
+{
+    if (inc <= 0 || inc > 1) {
+        return false;
+    }
+
+    this->inc = inc;
+    return true;
+}
+
 void Animation::start()
 {
     is_active = true;
