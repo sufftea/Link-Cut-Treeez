@@ -35,6 +35,9 @@
     <property name="horizontalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
+    <property name="dragMode">
+     <enum>QGraphicsView::ScrollHandDrag</enum>
+    </property>
    </widget>
    <widget class="QFrame" name="main_ui_frame">
     <property name="geometry">

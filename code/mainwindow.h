@@ -5,6 +5,8 @@
 #include <QLayout>
 #include <QMouseEvent>
 #include <QQueue>
+#include <QPropertyAnimation>
+#include <QWheelEvent>
 
 #include "Tree/Graphics/GraphicsLinkCutTree.h"
 #include "Tree/Node.h"
@@ -29,12 +31,13 @@ private slots:
 
     void mousePressEvent(QMouseEvent *e) override;
 
+    void wheelEvent(QWheelEvent *e) override;
+
     void on_pushButtonMakeStepClicked();
 
     void on_horizontalSliderAnimationSpeedValueChanged(int value);
 
     void on_pushButtonResetClicked();
-
 
     void on_pushButtonExposeClicked();
 
@@ -44,10 +47,23 @@ private slots:
 
     void on_pushButtonEndOperationClicked();
 
+    void on_pushButtonOpenPresetsClicked();
+
+    void on_pushButtonPreset1Clicked();
+    void on_pushButtonPreset2Clicked();
+    void on_pushButtonPreset3Clicked();
+    void on_pushButtonPreset4Clicked();
+    void on_pushButtonPreset5Clicked();
+    void on_pushButtonPreset6Clicked();
+    void on_pushButtonPreset7Clicked();
+    void on_pushButtonPreset8Clicked();
+
 private:
     Ui::MainWindow *ui_base;
     Ui::Frame *ui_main;
 
+    QPropertyAnimation * showPresetsListAnimation;
+    QPropertyAnimation * hidePresetsListAnimation;
 
     GraphicsLinkCutTree graphics_tree;
     LinkCutTree * tree;

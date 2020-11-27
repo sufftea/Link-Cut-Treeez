@@ -20,9 +20,13 @@ void LinkCutTree::link(Node * v, Node * to)
     if (v->is_solid_root()) {
         v->parent = to;
     } else {
-        // TODO: must splay the node instead;
-        Node * root = v->get_solid_root();
-        root->parent = to;
+        // TODO: implement 'normal' expose
+        start_expose(v);
+        finish_operation();
+        start_expose(to);
+        finish_operation();
+
+        v->parent = to;
     }
 }
 
@@ -43,12 +47,10 @@ void LinkCutTree::init(int size)
 {
     finish_operation();
 
-    if (nodes.size() > 0) {
-        for (Node * node : nodes) {
-            delete node;
-        }
-        nodes.clear();
+    for (Node * node : nodes) {
+        delete node;
     }
+    nodes.clear();
 
     nodes.reserve(size);
     for (int i = 0; i < size; i++) {
@@ -115,9 +117,6 @@ LinkCutTree::OperationExpose::~OperationExpose()
 bool LinkCutTree::OperationExpose::make_step()
 {
     if (current_step == Step::start_splaying_v) {
-        v->right = nullptr;
-        SequanceLog::add("get rid of right subtree for " + QString::number(v->displayed_value));
-
         v->start_splay();
         current_step = Step::splaying_v;
     }
@@ -134,6 +133,8 @@ bool LinkCutTree::OperationExpose::make_step()
             pp->start_splay();
             current_step = Step::splaying_pp;
         } else {
+            v->right = nullptr;
+            SequanceLog::add("get rid of right subtree for " + QString::number(v->displayed_value));
             return 0;
         }
     }
@@ -199,10 +200,10 @@ bool LinkCutTree::OperationLink::make_step()
 
     else if (current_step == Step::start_expose_to) {
         expose_operation = new OperationExpose(to);
-        current_step = Step::expose_u;
+        current_step = Step::expose_to;
     }
 
-    else if (current_step == Step::expose_u) {
+    else if (current_step == Step::expose_to) {
         if (!expose_operation->make_step()) {
             current_step = Step::link;
 

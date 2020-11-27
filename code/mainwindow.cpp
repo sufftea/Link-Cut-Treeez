@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "ui_MainUI.h"
+//#include "ui_
 
 #include "Helpers/Colors.h"
 
@@ -15,27 +16,38 @@ MainWindow::MainWindow(QWidget *parent)
     ui_main->setupUi(ui_base->main_ui_frame);
 
 
-    // connect slots that qt does't want to
-    connect(ui_main->pushButtonMakeStep, SIGNAL(clicked()), this, SLOT(on_pushButtonMakeStepClicked()));
-    connect(ui_main->pushButtonEndOperation, SIGNAL(clicked()), this, SLOT(on_pushButtonEndOperationClicked()));
-    connect(ui_main->pushButtonReset, SIGNAL(clicked()), this, SLOT(on_pushButtonResetClicked()));
+    // add some layouts
+    QGridLayout *gl1 = new QGridLayout(this->centralWidget());
+    this->centralWidget()->setLayout(gl1);
+    gl1->setContentsMargins(0, 0, 0, 0);
+    gl1->addWidget(ui_base->graphicsView, 0, 0);
+    gl1->addWidget(ui_base->main_ui_frame, 0, 0);
 
-    connect(ui_main->horizontalSliderAnimationSpeed, SIGNAL(valueChanged(int)),
-            this, SLOT(on_horizontalSliderAnimationSpeedValueChanged(int)));
+    QGridLayout *gl2 = new QGridLayout(ui_main->frameTopGrid);
+    ui_main->frameTopGrid->setLayout(gl2);
+    gl2->setContentsMargins(0,0,0,0);
+    gl2->addWidget(ui_main->framePopUpMenu, 0, 0);
+    gl2->addWidget(ui_main->scrollAreaLog, 0, 0);
 
-    connect(ui_main->pushButtonCut, SIGNAL(clicked()), this, SLOT(on_pushButtonCutClicked()));
-    connect(ui_main->pushButtonLink, SIGNAL(clicked()), this, SLOT(on_pushButtonLinkClicked()));
-    connect(ui_main->pushButtonExpose, SIGNAL(clicked()), this, SLOT(on_pushButtonExposeClicked()));
 
 
-    // create a layout
-    QGridLayout *gl = new QGridLayout(this->centralWidget());
+    // connect slots that qt does't want to connect
+    connect(ui_main->pushButtonMakeStep, &QAbstractButton::clicked, this, &MainWindow::on_pushButtonMakeStepClicked);
+    connect(ui_main->pushButtonEndOperation, &QAbstractButton::clicked, this, &MainWindow::on_pushButtonEndOperationClicked);
+    connect(ui_main->pushButtonReset, &QAbstractButton::clicked, this, &MainWindow::on_pushButtonResetClicked);
+    connect(ui_main->pushButtonCut, &QAbstractButton::clicked, this, &MainWindow::on_pushButtonCutClicked);
+    connect(ui_main->pushButtonLink, &QAbstractButton::clicked, this, &MainWindow::on_pushButtonLinkClicked);
+    connect(ui_main->pushButtonExpose, &QAbstractButton::clicked, this, &MainWindow::on_pushButtonExposeClicked);
+    connect(ui_main->pushButtonOpenPresets, &QAbstractButton::clicked, this, &MainWindow::on_pushButtonOpenPresetsClicked);
+    connect(ui_main->horizontalSliderAnimationSpeed, &QAbstractSlider::valueChanged, this, &MainWindow::on_horizontalSliderAnimationSpeedValueChanged);
 
-    this->centralWidget()->setLayout(gl);
-    gl->setContentsMargins(0, 0, 0, 0);
-
-    gl->addWidget(ui_base->graphicsView, 0, 0);
-    gl->addWidget(ui_base->main_ui_frame, 0, 0);
+    connect(ui_main->pushButtonPreset1, &QAbstractButton::clicked, this, &MainWindow::on_pushButtonPreset1Clicked);
+    connect(ui_main->pushButtonPreset2, &QAbstractButton::clicked, this, &MainWindow::on_pushButtonPreset2Clicked);
+    connect(ui_main->pushButtonPreset3, &QAbstractButton::clicked, this, &MainWindow::on_pushButtonPreset3Clicked);
+    connect(ui_main->pushButtonPreset4, &QAbstractButton::clicked, this, &MainWindow::on_pushButtonPreset4Clicked);
+    connect(ui_main->pushButtonPreset5, &QAbstractButton::clicked, this, &MainWindow::on_pushButtonPreset5Clicked);
+    connect(ui_main->pushButtonPreset6, &QAbstractButton::clicked, this, &MainWindow::on_pushButtonPreset6Clicked);
+    connect(ui_main->pushButtonPreset7, &QAbstractButton::clicked, this, &MainWindow::on_pushButtonPreset7Clicked);
 
 
     // set other stuff
@@ -52,12 +64,29 @@ MainWindow::MainWindow(QWidget *parent)
     ui_main->pushButtonLink->setEnabled(false);
     ui_main->pushButtonExpose->setEnabled(false);
 
+    ui_main->framePresetsList->setMaximumHeight(0);
+
+    // animations
+    showPresetsListAnimation = new QPropertyAnimation(this);
+    showPresetsListAnimation->setPropertyName("maximumHeight");
+    showPresetsListAnimation->setTargetObject(ui_main->framePresetsList);
+    showPresetsListAnimation->setEasingCurve(QEasingCurve::OutExpo);
+    showPresetsListAnimation->setDuration(300);
+    showPresetsListAnimation->setEndValue(170);
+
+    hidePresetsListAnimation = new QPropertyAnimation(this);
+    hidePresetsListAnimation->setPropertyName("maximumHeight");
+    hidePresetsListAnimation->setTargetObject(ui_main->framePresetsList);
+    hidePresetsListAnimation->setEasingCurve(QEasingCurve::OutExpo);
+    hidePresetsListAnimation->setDuration(300);
+    hidePresetsListAnimation->setEndValue(0);
+
 
     // set background tiling for the graphicsview
     QPixmap tile(20, 20);
     QPainter painter(&tile);
     QPen black_pen(QColor(45,45,45));
-    black_pen.setWidth(2);
+    black_pen.setWidth(3);
 
     painter.setPen(black_pen);
     painter.fillRect(tile.rect(), MyColors::black);
@@ -112,6 +141,16 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
             selected_nodes.pop_front();
         }
     }
+}
+
+void MainWindow::wheelEvent(QWheelEvent *e)
+{
+//    ui_base->graphicsView->resetTransform();
+//    if (e->delta() < 0) {
+//        ui_base->graphicsView->scale(0.9, 0.9);
+//    } else if (e->delta() > 0) {
+//        ui_base->graphicsView->scale(1.1, 1.1);
+//    }
 }
 
 void MainWindow::on_pushButtonMakeStepClicked()
@@ -191,4 +230,79 @@ void MainWindow::on_pushButtonEndOperationClicked()
 {
     tree->finish_operation();
     graphics_tree.update_scene();
+}
+
+void MainWindow::on_pushButtonOpenPresetsClicked()
+{
+    if (ui_main->framePresetsList->maximumHeight() > 0) {
+//        showPresetsListAnimation->setDirection(QPropertyAnimation::Direction::Backward);
+//        showPresetsListAnimation->start();
+        hidePresetsListAnimation->start();
+    } else {
+//        showPresetsListAnimation->setDirection(QPropertyAnimation::Direction::Forward);
+//        showPresetsListAnimation->start();
+        showPresetsListAnimation->start();
+    }
+}
+
+void MainWindow::on_pushButtonPreset1Clicked()
+{
+    hidePresetsListAnimation->start();
+
+    graphics_tree.init(14);
+
+    QVector<Node*> &nodes = tree->nodes;
+
+    tree->link(nodes[1], nodes[0]);
+    tree->link(nodes[2], nodes[1]);
+    tree->link(nodes[3], nodes[2]);
+    tree->link(nodes[4], nodes[1]);
+    tree->link(nodes[5], nodes[4]);
+    tree->link(nodes[6], nodes[5]);
+    tree->link(nodes[7], nodes[5]);
+    tree->link(nodes[8], nodes[7]);
+    tree->link(nodes[9], nodes[8]);
+    tree->link(nodes[10], nodes[9]);
+    tree->link(nodes[11], nodes[8]);
+    tree->link(nodes[12], nodes[11]);
+    tree->link(nodes[13], nodes[12]);
+
+
+    graphics_tree.update_scene();
+    ui_base->graphicsView->scale(0.5, 0.5);
+}
+
+void MainWindow::on_pushButtonPreset2Clicked()
+{
+    hidePresetsListAnimation->start();
+}
+
+void MainWindow::on_pushButtonPreset3Clicked()
+{
+    hidePresetsListAnimation->start();
+}
+
+void MainWindow::on_pushButtonPreset4Clicked()
+{
+    hidePresetsListAnimation->start();
+}
+
+void MainWindow::on_pushButtonPreset5Clicked()
+{
+    hidePresetsListAnimation->start();
+}
+
+void MainWindow::on_pushButtonPreset6Clicked()
+{
+    hidePresetsListAnimation->start();
+}
+
+void MainWindow::on_pushButtonPreset7Clicked()
+{
+    hidePresetsListAnimation->start();
+}
+
+void MainWindow::on_pushButtonPreset8Clicked()
+{
+    hidePresetsListAnimation->start();
 }
