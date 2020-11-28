@@ -28,9 +28,8 @@ public:
 
 private slots:
     void showEvent(QShowEvent *) override;
-
+    void resizeEvent(QResizeEvent *) override;
     void mousePressEvent(QMouseEvent *e) override;
-
     void wheelEvent(QWheelEvent *e) override;
 
     void on_pushButtonMakeStepClicked();

@@ -66,6 +66,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui_main->framePresetsList->setMaximumHeight(0);
 
+
+
     // animations
     showPresetsListAnimation = new QPropertyAnimation(this);
     showPresetsListAnimation->setPropertyName("maximumHeight");
@@ -80,7 +82,6 @@ MainWindow::MainWindow(QWidget *parent)
     hidePresetsListAnimation->setEasingCurve(QEasingCurve::OutExpo);
     hidePresetsListAnimation->setDuration(300);
     hidePresetsListAnimation->setEndValue(0);
-
 
     // set background tiling for the graphicsview
     QPixmap tile(20, 20);
@@ -105,7 +106,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::showEvent(QShowEvent *)
 {
+//    ui_base->graphicsView->setMask(this->centralWidget()->geometry());
+}
 
+void MainWindow::resizeEvent(QResizeEvent *)
+{
+//    ui_base->graphicsView->setMask(this->centralWidget()->geometry());
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *e)
