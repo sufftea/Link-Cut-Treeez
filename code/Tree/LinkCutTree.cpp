@@ -30,6 +30,19 @@ void LinkCutTree::link(Node * v, Node * to)
     }
 }
 
+void LinkCutTree::expose(Node *v)
+{
+    while (true) {
+        v->splay();
+        if (v->parent == nullptr) {
+            break;
+        }
+        v->parent->splay();
+        v->parent->right = v;
+    }
+    v->right = nullptr;
+}
+
 Node *LinkCutTree::get_abstract_root()
 {
     if (nodes.size() > 0) {

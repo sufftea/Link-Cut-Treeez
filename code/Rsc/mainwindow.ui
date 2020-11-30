@@ -20,11 +20,14 @@
    <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
      <rect>
-      <x>560</x>
+      <x>230</x>
       <y>140</y>
-      <width>311</width>
-      <height>291</height>
+      <width>641</width>
+      <height>301</height>
      </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">border: 0;</string>
@@ -37,25 +40,6 @@
     </property>
     <property name="dragMode">
      <enum>QGraphicsView::ScrollHandDrag</enum>
-    </property>
-   </widget>
-   <widget class="QFrame" name="main_ui_frame">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>400</y>
-      <width>241</width>
-      <height>171</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
     </property>
    </widget>
   </widget>

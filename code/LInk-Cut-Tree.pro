@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    FrameUiComponetns.cpp \
     Tree/Graphics/Helpers/PathSmoother.cpp \
     Tree/LinkCutTree.cpp \
     Tree/Node.cpp \
@@ -28,6 +29,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    FrameUiComponetns.h \
     Helpers/Colors.h \
     Tree/Graphics/Helpers/PathSmoother.h \
     Tree/LinkCutTree.h \
@@ -41,7 +43,7 @@ HEADERS += \
     mainwindow.h
 
 FORMS += \
-    MainUI.ui \
+    FrameUiComponetns.ui \
     Rsc/mainwindow.ui
 
 # Default rules for deployment.

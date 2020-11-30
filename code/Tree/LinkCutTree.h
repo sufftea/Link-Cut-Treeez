@@ -118,6 +118,8 @@ public:
     /* ========= INTSTANT OPERATIONS START ========= */
 
     void link(Node * v, Node * to); // DONE
+    void expose(Node * v);
+
     Node * get_abstract_root(); // DONE
     void init(int size); // DONE
 };
