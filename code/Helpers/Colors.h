@@ -10,4 +10,10 @@ const QColor red(182, 47, 68);
 const QColor black(25,25,25);
 }
 
+namespace ButtonStyles {
+const QString switch_button_on = "QPushButton {\ncolor: rgb(243, 234, 226);\nbackground-color: rgb(0, 125, 176);\nborder-radius: 5px;\nborder: 2px solid;\nborder-color: rgb(243, 234, 226);\n}\nQPushButton:hover {\nbackground-color: rgba(0, 125, 176, 220);\n}";
+const QString switch_button_off = "QPushButton {\ncolor: rgb(243, 234, 226);\nbackground-color: transparent;\n\nborder-radius: 5px;\nborder: 2px solid;\nborder-color: rgb(243, 234, 226);\n}\nQPushButton:enabled:hover {\nbackground-color: rgba(255,255,255,30);\n}";
+
+}
+
 #endif // COLORS_H

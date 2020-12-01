@@ -35,8 +35,8 @@ private:
 
     SelectionType selection = SelectionType::no_selection;
 
-
 public:
+    static bool show_delta;
     static const int node_size_px = 60;
     static const int node_bound_size_px = 100;
 

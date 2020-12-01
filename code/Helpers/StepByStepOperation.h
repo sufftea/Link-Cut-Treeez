@@ -2,16 +2,13 @@
 #define STEPBYSTEPOPERATION_H
 
 /*
- * Since I want to be able to animate any operation step-by-step,
- * I decided to create an object for each operation that stores
- * all the temporarry variables and has the only public function
- * make_step()
+ * Inherit a class for an operation from this class and implement
+ * make_step() function for that operation
  *
- * Inherit an object for an operation from this class, implement
- * make_step() function
+ * make_step() must return 0 if the operation has just finished
+ * and 1 otherwise.
  *
- * All the functions, exept for make_step() should be in private
- * field
+ * All the functions, exept for make_step() should be private
  */
 class StepByStepOperation
 {
@@ -19,7 +16,7 @@ public:
     StepByStepOperation() {}
     virtual ~StepByStepOperation() {}
 
-    // must return 0 if the operation have just finished, 1 otherwise.
+    // must return 0 if the operation has just finished, 1 otherwise.
     virtual bool make_step()=0;
 };
 

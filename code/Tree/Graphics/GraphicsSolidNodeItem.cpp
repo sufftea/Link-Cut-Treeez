@@ -2,6 +2,7 @@
 #include "Tree/Node.h"
 #include "Helpers/Colors.h"
 
+bool GraphicsSolidNodeItem::show_delta = false;
 
 
 GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, QGraphicsScene *my_scene)
@@ -75,7 +76,7 @@ void GraphicsSolidNodeItem::update_pix()
     painter.setPen(white_pen);
 
     QFont font;
-    font.setPixelSize(25);
+    font.setPixelSize(27);
     painter.setFont(font);
 
 
@@ -93,10 +94,16 @@ void GraphicsSolidNodeItem::update_pix()
         painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
     }
 
+    QString text = QString::number(my_node->get_value());
+    if (show_delta) {
+        font.setPixelSize(20);
+        painter.setFont(font);
+        text += "|Δ" + QString::number(my_node->delta_w);
+    }
 
     painter.drawText(QRect(0, 0, node_size_px, node_size_px),
                       Qt::AlignHCenter | Qt::AlignVCenter,
-                      QString::number(my_node->displayed_value));
+                      text);
 
 }
 

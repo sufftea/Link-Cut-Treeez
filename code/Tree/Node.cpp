@@ -1,9 +1,8 @@
 #include "Tree/Node.h"
 
-Node::Node(int displayed_value)
+Node::Node(int weight)
 {   
-    this->displayed_value = displayed_value;
-//    this->graphics = new GraphicsSolidNodeItem(this);
+    this->delta_w = weight;
 }
 
 Node::Node(Node * parent, int displayed_value)
@@ -15,7 +14,6 @@ Node::Node(Node * parent, int displayed_value)
 Node::~Node()
 {
     finish_operation(); // also deletes [current_operation]
-//    delete graphics;
 }
 
 void Node::start_splay()
@@ -46,6 +44,19 @@ void Node::finish_operation()
     }
 }
 
+int Node::get_value()
+{    
+    Node * it = this;
+    int sum = 0;
+    while (! it->is_solid_root()) {
+        sum += it->delta_w;
+        it = it->parent;
+    }
+    sum += it->delta_w;
+
+    return sum;
+}
+
 bool Node::try_zig_left()
 {
     Node * p = this->parent;
@@ -64,10 +75,25 @@ bool Node::try_zig_left()
            B     C                 A     B
 
 */
-
         Node * B = this->left;
         Node * g = p->parent;
 
+        // deltas
+        int v_new_delta = this->delta_w + p->delta_w;
+        int p_new_delta = p->delta_w - v_new_delta;
+        int b_new_delta = 0;
+        if (B != nullptr) {
+            b_new_delta = B->delta_w + this->delta_w;
+        }
+
+        this->delta_w = v_new_delta;
+        p->delta_w = p_new_delta;
+        if (B != nullptr) {
+            B->delta_w = b_new_delta;
+        }
+
+
+        // pointers
         p->right = B;
         if (B != nullptr) {
             B->parent = p;
@@ -110,9 +136,27 @@ bool Node::try_zig_right()
 
 */
 
+
         Node * B = this->right;
         Node * g = p->parent;
 
+        // deltas
+        int v_new_delta = this->delta_w + p->delta_w;
+        int p_new_delta = p->delta_w - v_new_delta;
+        int b_new_delta = 0;
+        if (B != nullptr) {
+            b_new_delta = B->delta_w + this->delta_w;
+        }
+
+        this->delta_w = v_new_delta;
+        p->delta_w = p_new_delta;
+        if (B != nullptr) {
+            B->delta_w = b_new_delta;
+        }
+
+
+
+        // pointers
         p->left = B;
         if (B != nullptr) {
             B->parent = p;
@@ -157,14 +201,39 @@ bool Node::try_zig_zig_left()
 
 
 */
-    Node * p = this->parent;
+    Node * p = this->parent; // can't be nullptr (after the if statement)
     if (this->is_right_child() && p->is_right_child()) {
-        Node * g = p->parent;
-        Node * gg = g->parent;
+        Node * g = p->parent; // can't be nullptr;
+        Node * gg = g->parent; // CAN be nullptr
 
-        Node * B = p->left;
-        Node * C = this->left;
+        Node * B = p->left;  // CAN be nullptr
+        Node * C = this->left;  // CAN be nullptr
 
+        // deltas
+        int g_new_delta = - p->delta_w;
+        int p_new_delta = - this->delta_w;
+        int v_new_delta = this->delta_w + p->delta_w + g->delta_w;
+        int b_new_delta = 0;
+        if (B != nullptr) {
+            b_new_delta = B->delta_w + p->delta_w;
+        }
+        int c_new_delta = 0;
+        if (C != nullptr) {
+            c_new_delta = C->delta_w - p_new_delta;
+        }
+
+        g->delta_w = g_new_delta;
+        p->delta_w = p_new_delta;
+        this->delta_w = v_new_delta;
+        if (B != nullptr) {
+            B->delta_w = b_new_delta;
+        }
+        if (C != nullptr) {
+            C->delta_w = c_new_delta;
+        }
+
+
+        // pointers
         g->right = B;
         if (B != nullptr) {
             B->parent = g;
@@ -222,6 +291,31 @@ bool Node::try_zig_zig_right()
         Node * B = this->right;
         Node * C = p->right;
 
+        // deltas
+        int g_new_delta = - p->delta_w;
+        int p_new_delta = - this->delta_w;
+        int v_new_delta = this->delta_w + p->delta_w + g->delta_w;
+        int b_new_delta = 0;
+        if (B != nullptr) {
+            b_new_delta = B->delta_w + p->delta_w;
+        }
+        int c_new_delta = 0;
+        if (C != nullptr) {
+            c_new_delta = C->delta_w - p_new_delta;
+        }
+
+        g->delta_w = g_new_delta;
+        p->delta_w = p_new_delta;
+        this->delta_w = v_new_delta;
+        if (B != nullptr) {
+            B->delta_w = b_new_delta;
+        }
+        if (C != nullptr) {
+            C->delta_w = c_new_delta;
+        }
+
+
+        // pointers
         g->left = C;
         if (C != nullptr) {
             C->parent = g;
@@ -278,6 +372,25 @@ bool Node::try_zig_zag_left()
         Node * B = this->left;
         Node * C = this->right;
 
+        // deltas
+        int v_new_delta = this->delta_w + p->delta_w + g->delta_w;
+        int p_new_delta = p->delta_w + g->delta_w - v_new_delta;
+        int g_new_delta = g->delta_w - v_new_delta;
+
+        if (B != nullptr) {
+            int b_new_delta = B->delta_w + this->delta_w + p->delta_w;
+            B->delta_w = b_new_delta;
+        }
+        if (C != nullptr) {
+            int c_new_delta = C->delta_w + this->delta_w;
+            C->delta_w  = c_new_delta;
+        }
+        this->delta_w = v_new_delta;
+        p->delta_w = p_new_delta;
+        g->delta_w = g_new_delta;
+
+
+        // pointers
         g->right = B;
         if (B != nullptr) {
             B->parent = g;
@@ -335,6 +448,25 @@ bool Node::try_zig_zag_right()
         Node * B = this->left;
         Node * C = this->right;
 
+        // deltas
+        int v_new_delta = this->delta_w + p->delta_w + g->delta_w;
+        int p_new_delta = p->delta_w + g->delta_w - v_new_delta;
+        int g_new_delta = g->delta_w - v_new_delta;
+
+        if (B != nullptr) {
+            int b_new_delta = B->delta_w + this->delta_w;
+            B->delta_w = b_new_delta;
+        }
+        if (C != nullptr) {
+            int c_new_delta = C->delta_w + this->delta_w + p->delta_w;
+            C->delta_w  = c_new_delta;
+        }
+        this->delta_w = v_new_delta;
+        p->delta_w = p_new_delta;
+        g->delta_w = g_new_delta;
+
+
+        // pointers
         p->right = B;
         if (B != nullptr) {
             B->parent = p;
@@ -445,7 +577,7 @@ bool Node::is_child()
 Node::OperationSplay::OperationSplay(Node * v)
 {
     SequanceLog::add("splay("
-                  + QString::number(v->displayed_value)
+                  + QString::number(v->get_value())
                   + ")");
     SequanceLog::step_in();
 

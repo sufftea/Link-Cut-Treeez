@@ -69,9 +69,11 @@ void MainWindow::resizeEvent(QResizeEvent *)
 
 void MainWindow::mousePressEvent(QMouseEvent *e)
 {
+    e->accept();
+
+
     QGraphicsView * gw = ui->graphicsView;
     QPoint pos = gw->mapToScene(gw->mapFromParent(e->pos())).toPoint();
-
 
     GraphicsSolidNodeItem * graphics_node = graphics_tree.solid_node_at(pos);
 

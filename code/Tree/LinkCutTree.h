@@ -67,6 +67,27 @@ private:
     };
 
 
+    class OperationCut : public StepByStepOperation
+    {
+    private:
+        enum Step {
+            start_expose_v = 0,
+            expose_v,
+            cut
+        };
+
+        Node * v;
+        Step current_step = start_expose_v;
+        OperationExpose * sbs_expose = nullptr;
+
+    public:
+        OperationCut(Node * v);
+        ~OperationCut() override;
+
+        bool make_step() override;
+    };
+
+
     StepByStepOperation * current_operation = nullptr;
 
 public:
@@ -93,7 +114,7 @@ public:
     */
     void start_expose(Node * v); // DONE
     void start_link(Node * v, Node * u); // DONE
-    void start_cut(Node * v);
+    void start_cut(Node * v); // DONE
 
     void start_lca(Node * a, Node * b);
     void start_add(Node * v, int c);
@@ -118,7 +139,8 @@ public:
     /* ========= INTSTANT OPERATIONS START ========= */
 
     void link(Node * v, Node * to); // DONE
-    void expose(Node * v);
+    void cut(Node * v); // DONE
+    void expose(Node * v); // DONE
 
     Node * get_abstract_root(); // DONE
     void init(int size); // DONE

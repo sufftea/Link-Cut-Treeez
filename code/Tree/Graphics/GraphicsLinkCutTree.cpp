@@ -25,12 +25,14 @@ void GraphicsLinkCutTree::update_scene()
     int current_offset = 0;
 
     // draw one splay tree and move offset to give enough spase for the next tree
-    for (Node * root: tree.nodes) {
-        if (!root->is_solid_root()) {
+    for (Node * node: tree.nodes) {
+        node->graphics->update_pix();
+
+        if (!node->is_solid_root()) {
             continue;
         }
 
-        current_offset += root->graphics->traverse_and_update_position(current_offset);
+        current_offset += node->graphics->traverse_and_update_position(current_offset);
         current_offset += 2;
     }
 
@@ -101,6 +103,22 @@ void GraphicsLinkCutTree::unselect_all_nodes()
     for (Node * node : tree.nodes) {
         node->graphics->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
     }
+}
+
+void GraphicsLinkCutTree::set_show_delta(bool show_delta)
+{
+    if (GraphicsSolidNodeItem::show_delta != show_delta) {
+        GraphicsSolidNodeItem::show_delta = show_delta;
+
+        for (Node * node : tree.nodes) {
+            node->graphics->update_pix();
+        }
+    }
+}
+
+bool GraphicsLinkCutTree::is_show_delta()
+{
+    return GraphicsSolidNodeItem::show_delta;
 }
 
 void GraphicsLinkCutTree::animate_scene()

@@ -6,10 +6,12 @@
 #include <QQueue>
 #include <QMouseEvent>
 #include <QGraphicsView>
+#include <QScrollBar>
 
 #include "Tree/Graphics/GraphicsLinkCutTree.h"
 #include "Tree/Node.h"
 #include "Helpers/Sequance.h"
+#include "Helpers/Colors.h"
 
 namespace Ui {
 class FrameUiComponetns;
@@ -60,6 +62,12 @@ private slots:
     void on_pushButtonPreset7_clicked();
 
 
+    void on_pushButtonClearLog_clicked();
+
+    void on_pushButtonHideLog_clicked();
+
+    void on_pushButtonShowDelta_clicked();
+
 private:
 
     QPropertyAnimation * showPresetsListAnimation;
@@ -69,6 +77,7 @@ private:
 
     GraphicsLinkCutTree &graphics_tree;
     LinkCutTree * tree;
+
     QQueue<GraphicsSolidNodeItem*> &selected_nodes;
 
     void reset_tree();

@@ -32,8 +32,10 @@ FrameUiComponetns::FrameUiComponetns(GraphicsLinkCutTree &graphics_tree,
     ui->pushButtonExpose->setEnabled(false);
     ui->framePresetsList->setMaximumHeight(0);
 
-    ui->scrollAreaLog->setAttribute(Qt::WA_TransparentForMouseEvents);
+//    ui->scrollAreaLog->setAttribute(Qt::WA_TransparentForMouseEvents);
     ui->labelSequence->setAttribute(Qt::WA_TransparentForMouseEvents);
+
+    ui->pushButtonShowDelta->setStyleSheet(ButtonStyles::switch_button_off);
 
 
     // animations
@@ -77,6 +79,8 @@ void FrameUiComponetns::on_pushButtonMakeStep_clicked()
     tree->make_step();
     ui->labelSequence->setText(SequanceLog::get_text());
     graphics_tree.update_scene();
+
+    ui->scrollAreaLog->verticalScrollBar()->setSliderPosition(ui->scrollAreaLog->height());
 }
 
 void FrameUiComponetns::on_horizontalSliderAnimationSpeed_valueChanged(int value)
@@ -105,8 +109,7 @@ void FrameUiComponetns::on_pushButtonExpose_clicked()
     if (selected_nodes.size() == 1) {
         SequanceLog::clear();
 
-//        tree->start_expose(selected_nodes[0]->my_node);
-        tree->expose(selected_nodes[0]->my_node);
+        tree->start_expose(selected_nodes[0]->my_node);
 
         ui->labelSequence->setText(SequanceLog::get_text());
 
@@ -152,6 +155,9 @@ void FrameUiComponetns::on_pushButtonEndOperation_clicked()
 {
     tree->finish_operation();
     graphics_tree.update_scene();
+    ui->labelSequence->setText(SequanceLog::get_text());
+
+    ui->scrollAreaLog->verticalScrollBar()->setSliderPosition(ui->scrollAreaLog->height());
 }
 
 void FrameUiComponetns::on_pushButtonOpenPresets_clicked()
@@ -219,3 +225,33 @@ void FrameUiComponetns::on_pushButtonPreset7_clicked()
     hidePresetsListAnimation->start();
 }
 
+
+void FrameUiComponetns::on_pushButtonClearLog_clicked()
+{
+    ui->labelSequence->clear();
+    SequanceLog::clear();
+}
+
+void FrameUiComponetns::on_pushButtonHideLog_clicked()
+{
+    if (ui->labelSequence->isHidden()) {
+        ui->labelSequence->show();
+        ui->pushButtonClearLog->show();
+        ui->pushButtonHideLog->setText("Hide Log");
+    } else {
+        ui->labelSequence->hide();
+        ui->pushButtonClearLog->hide();
+        ui->pushButtonHideLog->setText("Show Log");
+    }
+}
+
+void FrameUiComponetns::on_pushButtonShowDelta_clicked()
+{
+    if (graphics_tree.is_show_delta()) {
+        ui->pushButtonShowDelta->setStyleSheet(ButtonStyles::switch_button_off);
+        graphics_tree.set_show_delta(false);
+    } else {
+        ui->pushButtonShowDelta->setStyleSheet(ButtonStyles::switch_button_on);
+        graphics_tree.set_show_delta(true);
+    }
+}

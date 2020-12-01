@@ -44,6 +44,7 @@ private:
 
     StepByStepOperation * current_operation = nullptr;
 
+
 public:
     /*
      * Parent points either to the parent of the node in a splay
@@ -53,7 +54,10 @@ public:
     Node * parent = nullptr;
     Node * left = nullptr;
     Node * right = nullptr;
-    int displayed_value = 0;
+
+    int delta_w = 0;  // this.weight - parent.weight; for the root value is its weight
+    int subtree_min;  // the smallest value of the subtree
+    int subtree_max;  // the biggest value of the subtree
 
     /*
      * Stores graphical representation of the node
@@ -61,8 +65,8 @@ public:
     GraphicsSolidNodeItem *graphics;
 
 
-    Node(int displayed_value = 0);
-    Node(Node * parent, int displayed_value = 0);
+    Node(int weight = 0);
+    Node(Node * parent, int value = 0);
     ~Node();
 
 
@@ -96,7 +100,10 @@ public:
     void finish_operation();
 
 
+
     /* ========= INTSTANT OPERATIONS START ========= */
+
+    int get_value();
 
     bool try_zig_left();
     bool try_zig_right();

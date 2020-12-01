@@ -15,7 +15,6 @@ class GraphicsLinkCutTree : public QObject
 
     QTimer * animation_timer;
 
-
 public:   
     GraphicsLinkCutTree();
     ~GraphicsLinkCutTree();
@@ -30,6 +29,9 @@ public:
     bool set_animation_speed(qreal p);
     GraphicsSolidNodeItem * solid_node_at(QPoint pos);
     void unselect_all_nodes();
+
+    void set_show_delta(bool show_delta);
+    bool is_show_delta();
 
 private slots:
     void animate_scene();
