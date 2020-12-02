@@ -219,7 +219,7 @@ bool Node::try_zig_zig_left()
         }
         int c_new_delta = 0;
         if (C != nullptr) {
-            c_new_delta = C->delta_w - p_new_delta;
+            c_new_delta = C->delta_w + this->delta_w;
         }
 
         g->delta_w = g_new_delta;
@@ -297,11 +297,11 @@ bool Node::try_zig_zig_right()
         int v_new_delta = this->delta_w + p->delta_w + g->delta_w;
         int b_new_delta = 0;
         if (B != nullptr) {
-            b_new_delta = B->delta_w + p->delta_w;
+            b_new_delta = B->delta_w + this->delta_w;
         }
         int c_new_delta = 0;
         if (C != nullptr) {
-            c_new_delta = C->delta_w - p_new_delta;
+            c_new_delta = C->delta_w + p->delta_w;
         }
 
         g->delta_w = g_new_delta;
