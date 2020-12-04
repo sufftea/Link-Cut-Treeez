@@ -24,7 +24,7 @@ void SequanceLog::step_out()
 
 void SequanceLog::add(const QString &action)
 {
-    text += QString("   ").repeated(in) + action + "\n";
+    text += QString("|  ").repeated(in) + action + "\n";
 }
 
 void SequanceLog::clear()

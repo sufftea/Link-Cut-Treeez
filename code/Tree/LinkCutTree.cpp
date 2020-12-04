@@ -41,16 +41,26 @@ void LinkCutTree::expose(Node *v)
 {
     while (true) {
         v->splay();
+
         if (v->parent == nullptr) {
             break;
         }
+
         v->parent->splay();
 
         v->delta_w -= v->parent->delta_w;
-        v->parent->right->delta_w += v->parent->delta_w;
+
+        if (v->parent->right != nullptr) {
+            v->parent->right->delta_w += v->parent->delta_w;
+        }
+
         v->parent->right = v;
     }
-    v->right = nullptr;
+
+    if (v->right != nullptr) {
+        v->right->delta_w += v->delta_w;
+        v->right = nullptr;
+    }
 }
 
 Node *LinkCutTree::get_abstract_root()
@@ -99,6 +109,12 @@ void LinkCutTree::start_cut(Node *v)
     current_operation = new OperationCut(v);
 }
 
+void LinkCutTree::start_add(Node *v, int c)
+{
+    finish_operation();
+    current_operation = new OperationAddConst(v, c);
+}
+
 bool LinkCutTree::make_step()
 {
     if (current_operation != nullptr) {
@@ -129,6 +145,7 @@ LinkCutTree::OperationExpose::OperationExpose(Node *v)
                   + QString::number(v->get_value())
                   + "):");
     SequanceLog::step_in();
+
     this->v = v;
 }
 
@@ -157,6 +174,10 @@ bool LinkCutTree::OperationExpose::make_step()
             pp->start_splay();
             current_step = Step::splaying_pp;
         } else {
+            if (v->right != nullptr) {
+                v->right->delta_w += v->delta_w;
+            }
+
             v->right = nullptr;
             SequanceLog::add("get rid of right subtree for " + QString::number(v->get_value()));
             return 0;
@@ -257,17 +278,23 @@ bool LinkCutTree::OperationLink::make_step()
     return 1;
 }
 
+
+// ================ STEP BY STEP CUT ==================
+
 LinkCutTree::OperationCut::OperationCut(Node *v)
 {
     this->v = v;
+
     SequanceLog::add("cut(" + QString::number(v->get_value()) + "):");
     SequanceLog::step_in();
 }
 
 LinkCutTree::OperationCut::~OperationCut()
 {
-    delete this->sbs_expose;
-    this->sbs_expose = nullptr;
+
+    if (this->expose != nullptr) {
+        delete this->expose;
+    }
 
     SequanceLog::add("cut(" + QString::number(v->get_value()) + ") finished");
     SequanceLog::step_out();
@@ -276,22 +303,74 @@ LinkCutTree::OperationCut::~OperationCut()
 bool LinkCutTree::OperationCut::make_step()
 {
     if (current_step == Step::start_expose_v) {
-       sbs_expose = new OperationExpose(v);
+       expose = new OperationExpose(v);
        current_step = Step::expose_v;
     } else if (current_step == Step::expose_v) {
-       if (! sbs_expose->make_step()) {
+       if (! expose->make_step()) {
            current_step = Step::cut;
        }
     } else if (current_step == Step::cut) {
+        delete this->expose;
+        this->expose = nullptr;
+
         if (v->left != nullptr) {
+
             v->left->delta_w += v->delta_w;
 
             v->left->parent = nullptr;
             v->left = nullptr;
 
             SequanceLog::add("cut the left solid subtree");
+        } else {
+            SequanceLog::add("cut the left solid subtree (there wasn't subtree");
         }
+
         return 0;
     }
+    return 1;
+}
+
+
+
+// ================ ADD CONSTANT STEP BY STEP ==================
+
+LinkCutTree::OperationAddConst::OperationAddConst(Node *v, int value)
+{
+    this->v = v;
+    this->value = value;
+
+    SequanceLog::add("Add constant form the root to " + QString::number(v->get_value()) + ":");
+    SequanceLog::step_in();
+}
+
+LinkCutTree::OperationAddConst::~OperationAddConst()
+{
+    if (exposeOperation != nullptr) {
+        delete exposeOperation;
+    }
+
+    SequanceLog::add("Done!");
+    SequanceLog::step_out();
+}
+
+bool LinkCutTree::OperationAddConst::make_step()
+{
+    if (current_step == Step::start_expose_v) {
+        this->exposeOperation = new OperationExpose(v);
+        current_step = expose_v;
+    } else if (current_step == Step::expose_v) {
+        if ( ! exposeOperation->make_step()) {
+            current_step = Step::add;
+
+            delete exposeOperation;
+            exposeOperation = nullptr;
+        }
+    } else if (current_step == Step::add) {
+        SequanceLog::add("adding the constant to the root's delta");
+        v->delta_w += value;
+
+        return 0;
+    }
+
     return 1;
 }

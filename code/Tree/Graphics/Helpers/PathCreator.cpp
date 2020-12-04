@@ -37,6 +37,9 @@ bool PathCreator::is_inside(QPoint point, QPoint item_pos, int item_size)
 
 QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsScene *scene, int skip_points)
 {
+    from.rx() += (from.x() + from.y()) % 3;
+    from.ry() += (from.x() + from.y()) % 3;
+
     QHash<QPoint, Cell> opened;
     QHash<QPoint, Cell> closed;
 
@@ -58,18 +61,13 @@ QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsS
             break;
         }
 
-        // I added some randomization (+-2) in an attempt
-        // to prevent different paths from overlapping with
+        // +- 2 is to prevent different paths from overlapping with
         // each other.
         QVector<QPoint> neighbours = {
             curr.pos + QPoint( step_length_px,  2),
             curr.pos + QPoint( 2             , step_length_px),
             curr.pos + QPoint(-step_length_px,  -2),
             curr.pos + QPoint( -2            , -step_length_px),
-//            curr.pos + QPoint( step_length_px / 2 + 0,  step_length_px / 2 - 0),
-//            curr.pos + QPoint(-step_length_px / 2 - 0, -step_length_px / 2 + 0),
-//            curr.pos + QPoint(-step_length_px / 2 - 0,  step_length_px / 2 - 0),
-//            curr.pos + QPoint( step_length_px / 2 + 0, -step_length_px / 2 + 0)
         };
 
         for (QPoint nei : neighbours) {

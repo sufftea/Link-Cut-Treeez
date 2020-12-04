@@ -45,6 +45,7 @@ private:
     StepByStepOperation * current_operation = nullptr;
 
 
+
 public:
     /*
      * Parent points either to the parent of the node in a splay
@@ -62,7 +63,7 @@ public:
     /*
      * Stores graphical representation of the node
     */
-    GraphicsSolidNodeItem *graphics;
+    GraphicsSolidNodeItem *graphics = nullptr;
 
 
     Node(int weight = 0);
@@ -115,9 +116,11 @@ public:
     bool try_zig_zag_right();
 
     void splay();
+
     Node * get_solid_root();
     Node * get_abstart_root();
     Node * get_path_parent();
+
     bool is_solid_root();
     bool is_abstract_root();
     bool is_left_child();

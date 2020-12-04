@@ -27,12 +27,14 @@ FrameUiComponetns::FrameUiComponetns(GraphicsLinkCutTree &graphics_tree,
 
     // other
     ui->horizontalSliderAnimationSpeed->setValue(50);
+
     ui->pushButtonCut->setEnabled(false);
     ui->pushButtonLink->setEnabled(false);
     ui->pushButtonExpose->setEnabled(false);
+    ui->pushButtonAdd->setEnabled(false);
+
     ui->framePresetsList->setMaximumHeight(0);
 
-//    ui->scrollAreaLog->setAttribute(Qt::WA_TransparentForMouseEvents);
     ui->labelSequence->setAttribute(Qt::WA_TransparentForMouseEvents);
 
     ui->pushButtonShowDelta->setStyleSheet(ButtonStyles::switch_button_off);
@@ -95,6 +97,8 @@ void FrameUiComponetns::on_pushButtonReset_clicked()
 
 void FrameUiComponetns::reset_tree()
 {
+    selected_nodes.clear();
+
     graphics_tree.init(8);
     graphics_tree.update_scene();
 
@@ -107,47 +111,79 @@ void FrameUiComponetns::reset_tree()
 void FrameUiComponetns::on_pushButtonExpose_clicked()
 {
     if (selected_nodes.size() == 1) {
+        selected_nodes[0]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+
+        tree->finish_operation();
         SequanceLog::clear();
-
         tree->start_expose(selected_nodes[0]->my_node);
-
         ui->labelSequence->setText(SequanceLog::get_text());
 
-        for (GraphicsSolidNodeItem * node : selected_nodes) {
-            node->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
-        }
+        graphics_tree.update_scene();
+
         selected_nodes.clear();
 
         ui->pushButtonCut->setEnabled(false);
         ui->pushButtonLink->setEnabled(false);
         ui->pushButtonExpose->setEnabled(false);
-
-        graphics_tree.update_scene();
+        ui->pushButtonAdd->setEnabled(false);
     }
 }
 
 void FrameUiComponetns::on_pushButtonCut_clicked()
 {
+    if (selected_nodes.size() == 1) {
+        tree->finish_operation();
+        SequanceLog::clear();
 
+        tree->start_cut(selected_nodes[0]->my_node);
+
+        selected_nodes[0]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        selected_nodes.clear();
+
+        ui->pushButtonCut->setEnabled(false);
+        ui->pushButtonLink->setEnabled(false);
+        ui->pushButtonExpose->setEnabled(false);
+        ui->pushButtonAdd->setEnabled(false);
+    }
 }
 
 void FrameUiComponetns::on_pushButtonLink_clicked()
 {
     if (selected_nodes.size() == 2) {
+        tree->finish_operation();
         SequanceLog::clear();
 
         tree->start_link(selected_nodes[0]->my_node, selected_nodes[1]->my_node);
 
         ui->labelSequence->setText(SequanceLog::get_text());
 
-        for (GraphicsSolidNodeItem * node : selected_nodes) {
-            node->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
-        }
+        selected_nodes[0]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        selected_nodes[1]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+
         selected_nodes.clear();
 
         ui->pushButtonCut->setEnabled(false);
         ui->pushButtonLink->setEnabled(false);
         ui->pushButtonExpose->setEnabled(false);
+        ui->pushButtonAdd->setEnabled(false);
+    }
+}
+
+void FrameUiComponetns::on_pushButtonAdd_clicked()
+{
+    if (selected_nodes.size() == 1) {
+        tree->finish_operation();
+        SequanceLog::clear();
+        tree->start_add(selected_nodes[0]->my_node, 1);
+        ui->labelSequence->setText(SequanceLog::get_text());
+
+        selected_nodes[0]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        selected_nodes.clear();
+
+        ui->pushButtonCut->setEnabled(false);
+        ui->pushButtonLink->setEnabled(false);
+        ui->pushButtonExpose->setEnabled(false);
+        ui->pushButtonAdd->setEnabled(false);
     }
 }
 
@@ -169,8 +205,10 @@ void FrameUiComponetns::on_pushButtonOpenPresets_clicked()
     }
 }
 
+
 void FrameUiComponetns::on_pushButtonPreset1_clicked()
 {
+    selected_nodes.clear();
     hidePresetsListAnimation->start();
 
     graphics_tree.init(14);
@@ -197,34 +235,86 @@ void FrameUiComponetns::on_pushButtonPreset1_clicked()
 
 void FrameUiComponetns::on_pushButtonPreset2_clicked()
 {
+    selected_nodes.clear();
     hidePresetsListAnimation->start();
+
+    graphics_tree.init(26);
+
+    QVector<Node*> &nodes = tree->nodes;
+
+    tree->link(nodes[1], nodes[0]);
+    tree->link(nodes[2], nodes[1]);
+    tree->link(nodes[3], nodes[2]);
+    tree->link(nodes[4], nodes[3]);
+    tree->link(nodes[5], nodes[4]);
+    tree->link(nodes[6], nodes[2]);
+    tree->link(nodes[7], nodes[6]);
+
+    tree->link(nodes[8], nodes[5]);
+    tree->link(nodes[9], nodes[8]);
+    tree->link(nodes[10], nodes[9]);
+
+    tree->link(nodes[11], nodes[5]);
+    tree->link(nodes[12], nodes[11]);
+    tree->link(nodes[13], nodes[12]);
+    tree->link(nodes[14], nodes[13]);
+
+    tree->link(nodes[15], nodes[5]);
+    tree->link(nodes[16], nodes[15]);
+    tree->link(nodes[17], nodes[16]);
+    tree->link(nodes[18], nodes[17]);
+    tree->link(nodes[19], nodes[18]);
+
+    tree->link(nodes[20], nodes[7]);
+    tree->link(nodes[21], nodes[20]);
+    tree->link(nodes[22], nodes[21]);
+    tree->link(nodes[23], nodes[22]);
+    tree->link(nodes[24], nodes[23]);
+    tree->link(nodes[25], nodes[24]);
+
+
+    tree->expose(nodes[10]);
+    tree->expose(nodes[14]);
+    tree->expose(nodes[19]);
+    tree->expose(nodes[25]);
+    tree->expose(nodes[11]);
+    tree->expose(nodes[22]);
+    tree->expose(nodes[6]);
+    tree->expose(nodes[2]);
+
+
+    graphics_tree.update_scene();
 }
 
 void FrameUiComponetns::on_pushButtonPreset3_clicked()
 {
+    selected_nodes.clear();
     hidePresetsListAnimation->start();
 }
 
 void FrameUiComponetns::on_pushButtonPreset4_clicked()
 {
+    selected_nodes.clear();
     hidePresetsListAnimation->start();
 }
 
 void FrameUiComponetns::on_pushButtonPreset5_clicked()
 {
+    selected_nodes.clear();
     hidePresetsListAnimation->start();
 }
 
 void FrameUiComponetns::on_pushButtonPreset6_clicked()
 {
+    selected_nodes.clear();
     hidePresetsListAnimation->start();
 }
 
 void FrameUiComponetns::on_pushButtonPreset7_clicked()
 {
+    selected_nodes.clear();
     hidePresetsListAnimation->start();
 }
-
 
 void FrameUiComponetns::on_pushButtonClearLog_clicked()
 {
@@ -255,3 +345,4 @@ void FrameUiComponetns::on_pushButtonShowDelta_clicked()
         graphics_tree.set_show_delta(true);
     }
 }
+

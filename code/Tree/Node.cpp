@@ -572,7 +572,7 @@ bool Node::is_child()
 }
 
 
-/* ========= SPLAY OPERATION ========= */
+/* ========= STEP BY STEP SPLAY ========= */
 
 Node::OperationSplay::OperationSplay(Node * v)
 {

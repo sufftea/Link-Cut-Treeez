@@ -23,8 +23,9 @@ public:
     QGraphicsScene * scene;
     LinkCutTree tree;
 
-    void update_scene();
     void init(int size);
+
+    void update_scene();
     void set_animation_easing_curve(std::function<double(double)> f);
     bool set_animation_speed(qreal p);
     GraphicsSolidNodeItem * solid_node_at(QPoint pos);

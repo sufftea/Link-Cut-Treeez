@@ -87,18 +87,18 @@ void GraphicsSolidNodeItem::update_pix()
         painter.setBrush(MyColors::red);
         painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
     } else if (this->selection == SelectionType::selection0) {
-        painter.setBrush(MyColors::red);
+        painter.setBrush(MyColors::green);
         painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
     } else if (this->selection == SelectionType::selection1) {
         painter.setBrush(MyColors::red);
         painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
     }
 
-    QString text = QString::number(my_node->get_value());
+    QString text;
     if (show_delta) {
-        font.setPixelSize(20);
-        painter.setFont(font);
-        text += "|Δ" + QString::number(my_node->delta_w);
+        text = "Δ" + QString::number(my_node->delta_w);
+    } else {
+        text = QString::number(my_node->get_value());
     }
 
     painter.drawText(QRect(0, 0, node_size_px, node_size_px),

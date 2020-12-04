@@ -43,6 +43,7 @@ void GraphicsLinkCutTree::init(int size)
 {
     scene->clear();
     tree.init(size);
+
     for (Node * node : tree.nodes) {
         node->graphics = new GraphicsSolidNodeItem(node);
 

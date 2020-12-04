@@ -68,6 +68,8 @@ private slots:
 
     void on_pushButtonShowDelta_clicked();
 
+    void on_pushButtonAdd_clicked();
+
 private:
 
     QPropertyAnimation * showPresetsListAnimation;
