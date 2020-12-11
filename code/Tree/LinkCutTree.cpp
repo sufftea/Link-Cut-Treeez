@@ -109,6 +109,11 @@ void LinkCutTree::start_cut(Node *v)
     current_operation = new OperationCut(v);
 }
 
+void LinkCutTree::start_lca(Node *a, Node *b)
+{
+
+}
+
 void LinkCutTree::start_add(Node *v, int c)
 {
     finish_operation();

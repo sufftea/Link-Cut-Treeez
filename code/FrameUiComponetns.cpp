@@ -28,10 +28,7 @@ FrameUiComponetns::FrameUiComponetns(GraphicsLinkCutTree &graphics_tree,
     // other
     ui->horizontalSliderAnimationSpeed->setValue(50);
 
-    ui->pushButtonCut->setEnabled(false);
-    ui->pushButtonLink->setEnabled(false);
-    ui->pushButtonExpose->setEnabled(false);
-    ui->pushButtonAdd->setEnabled(false);
+    disable_operations_buttons();
 
     ui->framePresetsList->setMaximumHeight(0);
 
@@ -108,6 +105,13 @@ void FrameUiComponetns::reset_tree()
     selected_nodes.clear();
 }
 
+void FrameUiComponetns::disable_operations_buttons()
+{
+    for (QPushButton *button : ui->frameOperationsButtons->findChildren<QPushButton *>()) {
+        button->setEnabled(false);
+    }
+}
+
 void FrameUiComponetns::on_pushButtonExpose_clicked()
 {
     if (selected_nodes.size() == 1) {
@@ -122,10 +126,7 @@ void FrameUiComponetns::on_pushButtonExpose_clicked()
 
         selected_nodes.clear();
 
-        ui->pushButtonCut->setEnabled(false);
-        ui->pushButtonLink->setEnabled(false);
-        ui->pushButtonExpose->setEnabled(false);
-        ui->pushButtonAdd->setEnabled(false);
+        disable_operations_buttons();
     }
 }
 
@@ -140,10 +141,7 @@ void FrameUiComponetns::on_pushButtonCut_clicked()
         selected_nodes[0]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
         selected_nodes.clear();
 
-        ui->pushButtonCut->setEnabled(false);
-        ui->pushButtonLink->setEnabled(false);
-        ui->pushButtonExpose->setEnabled(false);
-        ui->pushButtonAdd->setEnabled(false);
+        disable_operations_buttons();
     }
 }
 
@@ -162,10 +160,7 @@ void FrameUiComponetns::on_pushButtonLink_clicked()
 
         selected_nodes.clear();
 
-        ui->pushButtonCut->setEnabled(false);
-        ui->pushButtonLink->setEnabled(false);
-        ui->pushButtonExpose->setEnabled(false);
-        ui->pushButtonAdd->setEnabled(false);
+        disable_operations_buttons();
     }
 }
 
@@ -180,10 +175,7 @@ void FrameUiComponetns::on_pushButtonAdd_clicked()
         selected_nodes[0]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
         selected_nodes.clear();
 
-        ui->pushButtonCut->setEnabled(false);
-        ui->pushButtonLink->setEnabled(false);
-        ui->pushButtonExpose->setEnabled(false);
-        ui->pushButtonAdd->setEnabled(false);
+        disable_operations_buttons();
     }
 }
 
@@ -346,3 +338,8 @@ void FrameUiComponetns::on_pushButtonShowDelta_clicked()
     }
 }
 
+
+void FrameUiComponetns::on_pushButtonFindLCA_clicked()
+{
+
+}

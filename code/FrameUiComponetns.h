@@ -31,6 +31,7 @@ public:
                                QWidget *parent = nullptr);
     ~FrameUiComponetns() override;
 
+    void disable_operations_buttons();
 
 private slots:
     void mousePressEvent(QMouseEvent *e) override;
@@ -69,6 +70,8 @@ private slots:
     void on_pushButtonShowDelta_clicked();
 
     void on_pushButtonAdd_clicked();
+
+    void on_pushButtonFindLCA_clicked();
 
 private:
 

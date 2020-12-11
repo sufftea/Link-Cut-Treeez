@@ -108,6 +108,8 @@ private:
     };
 
 
+
+
     StepByStepOperation * current_operation = nullptr;
 
 public:

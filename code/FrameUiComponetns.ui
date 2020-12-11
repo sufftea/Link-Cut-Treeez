@@ -931,7 +931,7 @@ background-color: rgba(0, 125, 176, 220);
        </widget>
       </item>
       <item>
-       <widget class="QFrame" name="frame_3">
+       <widget class="QFrame" name="frameOperationsButtons">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -951,6 +951,162 @@ background-color: rgba(0, 125, 176, 220);
          <property name="bottomMargin">
           <number>0</number>
          </property>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="pushButtonFindLCA">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei Light</family>
+             <pointsize>14</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+color: rgb(243, 234, 226);
+background-color: transparent;
+
+border-radius: 5px;
+border: 2px solid;
+border-color: rgb(243, 234, 226);
+}
+QPushButton:enabled:hover {
+background-color: rgb(0, 125, 176);
+}
+QPushButton:enabled:pressed {
+background-color:  rgb(0, 105, 156);
+}
+QPushButton:disabled {
+border-color: rgba(243, 234, 226, 100);
+color:  rgba(243, 234, 226, 100);
+background-color: rgba(255, 255, 255, 20);
+}</string>
+           </property>
+           <property name="text">
+            <string>LCA</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3">
+          <widget class="QPushButton" name="pushButtonLink">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei Light</family>
+             <pointsize>14</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+color: rgb(243, 234, 226);
+background-color: transparent;
+
+border-radius: 5px;
+border: 2px solid;
+border-color: rgb(243, 234, 226);
+}
+QPushButton:enabled:hover {
+background-color: rgb(0, 125, 176);
+}
+QPushButton:enabled:pressed {
+background-color:  rgb(0, 105, 156);
+}
+QPushButton:disabled {
+border-color: rgba(243, 234, 226, 100);
+color:  rgba(243, 234, 226, 100);
+background-color: rgba(255, 255, 255, 20);
+}</string>
+           </property>
+           <property name="text">
+            <string>Link</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QPushButton" name="pushButtonAdd">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei Light</family>
+             <pointsize>14</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+color: rgb(243, 234, 226);
+background-color: transparent;
+
+border-radius: 5px;
+border: 2px solid;
+border-color: rgb(243, 234, 226);
+}
+QPushButton:enabled:hover {
+background-color: rgb(0, 125, 176);
+}
+QPushButton:enabled:pressed {
+background-color:  rgb(0, 105, 156);
+}
+QPushButton:disabled {
+border-color: rgba(243, 234, 226, 100);
+color:  rgba(243, 234, 226, 100);
+background-color: rgba(255, 255, 255, 20);
+}</string>
+           </property>
+           <property name="text">
+            <string>Add 1</string>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="3">
           <widget class="QPushButton" name="pushButtonCut">
            <property name="sizePolicy">
@@ -1055,111 +1211,7 @@ background-color: rgba(255, 255, 255, 20);
            </property>
           </widget>
          </item>
-         <item row="0" column="3">
-          <widget class="QPushButton" name="pushButtonLink">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Microsoft YaHei Light</family>
-             <pointsize>14</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton {
-color: rgb(243, 234, 226);
-background-color: transparent;
-
-border-radius: 5px;
-border: 2px solid;
-border-color: rgb(243, 234, 226);
-}
-QPushButton:enabled:hover {
-background-color: rgb(0, 125, 176);
-}
-QPushButton:enabled:pressed {
-background-color:  rgb(0, 105, 156);
-}
-QPushButton:disabled {
-border-color: rgba(243, 234, 226, 100);
-color:  rgba(243, 234, 226, 100);
-background-color: rgba(255, 255, 255, 20);
-}</string>
-           </property>
-           <property name="text">
-            <string>Link</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1" rowspan="2">
-          <widget class="QPushButton" name="pushButtonAdd">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Microsoft YaHei Light</family>
-             <pointsize>14</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton {
-color: rgb(243, 234, 226);
-background-color: transparent;
-
-border-radius: 5px;
-border: 2px solid;
-border-color: rgb(243, 234, 226);
-}
-QPushButton:enabled:hover {
-background-color: rgb(0, 125, 176);
-}
-QPushButton:enabled:pressed {
-background-color:  rgb(0, 105, 156);
-}
-QPushButton:disabled {
-border-color: rgba(243, 234, 226, 100);
-color:  rgba(243, 234, 226, 100);
-background-color: rgba(255, 255, 255, 20);
-}</string>
-           </property>
-           <property name="text">
-            <string>Add 1</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0" rowspan="2">
+         <item row="0" column="0">
           <spacer name="horizontalSpacer">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
