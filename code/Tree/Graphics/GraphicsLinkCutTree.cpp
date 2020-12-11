@@ -26,7 +26,7 @@ void GraphicsLinkCutTree::update_scene()
 
     // draw one splay tree and move offset to give enough spase for the next tree
     for (Node * node: tree.nodes) {
-        node->graphics->update_pix();
+        node->graphics->update_pixmap();
 
         if (!node->is_solid_root()) {
             continue;
@@ -55,7 +55,7 @@ void GraphicsLinkCutTree::init(int size)
 void GraphicsLinkCutTree::set_animation_easing_curve(std::function<double (double)> f)
 {
     for (Node * node : tree.nodes) {
-        node->graphics->set_movement_easing_curve(f);
+        node->graphics->movement_anim.set_easing_curve(f);
     }
 }
 
@@ -102,24 +102,21 @@ GraphicsSolidNodeItem *GraphicsLinkCutTree::solid_node_at(QPoint pos)
 void GraphicsLinkCutTree::unselect_all_nodes()
 {
     for (Node * node : tree.nodes) {
-        node->graphics->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        node->graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
     }
 }
 
 void GraphicsLinkCutTree::set_show_delta(bool show_delta)
 {
-    if (GraphicsSolidNodeItem::show_delta != show_delta) {
-        GraphicsSolidNodeItem::show_delta = show_delta;
-
-        for (Node * node : tree.nodes) {
-            node->graphics->update_pix();
-        }
+    this->show_delta = show_delta;
+    for (Node * node : tree.nodes) {
+        node->graphics->set_show_delta(show_delta);
     }
 }
 
 bool GraphicsLinkCutTree::is_show_delta()
 {
-    return GraphicsSolidNodeItem::show_delta;
+    return this->show_delta;
 }
 
 void GraphicsLinkCutTree::animate_scene()

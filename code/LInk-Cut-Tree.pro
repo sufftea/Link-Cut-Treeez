@@ -17,6 +17,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     FrameUiComponetns.cpp \
+    Tree/Graphics/GraphicsAbstractNodeItem.cpp \
+    Tree/Graphics/GraphicsNodeItem.cpp \
     Tree/Graphics/Helpers/PathSmoother.cpp \
     Tree/LinkCutTree.cpp \
     Tree/Node.cpp \
@@ -31,6 +33,8 @@ SOURCES += \
 HEADERS += \
     FrameUiComponetns.h \
     Helpers/Colors.h \
+    Tree/Graphics/GraphicsAbstractNodeItem.h \
+    Tree/Graphics/GraphicsNodeItem.h \
     Tree/Graphics/Helpers/PathSmoother.h \
     Tree/LinkCutTree.h \
     Tree/Node.h \

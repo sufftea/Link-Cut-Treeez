@@ -10,11 +10,12 @@
 #include "Tree/Graphics/Helpers/Animation.h"
 #include "Tree/Graphics/Helpers/PathCreator.h"
 #include "Tree/Graphics/Helpers/PathSmoother.h"
+#include "Tree/Graphics/GraphicsNodeItem.h"
 
 class Node;
 
 
-class GraphicsSolidNodeItem : public QGraphicsItem
+class GraphicsSolidNodeItem : public GraphicsNodeItem
 {
 public:
     enum class SelectionType
@@ -26,22 +27,13 @@ public:
     };
 
 private:
-    QPointF last_pos = QPointF(0, 0);
-    QPointF next_pos = QPointF(0, 0);
-
 
     QGraphicsScene * my_scene = nullptr;
-    QPixmap pix_node;
-
-    SelectionType selection = SelectionType::no_selection;
+    bool show_delta = false;
 
 public:
-    static bool show_delta;
     static const int node_size_px = 60;
     static const int node_bound_size_px = 100;
-
-    Animation movement_anim;
-    Animation selection_anim;
 
     Node * my_node = nullptr;
 
@@ -50,13 +42,6 @@ public:
     ~GraphicsSolidNodeItem() override;
 
 
-    void update_position(int node_offset, int solid_depth);
-    void animate();
-    void set_movement_easing_curve(std::function<double(double)> f);
-    void set_my_scene(QGraphicsScene * scene);
-    void set_selection_type(SelectionType type);
-    SelectionType get_selection_type();
-    void update_pix();
 
 
     /*
@@ -69,6 +54,13 @@ public:
      * Should be called frome the root node in order to draw the entire solid tree.
     */
     int traverse_and_update_position(int offset, int solid_depth = 0);
+    void update_position(int node_offset, int solid_depth);
+
+    // updates node's pixmap after a display parameter
+    void update_pixmap() override;
+
+    void set_show_delta(bool show);
+    void set_my_scene(QGraphicsScene * scene);
 
 
     QRectF boundingRect() const override;

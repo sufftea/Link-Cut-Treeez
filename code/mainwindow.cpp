@@ -78,11 +78,11 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
     GraphicsSolidNodeItem * graphics_node = graphics_tree.solid_node_at(pos);
 
     if (graphics_node != nullptr) {
-        if (graphics_node->get_selection_type() == GraphicsSolidNodeItem::SelectionType::no_selection) {
-            graphics_node->set_selection_type(GraphicsSolidNodeItem::SelectionType::user_selected);
+        if (graphics_node->get_selection_type() == GraphicsNodeItem::SelectionType::no_selection) {
+            graphics_node->set_selection_type(GraphicsNodeItem::SelectionType::user_selected);
             selected_nodes << graphics_node;
-        } else if (graphics_node->get_selection_type() == GraphicsSolidNodeItem::SelectionType::user_selected) {
-            graphics_node->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        } else if (graphics_node->get_selection_type() == GraphicsNodeItem::SelectionType::user_selected) {
+            graphics_node->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
             selected_nodes.removeOne(graphics_node);
         }
 
@@ -100,7 +100,7 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
             ui_components_frame->ui->pushButtonLink->setEnabled(true);
             ui_components_frame->ui->pushButtonFindLCA->setEnabled(true);
         } else if (selected_nodes.size() == 3) {
-            selected_nodes.first()->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+            selected_nodes.first()->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
             selected_nodes.pop_front();
         }
     }

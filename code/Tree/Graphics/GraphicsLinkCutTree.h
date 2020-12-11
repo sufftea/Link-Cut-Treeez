@@ -14,6 +14,7 @@ class GraphicsLinkCutTree : public QObject
     Q_OBJECT
 
     QTimer * animation_timer;
+    bool show_delta = false;
 
 public:   
     GraphicsLinkCutTree();

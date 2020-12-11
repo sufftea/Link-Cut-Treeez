@@ -85,7 +85,6 @@ public:
      * that, the new operation will be started;
     */
     void start_splay();
-//    void start_split(Node * v);
 
     /*
      * after an operation has been started, call this function

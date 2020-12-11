@@ -115,7 +115,7 @@ void FrameUiComponetns::disable_operations_buttons()
 void FrameUiComponetns::on_pushButtonExpose_clicked()
 {
     if (selected_nodes.size() == 1) {
-        selected_nodes[0]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
 
         tree->finish_operation();
         SequanceLog::clear();
@@ -138,7 +138,7 @@ void FrameUiComponetns::on_pushButtonCut_clicked()
 
         tree->start_cut(selected_nodes[0]->my_node);
 
-        selected_nodes[0]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
         selected_nodes.clear();
 
         disable_operations_buttons();
@@ -155,8 +155,8 @@ void FrameUiComponetns::on_pushButtonLink_clicked()
 
         ui->labelSequence->setText(SequanceLog::get_text());
 
-        selected_nodes[0]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
-        selected_nodes[1]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[1]->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
 
         selected_nodes.clear();
 
@@ -172,7 +172,7 @@ void FrameUiComponetns::on_pushButtonAdd_clicked()
         tree->start_add(selected_nodes[0]->my_node, 1);
         ui->labelSequence->setText(SequanceLog::get_text());
 
-        selected_nodes[0]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
         selected_nodes.clear();
 
         disable_operations_buttons();

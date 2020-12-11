@@ -2,16 +2,14 @@
 #include "Tree/Node.h"
 #include "Helpers/Colors.h"
 
-bool GraphicsSolidNodeItem::show_delta = false;
-
 
 GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, QGraphicsScene *my_scene)
-    : pix_node(QSize(node_size_px, node_size_px))
+    : GraphicsNodeItem()
 {
     this->my_node = my_node;
     this->my_scene = my_scene;
 
-    update_pix();
+    update_pixmap();
 }
 
 GraphicsSolidNodeItem::~GraphicsSolidNodeItem()
@@ -32,19 +30,13 @@ void GraphicsSolidNodeItem::update_position(int node_offset, int solid_depth)
     }
 }
 
-void GraphicsSolidNodeItem::animate()
-{
-    // animate the position
-    if (movement_anim.get_is_active()) {
-        qreal v = movement_anim.get_value();
-        QPointF m = (next_pos - last_pos) * v;
-        this->setPos(last_pos + m);
-    }
-}
 
-void GraphicsSolidNodeItem::set_movement_easing_curve(std::function<double (double)> f)
+void GraphicsSolidNodeItem::set_show_delta(bool show)
 {
-    this->movement_anim.set_easing_curve(f);
+    if (this->show_delta != show) {
+        this->show_delta = show;
+        this->update_pixmap();
+    }
 }
 
 void GraphicsSolidNodeItem::set_my_scene(QGraphicsScene *scene)
@@ -52,20 +44,8 @@ void GraphicsSolidNodeItem::set_my_scene(QGraphicsScene *scene)
     this->my_scene = scene;
 }
 
-void GraphicsSolidNodeItem::set_selection_type(GraphicsSolidNodeItem::SelectionType type)
-{
-    if (this->selection != type) {
-        this->selection = type;
-        update_pix();
-    }
-}
 
-GraphicsSolidNodeItem::SelectionType GraphicsSolidNodeItem::get_selection_type()
-{
-    return this->selection;
-}
-
-void GraphicsSolidNodeItem::update_pix()
+void GraphicsSolidNodeItem::update_pixmap()
 {
     pix_node.fill(Qt::transparent);
 
@@ -80,16 +60,16 @@ void GraphicsSolidNodeItem::update_pix()
     painter.setFont(font);
 
 
-    if (this->selection == SelectionType::no_selection) {
+    if (this->selection == GraphicsNodeItem::SelectionType::no_selection) {
         painter.setBrush(MyColors::blue);
         painter.drawEllipse(QRect(5, 5, node_size_px - 10, node_size_px - 10));
-    } else if (this->selection == SelectionType::user_selected) {
+    } else if (this->selection == GraphicsNodeItem::SelectionType::user_selected) {
         painter.setBrush(MyColors::red);
         painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
-    } else if (this->selection == SelectionType::selection0) {
+    } else if (this->selection == GraphicsNodeItem::SelectionType::selection0) {
         painter.setBrush(MyColors::green);
         painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
-    } else if (this->selection == SelectionType::selection1) {
+    } else if (this->selection == GraphicsNodeItem::SelectionType::selection1) {
         painter.setBrush(MyColors::red);
         painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
     }
