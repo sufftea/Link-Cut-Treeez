@@ -54,6 +54,7 @@ public:
      * Should be called frome the root node in order to draw the entire solid tree.
     */
     int traverse_and_update_position(int offset, int solid_depth = 0);
+
     void update_position(int node_offset, int solid_depth);
 
     // updates node's pixmap after a display parameter

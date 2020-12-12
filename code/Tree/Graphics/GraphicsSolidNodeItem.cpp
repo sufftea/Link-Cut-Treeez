@@ -17,18 +17,6 @@ GraphicsSolidNodeItem::~GraphicsSolidNodeItem()
 
 }
 
-void GraphicsSolidNodeItem::update_position(int node_offset, int solid_depth)
-{
-    int node_x = node_offset * GraphicsSolidNodeItem::node_size_px;
-    int node_y = solid_depth * GraphicsSolidNodeItem::node_size_px;
-
-    this->last_pos = this->pos();
-    this->next_pos = QPointF(node_x, node_y);
-
-    if (this->pos() != next_pos) {
-        movement_anim.start();
-    }
-}
 
 
 void GraphicsSolidNodeItem::set_show_delta(bool show)
@@ -105,7 +93,18 @@ int GraphicsSolidNodeItem::traverse_and_update_position(int offset, int solid_de
     return width + 1;
 }
 
+void GraphicsSolidNodeItem::update_position(int node_offset, int solid_depth)
+{
+    int node_x = node_offset * GraphicsSolidNodeItem::node_size_px * 0.8;
+    int node_y = solid_depth * GraphicsSolidNodeItem::node_size_px;
 
+    this->last_pos = this->pos();
+    this->next_pos = QPointF(node_x, node_y);
+
+    if (this->pos() != next_pos) {
+        movement_anim.start();
+    }
+}
 
 
 QRectF GraphicsSolidNodeItem::boundingRect() const
