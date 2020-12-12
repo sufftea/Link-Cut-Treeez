@@ -13,35 +13,7 @@ Node::Node(Node * parent, int displayed_value)
 
 Node::~Node()
 {
-    finish_operation(); // also deletes [current_operation]
-}
 
-void Node::start_splay()
-{
-    finish_operation();
-    current_operation = new OperationSplay(this);
-}
-
-bool Node::make_step()
-{
-    if (current_operation != nullptr) {
-        if (current_operation->make_step()) {
-            return 1;
-        } else {
-            delete current_operation;
-            current_operation = nullptr;
-        }
-    }
-    return 0;
-}
-
-void Node::finish_operation()
-{
-    if (current_operation != nullptr) {
-        while (current_operation->make_step()) {}
-        delete current_operation;
-        current_operation = nullptr;
-    }
 }
 
 int Node::get_value()
@@ -572,56 +544,4 @@ bool Node::is_child()
 }
 
 
-/* ========= STEP BY STEP SPLAY ========= */
-
-Node::OperationSplay::OperationSplay(Node * v)
-{
-    SequanceLog::add("splay("
-                  + QString::number(v->get_value())
-                  + ")");
-    SequanceLog::step_in();
-
-    this->v = v;
-}
-
-Node::OperationSplay::~OperationSplay()
-{
-    SequanceLog::add("Splay finished!");
-    SequanceLog::step_out();
-}
-
-bool Node::OperationSplay::make_step()
-{
-    if (v->is_solid_root()) {
-        return 0;
-    }
-
-    if (v->try_zig_zag_left()) {
-        SequanceLog::add("Zig-Zag left");
-        return 1;
-    }
-    if (v->try_zig_zag_right()) {
-        SequanceLog::add("Zig-Zag right");
-        return 1;
-    }
-    if (v->try_zig_zig_left()) {
-        SequanceLog::add("Zig-Zig left");
-        return 1;
-    }
-    if (v->try_zig_zig_right()) {
-        SequanceLog::add("Zig-Zig right");
-        return 1;
-    }
-
-    if (v->try_zig_left()) {
-        SequanceLog::add("Zig left");
-        return 1;
-    }
-    if (v->try_zig_right()) {
-        SequanceLog::add("Zig right");
-        return 1;
-    }
-
-    return 1;
-}
 

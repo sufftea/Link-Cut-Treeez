@@ -107,7 +107,26 @@ private:
         bool make_step() override;
     };
 
+    /* Step by step implementation of Splay(x)
+     * Each step does either zig, zig-zig or zig-zag; */
+    class OperationSplay : public StepByStepOperation
+    {
+    private:
+        Node * v;
 
+    public:
+        /*
+         * [v] is the node that we want to move to the root
+         *
+         * [tree_path_parent] -- path parent of the tree that contains
+         * the node [v], if not specified, will be found by calling
+         * v->get_root() which will be slower.
+        */
+        OperationSplay(Node * v);
+        ~OperationSplay() override;
+
+        bool make_step() override;
+    };
 
 
     StepByStepOperation * current_operation = nullptr;

@@ -21,26 +21,7 @@
 class Node
 {
 private:
-    /* Step by step implementation of the Splay(x)
-     * Each step does either zig, zig-zig or zig-zag; */
-    class OperationSplay : public StepByStepOperation
-    {
-    private:
-        Node * v;
 
-    public:
-        /*
-         * [v] is the node that we want to move to the root
-         *
-         * [tree_path_parent] -- path parent of the tree that contains
-         * the node [v], if not specified, will be found by calling
-         * v->get_root() which will be slower.
-        */
-        OperationSplay(Node * v);
-        ~OperationSplay() override;
-
-        bool make_step() override;
-    };
 
     StepByStepOperation * current_operation = nullptr;
 
@@ -69,37 +50,6 @@ public:
     Node(int weight = 0);
     Node(Node * parent, int value = 0);
     ~Node();
-
-
-    /* ========= STEP BY STEP OPERATIONS START ========= */
-
-    /*
-     * The following functions are used to start a new operation.
-     *
-     * After an operation has been started, call make_step() to make
-     * each next step of the operation or finish_operation() to finish
-     * it immediately.
-     *
-     * If another operation has already been started, it will be
-     * finished immediately using finish_operation() function; after
-     * that, the new operation will be started;
-    */
-    void start_splay();
-
-    /*
-     * after an operation has been started, call this function
-     * to make each next step of the operation
-    */
-    bool make_step();
-
-    /*
-     * Call this function if there's no need to show the
-     * operation step by step, the operation will be finished
-     * immediatey
-    */
-    void finish_operation();
-
-
 
     /* ========= INTSTANT OPERATIONS START ========= */
 
