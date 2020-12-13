@@ -21,7 +21,7 @@
        <item>
         <widget class="QScrollArea" name="scrollAreaLog">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -44,7 +44,7 @@ border: 0;</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>300</width>
+            <width>644</width>
             <height>365</height>
            </rect>
           </property>
@@ -88,7 +88,7 @@ border: 0;</string>
            <item>
             <widget class="QLabel" name="labelSequence">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -112,7 +112,12 @@ border: 0;</string>
               </font>
              </property>
              <property name="styleSheet">
-              <string notr="true">color: rgba(243, 234, 226, 210);</string>
+              <string notr="true">QLabel {
+color: rgba(243, 234, 226, 210);
+}
+QLabel::hover {
+background-color: rgba(255,255,255,20);
+}</string>
              </property>
              <property name="text">
               <string/>

@@ -6,7 +6,7 @@
 
 #include "Helpers/StepByStepOperation.h"
 #include "Tree/Graphics/GraphicsSolidNodeItem.h"
-#include "Helpers/Sequance.h"
+#include "Helpers/Sequence.h"
 
 
 /*

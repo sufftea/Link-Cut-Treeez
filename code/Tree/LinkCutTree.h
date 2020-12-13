@@ -5,7 +5,7 @@
 #include <QDebug>
 #include "Node.h"
 #include "Helpers/StepByStepOperation.h"
-#include "Helpers/Sequance.h"
+#include "Helpers/Sequence.h"
 
 /*
 abstract tree -- the big tree with selected paths that
@@ -20,92 +20,6 @@ concrete tree -- the forest of solid trees
 class LinkCutTree
 {
 private:
-    class OperationExpose : public StepByStepOperation
-    {
-    private:
-        enum Step {
-            start_splaying_v = 0,
-            start_splaying_pp,
-            splaying_v,
-            splaying_pp,
-            cut_and_link
-        };
-
-        Node * v;
-        Node * pp;
-        Step current_step = start_splaying_v;
-
-    public:
-        OperationExpose(Node * v);
-        ~OperationExpose() override;
-
-        bool make_step() override;
-    };
-
-    class OperationLink : public StepByStepOperation
-    {
-    private:
-        enum Step {
-            start_expose_v = 0,
-            expose_v,
-            start_expose_to,
-            expose_to,
-            link
-        };
-
-        Step current_step = Step::start_expose_v;
-        OperationExpose * expose_operation;
-
-        Node * v;
-        Node * to;
-
-    public:
-        OperationLink(Node * v, Node * to);
-        ~OperationLink() override;
-
-        bool make_step() override;
-    };
-
-    class OperationCut : public StepByStepOperation
-    {
-    private:
-        enum Step {
-            start_expose_v = 0,
-            expose_v,
-            cut
-        };
-
-        Node * v;
-        Step current_step = start_expose_v;
-        OperationExpose * expose = nullptr;
-
-    public:
-        OperationCut(Node * v);
-        ~OperationCut() override;
-
-        bool make_step() override;
-    };
-
-    class OperationAddConst : public StepByStepOperation
-    {
-    private:
-        enum Step {
-            start_expose_v = 0,
-            expose_v,
-            add
-        };
-
-        Step current_step = Step::start_expose_v;
-        Node * v;
-        int value;
-        OperationExpose * exposeOperation = nullptr;
-
-    public:
-        OperationAddConst(Node * v, int value);
-        ~OperationAddConst() override;
-
-        bool make_step() override;
-    };
 
     /* Step by step implementation of Splay(x)
      * Each step does either zig, zig-zig or zig-zag; */
@@ -127,6 +41,99 @@ private:
 
         bool make_step() override;
     };
+
+    class OperationExpose : public StepByStepOperation
+    {
+    private:
+        enum Step {
+            start_splaying_v = 0,
+            splaying_v,
+            start_splaying_pp,
+            splaying_pp,
+            link,
+            finished
+        };
+
+        Node * v;
+        Node * pp;
+        Step current_step = start_splaying_v;
+
+        OperationSplay *splayer = nullptr;
+
+    public:
+        OperationExpose(Node * v);
+        ~OperationExpose() override;
+
+        bool make_step() override;
+    };
+
+    class OperationLink : public StepByStepOperation
+    {
+    private:
+        enum Step {
+            start_expose_v = 0,
+            expose_v,
+            start_expose_to,
+            expose_to,
+            link,
+            finished
+        };
+
+        Step current_step = Step::start_expose_v;
+        OperationExpose * expose_operation = nullptr;
+
+        Node * v;
+        Node * to;
+
+    public:
+        OperationLink(Node * v, Node * to);
+        ~OperationLink() override;
+
+        bool make_step() override;
+    };
+
+    class OperationCut : public StepByStepOperation
+    {
+    private:
+        enum Step {
+            start_expose_v = 0,
+            expose_v,
+            cut,
+            finished
+        };
+
+        Node * v;
+        Step current_step = start_expose_v;
+        OperationExpose * expose_operation = nullptr;
+
+    public:
+        OperationCut(Node * v);
+        ~OperationCut() override;
+
+        bool make_step() override;
+    };
+
+    class OperationAddConst : public StepByStepOperation
+    {
+    private:
+        enum Step {
+            start_expose_v = 0,
+            expose_v,
+            add
+        };
+
+        Step current_step = Step::start_expose_v;
+        Node * v;
+        int value;
+        OperationExpose * expose_operation = nullptr;
+
+    public:
+        OperationAddConst(Node * v, int value);
+        ~OperationAddConst() override;
+
+        bool make_step() override;
+    };
+
 
 
     StepByStepOperation * current_operation = nullptr;

@@ -95,7 +95,7 @@ int GraphicsSolidNodeItem::traverse_and_update_position(int offset, int solid_de
 
 void GraphicsSolidNodeItem::update_position(int node_offset, int solid_depth)
 {
-    int node_x = node_offset * GraphicsSolidNodeItem::node_size_px * 0.8;
+    int node_x = node_offset * GraphicsSolidNodeItem::node_size_px * 0.6;
     int node_y = solid_depth * GraphicsSolidNodeItem::node_size_px;
 
     this->last_pos = this->pos();

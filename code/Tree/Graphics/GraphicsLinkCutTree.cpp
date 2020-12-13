@@ -33,7 +33,7 @@ void GraphicsLinkCutTree::update_scene()
         }
 
         current_offset += node->graphics->traverse_and_update_position(current_offset);
-        current_offset += 2;
+        current_offset += 4;
     }
 
     this->scene->update();

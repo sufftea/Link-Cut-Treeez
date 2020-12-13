@@ -10,7 +10,7 @@
 
 #include "Tree/Graphics/GraphicsLinkCutTree.h"
 #include "Tree/Node.h"
-#include "Helpers/Sequance.h"
+#include "Helpers/Sequence.h"
 #include "Helpers/Colors.h"
 
 namespace Ui {
