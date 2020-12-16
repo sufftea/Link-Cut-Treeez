@@ -25,7 +25,11 @@ void LinkCutTree::link(Node * v, Node * to)
     expose(v);
     expose(to);
 
-    v->parent = to;
+    to->delta_w -= v->delta_w;
+
+    v->left = to;
+    v->parent = to->parent;
+    to->parent = v;
 }
 
 void LinkCutTree::cut(Node *v)

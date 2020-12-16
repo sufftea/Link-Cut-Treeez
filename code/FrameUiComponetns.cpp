@@ -221,6 +221,10 @@ void FrameUiComponetns::on_pushButtonPreset1_clicked()
     tree->link(nodes[12], nodes[11]);
     tree->link(nodes[13], nodes[12]);
 
+    tree->expose(nodes[13]);
+    tree->expose(nodes[10]);
+    tree->expose(nodes[6]);
+    tree->expose(nodes[3]);
 
     graphics_tree.update_scene();
 }
