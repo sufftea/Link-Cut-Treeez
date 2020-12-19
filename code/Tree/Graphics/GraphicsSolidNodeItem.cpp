@@ -55,7 +55,7 @@ void GraphicsSolidNodeItem::update_pixmap()
         painter.setBrush(MyColors::red);
         painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
     } else if (this->selection == GraphicsNodeItem::SelectionType::selection0) {
-        painter.setBrush(MyColors::green);
+        painter.setBrush(MyColors::light_red);
         painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
     } else if (this->selection == GraphicsNodeItem::SelectionType::selection1) {
         painter.setBrush(MyColors::red);
