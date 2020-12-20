@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1320</width>
-    <height>649</height>
+    <width>1478</width>
+    <height>650</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,6 +25,12 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>450</width>
+           <height>16777215</height>
+          </size>
          </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgba(0,0,0,0);
@@ -44,7 +50,7 @@ border: 0;</string>
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>644</width>
+            <width>450</width>
             <height>365</height>
            </rect>
           </property>
@@ -233,6 +239,9 @@ background-color:  rgb(152, 27, 48);
               <spacer name="horizontalSpacer_5">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Expanding</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -932,6 +941,53 @@ background-color: rgba(0, 125, 176, 220);
         </property>
         <property name="text">
          <string>Show delta</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonSwitchTree">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>170</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>170</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Microsoft YaHei Light</family>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+color: rgb(243, 234, 226);
+background-color: transparent;
+
+border-radius: 5px;
+border: 2px solid;
+border-color: rgb(243, 234, 226);
+}
+QPushButton:enabled:hover {
+background-color: rgb(0, 125, 176);
+}
+QPushButton:enabled:pressed {
+background-color:  rgb(0, 105, 156);
+}</string>
+        </property>
+        <property name="text">
+         <string>Concrete tree</string>
         </property>
        </widget>
       </item>

@@ -11,8 +11,6 @@
 
 /*
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * BIG TO DO: possibly implement the descendant search support   *
- *                                                               *
  * http://planarity.org/Klein_splay_trees_and_link-cut_trees.pdf *
  * Chapter 17.4                                                  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -42,7 +40,12 @@ public:
     int subtree_max;  // the biggest value of the subtree
 
     /*
-     * Stores graphical representation of the node
+     * Stores graphical representation of the node (in the concrete tree)
+     *
+     * A problem:
+     * it's only needed for the GraphicsSolidNodeItem itself (to traverse
+     * the tree while drawing it) and it may be deleted without the node
+     * being aware of it.
     */
     GraphicsSolidNodeItem *graphics = nullptr;
 

@@ -3,8 +3,8 @@
 
 GraphicsLinkCutTree::GraphicsLinkCutTree()
 {
-    scene = new QGraphicsScene;
-//    scene->setBackgroundBrush(QBrush(MyColors::black));
+    concrete_tree_scene = new QGraphicsScene;
+    abstract_tree_scene = new QGraphicsScene;
 
     animation_timer = new QTimer;
     animation_timer->setInterval(20);
@@ -17,7 +17,8 @@ GraphicsLinkCutTree::~GraphicsLinkCutTree()
     animation_timer->stop();
     delete animation_timer;
 
-    delete scene;
+    delete concrete_tree_scene;
+    delete abstract_tree_scene;
 }
 
 void GraphicsLinkCutTree::update_scene()
@@ -36,19 +37,21 @@ void GraphicsLinkCutTree::update_scene()
         current_offset += 4;
     }
 
-    this->scene->update();
+    this->concrete_tree_scene->update();
 }
 
 void GraphicsLinkCutTree::init(int size)
 {
-    scene->clear();
+    concrete_tree_scene->clear();
+    abstract_tree_scene->clear();
+
     tree.init(size);
 
     for (Node * node : tree.nodes) {
         node->graphics = new GraphicsSolidNodeItem(node);
 
-        scene->addItem(node->graphics);
-        node->graphics->set_my_scene(this->scene);
+        concrete_tree_scene->addItem(node->graphics);
+        node->graphics->set_my_scene(this->concrete_tree_scene);
     }
 }
 
@@ -125,5 +128,5 @@ void GraphicsLinkCutTree::animate_scene()
         node->graphics->animate();
     }
 
-    scene->update();
+//    concrete_tree_scene->update();
 }

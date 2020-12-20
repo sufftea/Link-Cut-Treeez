@@ -73,6 +73,8 @@ private slots:
 
     void on_pushButtonFindLCA_clicked();
 
+    void on_pushButtonSwitchTree_clicked();
+
 private:
 
     QPropertyAnimation * showPresetsListAnimation;
@@ -84,6 +86,11 @@ private:
     LinkCutTree * tree;
 
     QQueue<GraphicsSolidNodeItem*> &selected_nodes;
+
+    // Either "abstract" or "concrete"
+    // Abstract tree -- the one we *imagine* when talking about Link-Cut tree
+    // Concrete tree -- the way the tree is *actually* stored in the memory
+    QString current_tree_view = "concrete";
 
     void reset_tree();
 };

@@ -347,3 +347,18 @@ void FrameUiComponetns::on_pushButtonFindLCA_clicked()
 {
 
 }
+
+void FrameUiComponetns::on_pushButtonSwitchTree_clicked()
+{
+    if (this->current_tree_view == "concrete") {
+        this->current_tree_view = "abstract";
+        ui->pushButtonSwitchTree->setText("Abstract tree");
+
+        graphics_view_ui->setScene(graphics_tree.abstract_tree_scene);
+    } else {
+        this->current_tree_view = "concrete";
+        ui->pushButtonSwitchTree->setText("Concrete tree");
+
+        graphics_view_ui->setScene(graphics_tree.concrete_tree_scene);
+    }
+}
