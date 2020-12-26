@@ -7,6 +7,7 @@
 #include "Helpers/StepByStepOperation.h"
 #include "Tree/Graphics/GraphicsSolidNodeItem.h"
 #include "Helpers/Sequence.h"
+#include "Tree/Graphics/Helpers/AbstractNode.h"
 
 
 /*
@@ -47,7 +48,13 @@ public:
      * the tree while drawing it) and it may be deleted without the node
      * being aware of it.
     */
-    GraphicsSolidNodeItem *graphics = nullptr;
+    GraphicsSolidNodeItem *concrete_tree_graphics = nullptr;
+
+    /*
+     * A corresponding abstract node. Needed to construct the abstract tree
+     * for displaying it.
+    */
+    AbstractNode abstract;
 
 
     Node(int weight = 0);
@@ -69,15 +76,17 @@ public:
 
     void splay();
 
-    Node * get_solid_root();
-    Node * get_abstart_root();
-    Node * get_path_parent();
 
-    bool is_solid_root();
-    bool is_abstract_root();
-    bool is_left_child();
-    bool is_right_child();
-    bool is_child();
+    Node * get_solid_root();        // O(logn)
+    Node * get_abstract_parent();   // O(logn)
+    Node * get_path_parent();       // O(logn)
+
+    bool is_solid_root();           // O(n)
+    bool is_abstract_root();        // O(logn)
+    bool is_left_child();           // O(n)
+    bool is_right_child();          // O(n)
+    bool is_solid_child();          // O(n)
+    bool is_prefered_child();       // O(logn)
 };
 
 

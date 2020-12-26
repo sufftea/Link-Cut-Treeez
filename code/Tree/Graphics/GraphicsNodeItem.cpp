@@ -1,7 +1,7 @@
 #include "GraphicsNodeItem.h"
 
 GraphicsNodeItem::GraphicsNodeItem()
-    : pix_node(QSize(node_size_px, node_size_px))
+    : pix(QSize(node_size_px, node_size_px))
 {
 
 }

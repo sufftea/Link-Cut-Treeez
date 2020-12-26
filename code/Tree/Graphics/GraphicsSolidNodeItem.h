@@ -38,7 +38,7 @@ public:
     Node * my_node = nullptr;
 
 
-    GraphicsSolidNodeItem(Node * my_node, QGraphicsScene * my_scene = nullptr);
+    GraphicsSolidNodeItem(Node * my_node, bool show_delta = false, QGraphicsScene * my_scene = nullptr);
     ~GraphicsSolidNodeItem() override;
 
 

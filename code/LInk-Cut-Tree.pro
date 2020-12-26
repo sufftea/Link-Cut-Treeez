@@ -20,6 +20,7 @@ SOURCES += \
     Helpers/Sequence.cpp \
     Tree/Graphics/GraphicsAbstractNodeItem.cpp \
     Tree/Graphics/GraphicsNodeItem.cpp \
+    Tree/Graphics/Helpers/AbstractNode.cpp \
     Tree/Graphics/Helpers/PathSmoother.cpp \
     Tree/LinkCutTree.cpp \
     Tree/Node.cpp \
@@ -36,6 +37,7 @@ HEADERS += \
     Helpers/Sequence.h \
     Tree/Graphics/GraphicsAbstractNodeItem.h \
     Tree/Graphics/GraphicsNodeItem.h \
+    Tree/Graphics/Helpers/AbstractNode.h \
     Tree/Graphics/Helpers/PathSmoother.h \
     Tree/LinkCutTree.h \
     Tree/Node.h \

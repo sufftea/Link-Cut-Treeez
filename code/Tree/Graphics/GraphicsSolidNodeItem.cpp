@@ -3,11 +3,12 @@
 #include "Helpers/Colors.h"
 
 
-GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, QGraphicsScene *my_scene)
+GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, bool show_delta, QGraphicsScene *my_scene)
     : GraphicsNodeItem()
 {
     this->my_node = my_node;
     this->my_scene = my_scene;
+    this->show_delta = show_delta;
 
     update_pixmap();
 }
@@ -35,9 +36,9 @@ void GraphicsSolidNodeItem::set_my_scene(QGraphicsScene *scene)
 
 void GraphicsSolidNodeItem::update_pixmap()
 {
-    pix_node.fill(Qt::transparent);
+    pix.fill(Qt::transparent);
 
-    QPainter painter(&pix_node);
+    QPainter painter(&pix);
     painter.setRenderHint(QPainter::RenderHint::Antialiasing);
     QPen white_pen(MyColors::white);
     white_pen.setWidth(3);
@@ -63,7 +64,7 @@ void GraphicsSolidNodeItem::update_pixmap()
     }
 
     QString text;
-    if (show_delta) {
+    if (this->show_delta) {
         text = "Δ" + QString::number(my_node->delta_w);
     } else {
         text = QString::number(my_node->get_value());
@@ -72,14 +73,13 @@ void GraphicsSolidNodeItem::update_pixmap()
     painter.drawText(QRect(0, 0, node_size_px, node_size_px),
                       Qt::AlignHCenter | Qt::AlignVCenter,
                       text);
-
 }
 
 int GraphicsSolidNodeItem::traverse_and_update_position(int offset, int solid_depth)
 {
     int width = 0;
     if (my_node->left != nullptr) {
-        width += my_node->left->graphics->traverse_and_update_position(offset, solid_depth + 1);
+        width += my_node->left->concrete_tree_graphics->traverse_and_update_position(offset, solid_depth + 1);
     }
     offset += width;
 
@@ -87,7 +87,7 @@ int GraphicsSolidNodeItem::traverse_and_update_position(int offset, int solid_de
     offset += 1;
 
     if (my_node->right != nullptr) {
-        width += my_node->right->graphics->traverse_and_update_position(offset, solid_depth + 1);
+        width += my_node->right->concrete_tree_graphics->traverse_and_update_position(offset, solid_depth + 1);
     }
 
     return width + 1;
@@ -140,9 +140,9 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
                           GraphicsSolidNodeItem::node_size_px / 2);
 
             QPainterPath path_parent_path = PathCreator::create_path(this->pos().toPoint() + offset,
-                                                         this->my_node->parent->graphics->pos().toPoint() + offset,
+                                                         this->my_node->parent->concrete_tree_graphics->pos().toPoint() + offset,
                                                          my_scene,
-                                                         3);
+                                                         5);
             path_parent_path.translate(-this->pos());
 
             painter->setPen(eraser);
@@ -172,7 +172,7 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
     } else {
         // draw the edge
         QPointF a = QPoint(0, 0);
-        QPointF b = this->my_node->parent->graphics->pos() - this->pos();
+        QPointF b = this->my_node->parent->concrete_tree_graphics->pos() - this->pos();
 
         QPoint offset(GraphicsSolidNodeItem::node_size_px / 2,
                       GraphicsSolidNodeItem::node_size_px / 2);
@@ -196,6 +196,6 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
     }
 
     // draw the node
-    painter->drawPixmap(0, 0, this->pix_node);
+    painter->drawPixmap(0, 0, this->pix);
 }
 

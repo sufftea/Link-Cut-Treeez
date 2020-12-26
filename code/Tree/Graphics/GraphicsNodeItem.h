@@ -20,7 +20,7 @@ protected:
     QPointF last_pos = QPointF(0, 0);
     QPointF next_pos = QPointF(0, 0);
 
-    QPixmap pix_node;
+    QPixmap pix;
 
     SelectionType selection = SelectionType::no_selection;
 
@@ -37,9 +37,7 @@ public:
     void animate();
     virtual void update_pixmap()=0;
 
-    void set_my_scene(QGraphicsScene * scene);
     void set_selection_type(SelectionType type);
-
     SelectionType get_selection_type();
 };
 

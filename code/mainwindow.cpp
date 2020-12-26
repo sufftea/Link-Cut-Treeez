@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     graphics_tree.set_animation_easing_curve(Animation::ease_out_cubic);
     tree = & graphics_tree.tree;
 
-    ui->graphicsView->setScene(graphics_tree.concrete_tree_scene);
+    ui->graphicsView->setScene(graphics_tree.get_concrete_tree_scene());
     ui->graphicsView->setRenderHints(QPainter::RenderHint::Antialiasing);
     ui->graphicsView->setTransformationAnchor(QGraphicsView::ViewportAnchor::AnchorUnderMouse);
 

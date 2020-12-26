@@ -354,11 +354,15 @@ void FrameUiComponetns::on_pushButtonSwitchTree_clicked()
         this->current_tree_view = "abstract";
         ui->pushButtonSwitchTree->setText("Abstract tree");
 
-        graphics_view_ui->setScene(graphics_tree.abstract_tree_scene);
+        graphics_view_ui->setScene(graphics_tree.get_abstract_tree_scene());
+
+        graphics_tree.activate_concrete_tree_scene();
     } else {
         this->current_tree_view = "concrete";
         ui->pushButtonSwitchTree->setText("Concrete tree");
 
-        graphics_view_ui->setScene(graphics_tree.concrete_tree_scene);
+        graphics_view_ui->setScene(graphics_tree.get_concrete_tree_scene());
+
+        graphics_tree.activate_concrete_tree_scene();
     }
 }

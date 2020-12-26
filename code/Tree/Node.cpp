@@ -1,6 +1,7 @@
 #include "Tree/Node.h"
 
 Node::Node(int weight)
+    : abstract(this)
 {   
     this->delta_w = weight;
 }
@@ -494,9 +495,21 @@ Node *Node::get_solid_root()
     return current;
 }
 
-Node *Node::get_abstart_root()
+Node *Node::get_abstract_parent()
 {
-    return this; // do the actual implementation later
+    if (this->left != nullptr) {
+        return this->left;
+    }
+
+    Node * p = this;
+    while (! p->is_solid_root()) {
+        if (p->is_right_child()) {
+            return p->parent;
+        }
+        p = p->parent;
+    }
+
+    return p->parent;
 }
 
 Node *Node::get_path_parent()
@@ -512,7 +525,7 @@ bool Node::is_solid_root()
 {
     return this->parent == nullptr
             || (this->parent->left != this
-            && this->parent->right != this);
+                && this->parent->right != this);
 }
 
 bool Node::is_abstract_root()
@@ -536,11 +549,28 @@ bool Node::is_right_child()
     return false;
 }
 
-bool Node::is_child()
+bool Node::is_solid_child()
 {
-    return parent != nullptr
-            && (parent->left == this
-                || parent->right == this);
+    return ! this->is_solid_root();
+}
+
+bool Node::is_prefered_child()
+{
+    if (this->left != nullptr) {
+        return true;
+    }
+
+    // if node is in right subtree
+    Node * p = this;
+    while (! p->is_solid_root()) {
+        if (p->is_right_child()) {
+            return true;
+        }
+
+        p = p->parent;
+    }
+
+    return false;
 }
 
 
