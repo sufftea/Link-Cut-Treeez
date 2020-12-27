@@ -58,7 +58,7 @@ public:
 
 
     Node(int weight = 0);
-    Node(Node * parent, int value = 0);
+    Node(Node * parent, int weight = 0);
     ~Node();
 
     /* ========= INTSTANT OPERATIONS START ========= */

@@ -6,8 +6,8 @@ Node::Node(int weight)
     this->delta_w = weight;
 }
 
-Node::Node(Node * parent, int displayed_value)
-    : Node(displayed_value)
+Node::Node(Node * parent, int weight)
+    : Node(weight)
 {
     this->parent = parent;
 }
@@ -498,7 +498,12 @@ Node *Node::get_solid_root()
 Node *Node::get_abstract_parent()
 {
     if (this->left != nullptr) {
-        return this->left;
+        // find the right-most node of the left child.
+        Node * right_most = this->left;
+        while (right_most->right != nullptr) {
+            right_most = right_most->right;
+        }
+        return right_most;
     }
 
     Node * p = this;

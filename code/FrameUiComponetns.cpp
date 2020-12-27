@@ -356,7 +356,7 @@ void FrameUiComponetns::on_pushButtonSwitchTree_clicked()
 
         graphics_view_ui->setScene(graphics_tree.get_abstract_tree_scene());
 
-        graphics_tree.activate_concrete_tree_scene();
+        graphics_tree.activate_abstract_tree_scene();
     } else {
         this->current_tree_view = "concrete";
         ui->pushButtonSwitchTree->setText("Concrete tree");

@@ -9,18 +9,20 @@ class Node;
 class AbstractNode
 {
 public:
-    AbstractNode * parent;
+    AbstractNode * parent = nullptr;
     QVector<AbstractNode * > children;
-    Node * my_node;
+    Node * my_solid_node;
     GraphicsAbstractNodeItem * graphics = nullptr;
 
-    AbstractNode(Node * my_node);
+    AbstractNode(Node * my_solid_node);
     ~AbstractNode();
 
 
     bool is_prefered_child();
 
-    int traverse_and_draw(int offset, int depth);
+    int traverse_and_draw(int offset, int depth = 0);
+
+    // clears the children and parent
     void reset();
 };
 

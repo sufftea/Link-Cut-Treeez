@@ -61,6 +61,12 @@ public:
     void update_pixmap() override;
 
     void set_show_delta(bool show);
+
+    /*
+     * To draw path-parent connections with other nodes, the node needs to know the
+     * positions of all the other nodes on the scene (so it can draw a line that doesn't
+     * intersect other nodes)
+    */
     void set_my_scene(QGraphicsScene * scene);
 
 

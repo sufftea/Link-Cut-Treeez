@@ -45,9 +45,11 @@ void GraphicsLinkCutTree::update_abstract_tree_scene()
     // create the abstract tree
     for (Node * node : tree.nodes) {
         node->abstract.reset();
+        node->abstract.graphics->update_pixmap();
     }
 
     QVector<AbstractNode*> roots;
+
     for (Node * node : tree.nodes) {
         Node * parent = node->get_abstract_parent();
         if (parent == nullptr) {
@@ -57,14 +59,16 @@ void GraphicsLinkCutTree::update_abstract_tree_scene()
 
         node->abstract.parent = & parent->abstract;
         parent->abstract.children.push_back(& node->abstract);
-
     }
 
     // traverse the tree and draw each graphicsNode
-//    int offset = 1;
-//    for (AbstractNode * root : roots) {
-//        offset += root->traverse_and_draw(offset);
-//    }
+    int offset = 1;
+    for (AbstractNode * root : roots) {
+        offset += root->traverse_and_draw(offset);
+        offset += 2;
+    }
+
+    this->abstract_tree_scene->update();
 }
 
 void GraphicsLinkCutTree::init(int size)
@@ -75,10 +79,15 @@ void GraphicsLinkCutTree::init(int size)
     tree.init(size);
 
     for (Node * node : tree.nodes) {
-        node->concrete_tree_graphics = new GraphicsSolidNodeItem(node, this->show_delta);
+        // set concrete tree graphics
+        node->concrete_tree_graphics = new GraphicsSolidNodeItem(node, this->show_delta, this->concrete_tree_scene);
 
         concrete_tree_scene->addItem(node->concrete_tree_graphics);
         node->concrete_tree_graphics->set_my_scene(this->concrete_tree_scene);
+
+        // set abstract tree graphics
+        node->abstract.graphics = new GraphicsAbstractNodeItem(&node->abstract);
+        abstract_tree_scene->addItem(node->abstract.graphics);
     }
 }
 
@@ -95,6 +104,7 @@ void GraphicsLinkCutTree::set_animation_easing_curve(std::function<double (doubl
 {
     for (Node * node : tree.nodes) {
         node->concrete_tree_graphics->movement_anim.set_easing_curve(f);
+        node->abstract.graphics->movement_anim.set_easing_curve(f);
     }
 }
 
@@ -148,6 +158,7 @@ void GraphicsLinkCutTree::unselect_all_nodes()
 {
     for (Node * node : tree.nodes) {
         node->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        node->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
     }
 }
 
@@ -179,18 +190,26 @@ QGraphicsScene *GraphicsLinkCutTree::get_concrete_tree_scene()
 void GraphicsLinkCutTree::activate_concrete_tree_scene()
 {
     this->active_scene_type = "concrete";
+    update_scene();
 }
 
 void GraphicsLinkCutTree::activate_abstract_tree_scene()
 {
     this->active_scene_type = "abstract";
+    update_scene();
 }
 
 void GraphicsLinkCutTree::animate_scene()
 {
-    for (Node * node : tree.nodes) {
-        node->concrete_tree_graphics->animate();
+    if (this->active_scene_type == "concrete") {
+        for (Node * node : tree.nodes) {
+            node->concrete_tree_graphics->animate();
+        }
+        concrete_tree_scene->update();
+    } else if (this->active_scene_type == "abstract") {
+        for (Node * node : tree.nodes) {
+            node->abstract.graphics->animate();
+        }
+        abstract_tree_scene->update();
     }
-
-    concrete_tree_scene->update();
 }
