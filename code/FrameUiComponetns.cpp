@@ -2,7 +2,7 @@
 #include "ui_FrameUiComponetns.h"
 
 FrameUiComponetns::FrameUiComponetns(GraphicsLinkCutTree &graphics_tree,
-                                     QQueue<GraphicsSolidNodeItem *> &selected_nodes,
+                                     QQueue<Node *> &selected_nodes,
                                      QGraphicsView * graphicsView,
                                      QWidget *parent) :
     QFrame(parent),
@@ -115,11 +115,12 @@ void FrameUiComponetns::disable_operations_buttons()
 void FrameUiComponetns::on_pushButtonExpose_clicked()
 {
     if (selected_nodes.size() == 1) {
-        selected_nodes[0]->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
 
         tree->finish_operation();
         SequenceLog::clear();
-        tree->start_expose(selected_nodes[0]->my_node);
+        tree->start_expose(selected_nodes[0]);
         ui->labelSequence->setText(SequenceLog::get_text());
 
         graphics_tree.update_scene();
@@ -136,9 +137,10 @@ void FrameUiComponetns::on_pushButtonCut_clicked()
         tree->finish_operation();
         SequenceLog::clear();
 
-        tree->start_cut(selected_nodes[0]->my_node);
+        tree->start_cut(selected_nodes[0]);
 
-        selected_nodes[0]->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
         selected_nodes.clear();
 
         disable_operations_buttons();
@@ -151,12 +153,14 @@ void FrameUiComponetns::on_pushButtonLink_clicked()
         tree->finish_operation();
         SequenceLog::clear();
 
-        tree->start_link(selected_nodes[0]->my_node, selected_nodes[1]->my_node);
+        tree->start_link(selected_nodes[0], selected_nodes[1]);
 
         ui->labelSequence->setText(SequenceLog::get_text());
 
-        selected_nodes[0]->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
-        selected_nodes[1]->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[1]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[1]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
 
         selected_nodes.clear();
 
@@ -169,10 +173,11 @@ void FrameUiComponetns::on_pushButtonAdd_clicked()
     if (selected_nodes.size() == 1) {
         tree->finish_operation();
         SequenceLog::clear();
-        tree->start_add(selected_nodes[0]->my_node, 1);
+        tree->start_add(selected_nodes[0], 1);
         ui->labelSequence->setText(SequenceLog::get_text());
 
-        selected_nodes[0]->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
         selected_nodes.clear();
 
         disable_operations_buttons();

@@ -54,10 +54,9 @@ public:
     bool set_animation_speed(qreal p);
 
     /*
-     * Returns a refference to a node of a concrete tree at the [pos] or a
-     * nullptr if there are no nodes.
+     * Returns a refference to the node that is drawn on the specified position [pos]
     */
-    GraphicsSolidNodeItem * solid_node_at(QPoint pos);
+    Node * node_at(QPoint pos);
 
     void unselect_all_nodes();
 
@@ -71,6 +70,8 @@ public:
 
     void activate_concrete_tree_scene();
     void activate_abstract_tree_scene();
+
+    const QString & get_current_scene_type();
 
 private slots:
     /*

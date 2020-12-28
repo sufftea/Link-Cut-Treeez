@@ -43,7 +43,7 @@ private:
 
     GraphicsLinkCutTree graphics_tree;
     LinkCutTree * tree;
-    QQueue<GraphicsSolidNodeItem*> selected_nodes;
+    QQueue<Node*> selected_nodes;
 
 };
 #endif // MAINWINDOW_H

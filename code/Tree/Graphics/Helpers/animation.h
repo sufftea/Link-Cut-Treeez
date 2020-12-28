@@ -22,6 +22,11 @@ public:
     qreal get_value(bool dont_increment = false);
     void set_reversed(bool is_reversed);
     void set_easing_curve(std::function<qreal(qreal)> easing_curve);
+
+    /*
+     * each step variable [t] is increased by the value of increment.
+     * [t] goes from 0 to 1
+    */
     bool set_increment(qreal inc);
     void start();
     void stop();

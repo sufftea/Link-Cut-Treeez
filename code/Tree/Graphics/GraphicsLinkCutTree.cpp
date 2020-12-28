@@ -118,17 +118,14 @@ bool GraphicsLinkCutTree::set_animation_speed(qreal p)
 
     for (Node * node : tree.nodes) {
         node->concrete_tree_graphics->movement_anim.set_increment(inc);
+        node->abstract.graphics->movement_anim.set_increment(inc);
     }
 
     return true;
 }
 
-GraphicsSolidNodeItem *GraphicsLinkCutTree::solid_node_at(QPoint pos)
+Node *GraphicsLinkCutTree::node_at(QPoint pos)
 {
-    if (this->active_scene_type == "abstract") {
-        return nullptr;
-    }
-
     if (tree.nodes.size() == 0) {
         return nullptr;
     }
@@ -137,21 +134,37 @@ GraphicsSolidNodeItem *GraphicsLinkCutTree::solid_node_at(QPoint pos)
     pos.rx() -= GraphicsSolidNodeItem::node_size_px / 2;
     pos.ry() -= GraphicsSolidNodeItem::node_size_px / 2;
 
-    GraphicsSolidNodeItem * res = nullptr;
-    qreal closest_dist = 99999999;
-    for (auto node : tree.nodes) {
-        qreal dist = QVector2D(node->concrete_tree_graphics->pos() - pos).length();
-        if (dist < closest_dist) {
-            closest_dist = dist;
-            res = node->concrete_tree_graphics;
+    if (active_scene_type == "concrete") {
+        GraphicsSolidNodeItem * res = nullptr;
+        qreal closest_dist = 99999999;
+        for (auto node : tree.nodes) {
+            qreal dist = QVector2D(node->concrete_tree_graphics->pos() - pos).length();
+            if (dist < closest_dist) {
+                closest_dist = dist;
+                res = node->concrete_tree_graphics;
+            }
+        }
+
+        if (closest_dist <= GraphicsSolidNodeItem::node_size_px) {
+            return res->my_node;
+        }
+    } else if (active_scene_type == "abstract") {
+        GraphicsAbstractNodeItem * res = nullptr;
+        qreal closest_dist = 99999999;
+        for (auto node : tree.nodes) {
+            qreal dist = QVector2D(node->abstract.graphics->pos() - pos).length();
+            if (dist < closest_dist) {
+                closest_dist = dist;
+                res = node->abstract.graphics;
+            }
+        }
+
+        if (closest_dist <= GraphicsSolidNodeItem::node_size_px) {
+            return res->my_abstract_node->my_solid_node;
         }
     }
 
-    if (closest_dist > GraphicsSolidNodeItem::node_size_px) {
-        return nullptr;
-    }
-
-    return res;
+    return nullptr;
 }
 
 void GraphicsLinkCutTree::unselect_all_nodes()
@@ -197,6 +210,11 @@ void GraphicsLinkCutTree::activate_abstract_tree_scene()
 {
     this->active_scene_type = "abstract";
     update_scene();
+}
+
+const QString &GraphicsLinkCutTree::get_current_scene_type()
+{
+    return this->active_scene_type;
 }
 
 void GraphicsLinkCutTree::animate_scene()

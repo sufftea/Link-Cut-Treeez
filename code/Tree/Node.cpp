@@ -535,7 +535,7 @@ bool Node::is_solid_root()
 
 bool Node::is_abstract_root()
 {
-    return this->get_path_parent() == nullptr;
+    return this->get_abstract_parent() == nullptr;
 }
 
 bool Node::is_left_child()

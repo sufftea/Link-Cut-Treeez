@@ -77,6 +77,8 @@ public:
     void splay();
 
 
+    // [n] -- number of nodes in the path
+
     Node * get_solid_root();        // O(logn)
     Node * get_abstract_parent();   // O(logn)
     Node * get_path_parent();       // O(logn)

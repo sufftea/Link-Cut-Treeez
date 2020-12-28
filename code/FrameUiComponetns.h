@@ -26,7 +26,7 @@ public:
 
 
     explicit FrameUiComponetns(GraphicsLinkCutTree &graphics_tree,
-                               QQueue<GraphicsSolidNodeItem*> &selected_nodes,
+                               QQueue<Node*> &selected_nodes,
                                QGraphicsView *graphicsView,
                                QWidget *parent = nullptr);
     ~FrameUiComponetns() override;
@@ -85,7 +85,7 @@ private:
     GraphicsLinkCutTree &graphics_tree;
     LinkCutTree * tree;
 
-    QQueue<GraphicsSolidNodeItem*> &selected_nodes;
+    QQueue<Node*> &selected_nodes;
 
     // Either "abstract" or "concrete"
     // Abstract tree -- the one we *imagine* when talking about Link-Cut tree

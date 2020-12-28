@@ -75,15 +75,19 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
     QGraphicsView * gw = ui->graphicsView;
     QPoint pos = gw->mapToScene(gw->mapFromParent(e->pos())).toPoint();
 
-    GraphicsSolidNodeItem * graphics_node = graphics_tree.solid_node_at(pos);
 
-    if (graphics_node != nullptr) {
-        if (graphics_node->get_selection_type() == GraphicsNodeItem::SelectionType::no_selection) {
-            graphics_node->set_selection_type(GraphicsNodeItem::SelectionType::user_selected);
-            selected_nodes << graphics_node;
-        } else if (graphics_node->get_selection_type() == GraphicsNodeItem::SelectionType::user_selected) {
-            graphics_node->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
-            selected_nodes.removeOne(graphics_node);
+    Node * node = graphics_tree.node_at(pos);
+
+
+    if (node != nullptr) {
+        if (node->concrete_tree_graphics->get_selection_type() == GraphicsNodeItem::SelectionType::no_selection) {
+            node->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::user_selected);
+            node->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::user_selected);
+            selected_nodes << node;
+        } else if (node->concrete_tree_graphics->get_selection_type() == GraphicsNodeItem::SelectionType::user_selected) {
+            node->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+            node->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+            selected_nodes.removeOne(node);
         }
 
         if (selected_nodes.size() == 0) {
@@ -100,7 +104,8 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
             ui_components_frame->ui->pushButtonLink->setEnabled(true);
             ui_components_frame->ui->pushButtonFindLCA->setEnabled(true);
         } else if (selected_nodes.size() == 3) {
-            selected_nodes.first()->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+            selected_nodes.first()->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+            selected_nodes.first()->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
             selected_nodes.pop_front();
         }
     }

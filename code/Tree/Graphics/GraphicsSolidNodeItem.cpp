@@ -125,7 +125,8 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
     // draw node's parent line
     // either just a parant edge [2] or a path-parent pointer [1]
     if (this->my_node->is_solid_root()) {
-        if (!this->my_node->is_abstract_root()) {
+        // since the node is a solid root, its parent is the path-parent
+        if (this->my_node->parent != nullptr) {
             // draw the path-parent pointer
 
             QPen red_dot_pen(MyColors::red);
