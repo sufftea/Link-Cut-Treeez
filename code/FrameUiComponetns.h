@@ -10,7 +10,7 @@
 
 #include "Tree/Graphics/GraphicsLinkCutTree.h"
 #include "Tree/Node.h"
-#include "Helpers/Sequance.h"
+#include "Helpers/Sequence.h"
 #include "Helpers/Colors.h"
 
 namespace Ui {
@@ -26,7 +26,7 @@ public:
 
 
     explicit FrameUiComponetns(GraphicsLinkCutTree &graphics_tree,
-                               QQueue<GraphicsSolidNodeItem*> &selected_nodes,
+                               QQueue<Node*> &selected_nodes,
                                QGraphicsView *graphicsView,
                                QWidget *parent = nullptr);
     ~FrameUiComponetns() override;
@@ -73,6 +73,8 @@ private slots:
 
     void on_pushButtonFindLCA_clicked();
 
+    void on_pushButtonSwitchTree_clicked();
+
 private:
 
     QPropertyAnimation * showPresetsListAnimation;
@@ -83,7 +85,12 @@ private:
     GraphicsLinkCutTree &graphics_tree;
     LinkCutTree * tree;
 
-    QQueue<GraphicsSolidNodeItem*> &selected_nodes;
+    QQueue<Node*> &selected_nodes;
+
+    // Either "abstract" or "concrete"
+    // Abstract tree -- the one we *imagine* when talking about Link-Cut tree
+    // Concrete tree -- the way the tree is *actually* stored in the memory
+    QString current_tree_view = "concrete";
 
     void reset_tree();
 };

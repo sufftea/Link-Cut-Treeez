@@ -8,23 +8,28 @@ LinkCutTree::LinkCutTree()
 
 LinkCutTree::~LinkCutTree()
 {
+    finish_operation();
+
     for (Node * node : nodes) {
         delete node;
     }
-
-    delete current_operation;
 }
 
 void LinkCutTree::link(Node * v, Node * to)
 {
-    if (v->is_solid_root()) {
-        v->parent = to;
-    } else {
-        expose(v);
-        expose(to);
-
-        v->parent = to;
+    if (! v->is_abstract_root()) {
+        qDebug() << "can't link";
+        return;
     }
+
+    expose(v);
+    expose(to);
+
+    to->delta_w -= v->delta_w;
+
+    v->left = to;
+    v->parent = to->parent;
+    to->parent = v;
 }
 
 void LinkCutTree::cut(Node *v)
@@ -146,65 +151,78 @@ void LinkCutTree::finish_operation()
 
 LinkCutTree::OperationExpose::OperationExpose(Node *v)
 {
-    SequanceLog::add("Expose("
+    SequenceLog::add("Expose("
                   + QString::number(v->get_value())
                   + "):");
-    SequanceLog::step_in();
+    SequenceLog::step_in();
 
     this->v = v;
 }
 
 LinkCutTree::OperationExpose::~OperationExpose()
 {
-    SequanceLog::add("expose finished!");
-    SequanceLog::step_out();
+    SequenceLog::add("expose finished!");
+    SequenceLog::step_out();
 }
 
 bool LinkCutTree::OperationExpose::make_step()
 {
     if (current_step == Step::start_splaying_v) {
-        v->start_splay();
+        if (splayer != nullptr) delete splayer;
+        splayer = new OperationSplay(v);
         current_step = Step::splaying_v;
     }
 
     else if (current_step == Step::splaying_v) {
-        if (!v->make_step()) {
-            pp = v->get_path_parent();
+        if (! splayer->make_step()) {
+            delete splayer;
+            splayer = nullptr;
             current_step = Step::start_splaying_pp;
         }
     }
 
     else if (current_step == Step::start_splaying_pp) {
-        if (pp != nullptr) {
-            pp->start_splay();
-            current_step = Step::splaying_pp;
-        } else {
+        if (v->parent == nullptr) {
+            SequenceLog::add("cut the rest of the path");
+
             if (v->right != nullptr) {
                 v->right->delta_w += v->delta_w;
+                v->right = nullptr;
             }
 
-            v->right = nullptr;
-            SequanceLog::add("get rid of right subtree for " + QString::number(v->get_value()));
+            current_step = Step::finished;
             return 0;
         }
+
+        pp = v->parent;
+
+        if (splayer != nullptr) delete splayer;
+        splayer = new OperationSplay(pp);
+        current_step = Step::splaying_pp;
     }
 
     else if (current_step == Step::splaying_pp) {
-        if (!pp->make_step()) {
-            current_step = Step::cut_and_link;
+        if (! splayer->make_step()) {
+            delete splayer;
+            splayer = nullptr;
+            current_step = Step::link;
         }
     }
 
-    else if (current_step == Step::cut_and_link) {
-        v->delta_w -= pp->delta_w;
+    else if (current_step == Step::link) {
+        SequenceLog::add("connect to path parent");
         if (pp->right != nullptr) {
             pp->right->delta_w += pp->delta_w;
         }
+        v->delta_w -= pp->delta_w;
+
         pp->right = v;
 
-        current_step = start_splaying_v;
+        current_step = Step::start_splaying_v;
+    }
 
-        SequanceLog::add("connect v to its path parent;");
+    else if (current_step == Step::finished) {
+        return 0;
     }
 
     return 1;
@@ -215,21 +233,33 @@ bool LinkCutTree::OperationExpose::make_step()
 
 LinkCutTree::OperationLink::OperationLink(Node *v, Node *to)
 {
-    SequanceLog::add("Link "
+    if (! v->is_abstract_root()) {
+        SequenceLog::add("Cannot link. "
+                         + QString::number(v->get_value())
+                         + " must be the root of an abstract tree");
+        current_step = Step::finished;
+
+        return;
+    }
+
+
+    SequenceLog::add("Link "
                   + QString::number(v->get_value())
                   + " to "
                   + QString::number(to->get_value())
                   + ":");
-    SequanceLog::step_in();
+    SequenceLog::step_in();
 
     this->v = v;
     this->to = to;
+
+    current_step = Step::start_expose_v;
 }
 
 LinkCutTree::OperationLink::~OperationLink()
 {
-    SequanceLog::add("link finished!");
-    SequanceLog::step_out();
+    SequenceLog::add("link finished!");
+    SequenceLog::step_out();
 
     if (expose_operation != nullptr) {
         delete expose_operation;
@@ -244,11 +274,9 @@ bool LinkCutTree::OperationLink::make_step()
     }
 
     else if (current_step == Step::expose_v) {
-        if (!expose_operation->make_step()) {
-            current_step = Step::start_expose_to;
-
+        if (! expose_operation->make_step()) {
             delete expose_operation;
-            expose_operation = nullptr;
+            current_step = Step::start_expose_to;
         }
     }
 
@@ -258,27 +286,30 @@ bool LinkCutTree::OperationLink::make_step()
     }
 
     else if (current_step == Step::expose_to) {
-        if (!expose_operation->make_step()) {
-            current_step = Step::link;
-
+        if (! expose_operation->make_step()) {
             delete expose_operation;
             expose_operation = nullptr;
+            current_step = Step::link;
         }
     }
 
     else if (current_step == Step::link) {
-        v->finish_operation();
-        to->finish_operation();
+        SequenceLog::add("connect trees");
 
-        v->parent = to;
+        to->delta_w -= v->delta_w;
+        v->left = to;
+        v->parent = to->parent; // if [to] has a path-parent
+        to->parent = v;
 
-        SequanceLog::add("linking "
-                      + QString::number(v->get_value())
-                      + " to "
-                      + QString::number(to->get_value()));
+        current_step = finished;
 
         return 0;
     }
+
+    else if (current_step == Step::finished) {
+        return 0;
+    }
+
 
     return 1;
 }
@@ -290,48 +321,63 @@ LinkCutTree::OperationCut::OperationCut(Node *v)
 {
     this->v = v;
 
-    SequanceLog::add("cut(" + QString::number(v->get_value()) + "):");
-    SequanceLog::step_in();
+    SequenceLog::add("cut(" + QString::number(v->get_value()) + "):");
+    SequenceLog::step_in();
+
+    if (v->is_abstract_root()) {
+        SequenceLog::add(QString::number(v->get_value()) + " is already a root");
+        current_step = Step::finished;
+    }
 }
 
 LinkCutTree::OperationCut::~OperationCut()
 {
 
-    if (this->expose != nullptr) {
-        delete this->expose;
+    if (this->expose_operation != nullptr) {
+        delete this->expose_operation;
     }
 
-    SequanceLog::add("cut(" + QString::number(v->get_value()) + ") finished");
-    SequanceLog::step_out();
+    SequenceLog::add("cut(" + QString::number(v->get_value()) + ") finished");
+    SequenceLog::step_out();
 }
 
 bool LinkCutTree::OperationCut::make_step()
 {
     if (current_step == Step::start_expose_v) {
-       expose = new OperationExpose(v);
-       current_step = Step::expose_v;
-    } else if (current_step == Step::expose_v) {
-       if (! expose->make_step()) {
-           current_step = Step::cut;
-       }
-    } else if (current_step == Step::cut) {
-        delete this->expose;
-        this->expose = nullptr;
+        if (expose_operation != nullptr) {
+            delete expose_operation;
+        }
 
+        expose_operation = new OperationExpose(v);
+        current_step = Step::expose_v;
+    }
+
+    else if (current_step == Step::expose_v) {
+        if (! expose_operation->make_step()) {
+            delete expose_operation;
+            expose_operation = nullptr;
+
+            current_step = Step::cut;
+        }
+    }
+
+    else if (current_step == Step::cut) {
         if (v->left != nullptr) {
-
+            SequenceLog::add("disconnect the left child");
             v->left->delta_w += v->delta_w;
-
             v->left->parent = nullptr;
             v->left = nullptr;
-
-            SequanceLog::add("cut the left solid subtree");
-        } else {
-            SequanceLog::add("cut the left solid subtree (there wasn't subtree");
         }
+
+        current_step = Step::finished;
+    }
+
+    else if (current_step == Step::finished) {
 
         return 0;
     }
+
+
     return 1;
 }
 
@@ -344,37 +390,90 @@ LinkCutTree::OperationAddConst::OperationAddConst(Node *v, int value)
     this->v = v;
     this->value = value;
 
-    SequanceLog::add("Add constant form the root to " + QString::number(v->get_value()) + ":");
-    SequanceLog::step_in();
+    SequenceLog::add("Add constant form the root to " + QString::number(v->get_value()) + ":");
+    SequenceLog::step_in();
 }
 
 LinkCutTree::OperationAddConst::~OperationAddConst()
 {
-    if (exposeOperation != nullptr) {
-        delete exposeOperation;
+    if (expose_operation != nullptr) {
+        delete expose_operation;
     }
 
-    SequanceLog::add("Done!");
-    SequanceLog::step_out();
+    SequenceLog::add("Done!");
+    SequenceLog::step_out();
 }
 
 bool LinkCutTree::OperationAddConst::make_step()
 {
     if (current_step == Step::start_expose_v) {
-        this->exposeOperation = new OperationExpose(v);
+        this->expose_operation = new OperationExpose(v);
         current_step = expose_v;
     } else if (current_step == Step::expose_v) {
-        if ( ! exposeOperation->make_step()) {
+        if ( ! expose_operation->make_step()) {
             current_step = Step::add;
 
-            delete exposeOperation;
-            exposeOperation = nullptr;
+            delete expose_operation;
+            expose_operation = nullptr;
         }
     } else if (current_step == Step::add) {
-        SequanceLog::add("adding the constant to the root's delta");
+        SequenceLog::add("adding the constant to the root's delta");
         v->delta_w += value;
 
         return 0;
+    }
+
+    return 1;
+}
+
+/* ========= STEP BY STEP SPLAY ========= */
+
+LinkCutTree::OperationSplay::OperationSplay(Node * v)
+{
+    SequenceLog::add("splay("
+                  + QString::number(v->get_value())
+                  + ")");
+    SequenceLog::step_in();
+
+    this->v = v;
+}
+
+LinkCutTree::OperationSplay::~OperationSplay()
+{
+    SequenceLog::add("Splay finished!");
+    SequenceLog::step_out();
+}
+
+bool LinkCutTree::OperationSplay::make_step()
+{
+    if (v->is_solid_root()) {
+        return 0;
+    }
+
+    if (v->try_zig_zag_left()) {
+        SequenceLog::add("Zig-Zag left");
+        return 1;
+    }
+    if (v->try_zig_zag_right()) {
+        SequenceLog::add("Zig-Zag right");
+        return 1;
+    }
+    if (v->try_zig_zig_left()) {
+        SequenceLog::add("Zig-Zig left");
+        return 1;
+    }
+    if (v->try_zig_zig_right()) {
+        SequenceLog::add("Zig-Zig right");
+        return 1;
+    }
+
+    if (v->try_zig_left()) {
+        SequenceLog::add("Zig left");
+        return 1;
+    }
+    if (v->try_zig_right()) {
+        SequenceLog::add("Zig right");
+        return 1;
     }
 
     return 1;

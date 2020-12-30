@@ -2,7 +2,7 @@
 #include "ui_FrameUiComponetns.h"
 
 FrameUiComponetns::FrameUiComponetns(GraphicsLinkCutTree &graphics_tree,
-                                     QQueue<GraphicsSolidNodeItem *> &selected_nodes,
+                                     QQueue<Node *> &selected_nodes,
                                      QGraphicsView * graphicsView,
                                      QWidget *parent) :
     QFrame(parent),
@@ -21,6 +21,10 @@ FrameUiComponetns::FrameUiComponetns(GraphicsLinkCutTree &graphics_tree,
     ui->gridLayoutPopUpMenu->setParent(nullptr);
     ui->gridLayoutTopPart->addLayout(ui->gridLayoutPopUpMenu, 0, 0);
     ui->gridLayoutPopUpMenu->setParent(ui->gridLayoutTopPart);
+
+    ui->gridLayoutPopUpDialog->setParent(nullptr);
+    ui->gridLayoutTopPart->addLayout(ui->gridLayoutPopUpDialog, 0, 0);
+    ui->gridLayoutPopUpDialog->setParent(ui->gridLayoutTopPart);
 
     ui->scrollAreaLog->stackUnder(ui->framePresetsList);
 
@@ -76,7 +80,7 @@ void FrameUiComponetns::mouseReleaseEvent(QMouseEvent *e)
 void FrameUiComponetns::on_pushButtonMakeStep_clicked()
 {
     tree->make_step();
-    ui->labelSequence->setText(SequanceLog::get_text());
+    ui->labelSequence->setText(SequenceLog::get_text());
     graphics_tree.update_scene();
 
     ui->scrollAreaLog->verticalScrollBar()->setSliderPosition(ui->scrollAreaLog->height());
@@ -99,8 +103,8 @@ void FrameUiComponetns::reset_tree()
     graphics_tree.init(8);
     graphics_tree.update_scene();
 
-    SequanceLog::clear();
-    ui->labelSequence->setText(SequanceLog::get_text());
+    SequenceLog::clear();
+    ui->labelSequence->setText(SequenceLog::get_text());
 
     selected_nodes.clear();
 }
@@ -115,12 +119,13 @@ void FrameUiComponetns::disable_operations_buttons()
 void FrameUiComponetns::on_pushButtonExpose_clicked()
 {
     if (selected_nodes.size() == 1) {
-        selected_nodes[0]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
 
         tree->finish_operation();
-        SequanceLog::clear();
-        tree->start_expose(selected_nodes[0]->my_node);
-        ui->labelSequence->setText(SequanceLog::get_text());
+        SequenceLog::clear();
+        tree->start_expose(selected_nodes[0]);
+        ui->labelSequence->setText(SequenceLog::get_text());
 
         graphics_tree.update_scene();
 
@@ -134,11 +139,12 @@ void FrameUiComponetns::on_pushButtonCut_clicked()
 {
     if (selected_nodes.size() == 1) {
         tree->finish_operation();
-        SequanceLog::clear();
+        SequenceLog::clear();
 
-        tree->start_cut(selected_nodes[0]->my_node);
+        tree->start_cut(selected_nodes[0]);
 
-        selected_nodes[0]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
         selected_nodes.clear();
 
         disable_operations_buttons();
@@ -149,14 +155,16 @@ void FrameUiComponetns::on_pushButtonLink_clicked()
 {
     if (selected_nodes.size() == 2) {
         tree->finish_operation();
-        SequanceLog::clear();
+        SequenceLog::clear();
 
-        tree->start_link(selected_nodes[0]->my_node, selected_nodes[1]->my_node);
+        tree->start_link(selected_nodes[0], selected_nodes[1]);
 
-        ui->labelSequence->setText(SequanceLog::get_text());
+        ui->labelSequence->setText(SequenceLog::get_text());
 
-        selected_nodes[0]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
-        selected_nodes[1]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[1]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[1]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
 
         selected_nodes.clear();
 
@@ -168,11 +176,12 @@ void FrameUiComponetns::on_pushButtonAdd_clicked()
 {
     if (selected_nodes.size() == 1) {
         tree->finish_operation();
-        SequanceLog::clear();
-        tree->start_add(selected_nodes[0]->my_node, 1);
-        ui->labelSequence->setText(SequanceLog::get_text());
+        SequenceLog::clear();
+        tree->start_add(selected_nodes[0], 1);
+        ui->labelSequence->setText(SequenceLog::get_text());
 
-        selected_nodes[0]->set_selection_type(GraphicsSolidNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
         selected_nodes.clear();
 
         disable_operations_buttons();
@@ -183,7 +192,7 @@ void FrameUiComponetns::on_pushButtonEndOperation_clicked()
 {
     tree->finish_operation();
     graphics_tree.update_scene();
-    ui->labelSequence->setText(SequanceLog::get_text());
+    ui->labelSequence->setText(SequenceLog::get_text());
 
     ui->scrollAreaLog->verticalScrollBar()->setSliderPosition(ui->scrollAreaLog->height());
 }
@@ -221,6 +230,10 @@ void FrameUiComponetns::on_pushButtonPreset1_clicked()
     tree->link(nodes[12], nodes[11]);
     tree->link(nodes[13], nodes[12]);
 
+    tree->expose(nodes[13]);
+    tree->expose(nodes[10]);
+    tree->expose(nodes[6]);
+    tree->expose(nodes[3]);
 
     graphics_tree.update_scene();
 }
@@ -311,7 +324,7 @@ void FrameUiComponetns::on_pushButtonPreset7_clicked()
 void FrameUiComponetns::on_pushButtonClearLog_clicked()
 {
     ui->labelSequence->clear();
-    SequanceLog::clear();
+    SequenceLog::clear();
 }
 
 void FrameUiComponetns::on_pushButtonHideLog_clicked()
@@ -342,4 +355,23 @@ void FrameUiComponetns::on_pushButtonShowDelta_clicked()
 void FrameUiComponetns::on_pushButtonFindLCA_clicked()
 {
 
+}
+
+void FrameUiComponetns::on_pushButtonSwitchTree_clicked()
+{
+    if (this->current_tree_view == "concrete") {
+        this->current_tree_view = "abstract";
+        ui->pushButtonSwitchTree->setText("Abstract tree");
+
+        graphics_view_ui->setScene(graphics_tree.get_abstract_tree_scene());
+
+        graphics_tree.activate_abstract_tree_scene();
+    } else {
+        this->current_tree_view = "concrete";
+        ui->pushButtonSwitchTree->setText("Concrete tree");
+
+        graphics_view_ui->setScene(graphics_tree.get_concrete_tree_scene());
+
+        graphics_tree.activate_concrete_tree_scene();
+    }
 }

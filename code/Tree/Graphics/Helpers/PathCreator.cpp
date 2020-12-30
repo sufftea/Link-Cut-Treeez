@@ -56,18 +56,18 @@ QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsS
             }
         }
 
-        if (closed.size() > 200) {
+        if (closed.size() > 2000) {
             closed[targ] = Cell(targ, curr.pos, targ, curr.f + 1);
             break;
         }
 
-        // +- 2 is to prevent different paths from overlapping with
-        // each other.
+
+        int skew = 7;
         QVector<QPoint> neighbours = {
-            curr.pos + QPoint( step_length_px,  2),
-            curr.pos + QPoint( 2             , step_length_px),
-            curr.pos + QPoint(-step_length_px,  -2),
-            curr.pos + QPoint( -2            , -step_length_px),
+            curr.pos + QPoint( step_length_px,   skew),
+            curr.pos + QPoint( skew,             step_length_px),
+            curr.pos + QPoint(-step_length_px,  -skew),
+            curr.pos + QPoint(-skew,            -step_length_px),
         };
 
         for (QPoint nei : neighbours) {

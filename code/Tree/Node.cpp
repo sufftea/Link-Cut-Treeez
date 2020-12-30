@@ -1,47 +1,20 @@
 #include "Tree/Node.h"
 
 Node::Node(int weight)
+    : abstract(this)
 {   
     this->delta_w = weight;
 }
 
-Node::Node(Node * parent, int displayed_value)
-    : Node(displayed_value)
+Node::Node(Node * parent, int weight)
+    : Node(weight)
 {
     this->parent = parent;
 }
 
 Node::~Node()
 {
-    finish_operation(); // also deletes [current_operation]
-}
 
-void Node::start_splay()
-{
-    finish_operation();
-    current_operation = new OperationSplay(this);
-}
-
-bool Node::make_step()
-{
-    if (current_operation != nullptr) {
-        if (current_operation->make_step()) {
-            return 1;
-        } else {
-            delete current_operation;
-            current_operation = nullptr;
-        }
-    }
-    return 0;
-}
-
-void Node::finish_operation()
-{
-    if (current_operation != nullptr) {
-        while (current_operation->make_step()) {}
-        delete current_operation;
-        current_operation = nullptr;
-    }
 }
 
 int Node::get_value()
@@ -522,9 +495,26 @@ Node *Node::get_solid_root()
     return current;
 }
 
-Node *Node::get_abstart_root()
+Node *Node::get_abstract_parent()
 {
-    return this; // do the actual implementation later
+    if (this->left != nullptr) {
+        // find the right-most node of the left child.
+        Node * right_most = this->left;
+        while (right_most->right != nullptr) {
+            right_most = right_most->right;
+        }
+        return right_most;
+    }
+
+    Node * p = this;
+    while (! p->is_solid_root()) {
+        if (p->is_right_child()) {
+            return p->parent;
+        }
+        p = p->parent;
+    }
+
+    return p->parent;
 }
 
 Node *Node::get_path_parent()
@@ -540,12 +530,12 @@ bool Node::is_solid_root()
 {
     return this->parent == nullptr
             || (this->parent->left != this
-            && this->parent->right != this);
+                && this->parent->right != this);
 }
 
 bool Node::is_abstract_root()
 {
-    return parent == nullptr;
+    return this->get_abstract_parent() == nullptr;
 }
 
 bool Node::is_left_child()
@@ -564,64 +554,29 @@ bool Node::is_right_child()
     return false;
 }
 
-bool Node::is_child()
+bool Node::is_solid_child()
 {
-    return parent != nullptr
-            && (parent->left == this
-                || parent->right == this);
+    return ! this->is_solid_root();
+}
+
+bool Node::is_prefered_child()
+{
+    if (this->left != nullptr) {
+        return true;
+    }
+
+    // if node is in right subtree
+    Node * p = this;
+    while (! p->is_solid_root()) {
+        if (p->is_right_child()) {
+            return true;
+        }
+
+        p = p->parent;
+    }
+
+    return false;
 }
 
 
-/* ========= STEP BY STEP SPLAY ========= */
-
-Node::OperationSplay::OperationSplay(Node * v)
-{
-    SequanceLog::add("splay("
-                  + QString::number(v->get_value())
-                  + ")");
-    SequanceLog::step_in();
-
-    this->v = v;
-}
-
-Node::OperationSplay::~OperationSplay()
-{
-    SequanceLog::add("Splay finished!");
-    SequanceLog::step_out();
-}
-
-bool Node::OperationSplay::make_step()
-{
-    if (v->is_solid_root()) {
-        return 0;
-    }
-
-    if (v->try_zig_zag_left()) {
-        SequanceLog::add("Zig-Zag left");
-        return 1;
-    }
-    if (v->try_zig_zag_right()) {
-        SequanceLog::add("Zig-Zag right");
-        return 1;
-    }
-    if (v->try_zig_zig_left()) {
-        SequanceLog::add("Zig-Zig left");
-        return 1;
-    }
-    if (v->try_zig_zig_right()) {
-        SequanceLog::add("Zig-Zig right");
-        return 1;
-    }
-
-    if (v->try_zig_left()) {
-        SequanceLog::add("Zig left");
-        return 1;
-    }
-    if (v->try_zig_right()) {
-        SequanceLog::add("Zig right");
-        return 1;
-    }
-
-    return 1;
-}
 

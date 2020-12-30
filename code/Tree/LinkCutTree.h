@@ -5,7 +5,7 @@
 #include <QDebug>
 #include "Node.h"
 #include "Helpers/StepByStepOperation.h"
-#include "Helpers/Sequance.h"
+#include "Helpers/Sequence.h"
 
 /*
 abstract tree -- the big tree with selected paths that
@@ -20,20 +20,45 @@ concrete tree -- the forest of solid trees
 class LinkCutTree
 {
 private:
+
+    /* Step by step implementation of Splay(x)
+     * Each step does either zig, zig-zig or zig-zag; */
+    class OperationSplay : public StepByStepOperation
+    {
+    private:
+        Node * v;
+
+    public:
+        /*
+         * [v] is the node that we want to move to the root
+         *
+         * [tree_path_parent] -- path parent of the tree that contains
+         * the node [v], if not specified, will be found by calling
+         * v->get_root() which will be slower.
+        */
+        OperationSplay(Node * v);
+        ~OperationSplay() override;
+
+        bool make_step() override;
+    };
+
     class OperationExpose : public StepByStepOperation
     {
     private:
         enum Step {
             start_splaying_v = 0,
-            start_splaying_pp,
             splaying_v,
+            start_splaying_pp,
             splaying_pp,
-            cut_and_link
+            link,
+            finished
         };
 
         Node * v;
         Node * pp;
         Step current_step = start_splaying_v;
+
+        OperationSplay *splayer = nullptr;
 
     public:
         OperationExpose(Node * v);
@@ -50,11 +75,12 @@ private:
             expose_v,
             start_expose_to,
             expose_to,
-            link
+            link,
+            finished
         };
 
         Step current_step = Step::start_expose_v;
-        OperationExpose * expose_operation;
+        OperationExpose * expose_operation = nullptr;
 
         Node * v;
         Node * to;
@@ -72,12 +98,13 @@ private:
         enum Step {
             start_expose_v = 0,
             expose_v,
-            cut
+            cut,
+            finished
         };
 
         Node * v;
         Step current_step = start_expose_v;
-        OperationExpose * expose = nullptr;
+        OperationExpose * expose_operation = nullptr;
 
     public:
         OperationCut(Node * v);
@@ -98,7 +125,7 @@ private:
         Step current_step = Step::start_expose_v;
         Node * v;
         int value;
-        OperationExpose * exposeOperation = nullptr;
+        OperationExpose * expose_operation = nullptr;
 
     public:
         OperationAddConst(Node * v, int value);
@@ -106,7 +133,6 @@ private:
 
         bool make_step() override;
     };
-
 
 
 

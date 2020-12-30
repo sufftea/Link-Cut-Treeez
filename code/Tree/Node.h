@@ -6,13 +6,12 @@
 
 #include "Helpers/StepByStepOperation.h"
 #include "Tree/Graphics/GraphicsSolidNodeItem.h"
-#include "Helpers/Sequance.h"
+#include "Helpers/Sequence.h"
+#include "Tree/Graphics/Helpers/AbstractNode.h"
 
 
 /*
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * BIG TO DO: possibly implement the descendant search support   *
- *                                                               *
  * http://planarity.org/Klein_splay_trees_and_link-cut_trees.pdf *
  * Chapter 17.4                                                  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -21,26 +20,7 @@
 class Node
 {
 private:
-    /* Step by step implementation of the Splay(x)
-     * Each step does either zig, zig-zig or zig-zag; */
-    class OperationSplay : public StepByStepOperation
-    {
-    private:
-        Node * v;
 
-    public:
-        /*
-         * [v] is the node that we want to move to the root
-         *
-         * [tree_path_parent] -- path parent of the tree that contains
-         * the node [v], if not specified, will be found by calling
-         * v->get_root() which will be slower.
-        */
-        OperationSplay(Node * v);
-        ~OperationSplay() override;
-
-        bool make_step() override;
-    };
 
     StepByStepOperation * current_operation = nullptr;
 
@@ -61,46 +41,25 @@ public:
     int subtree_max;  // the biggest value of the subtree
 
     /*
-     * Stores graphical representation of the node
+     * Stores graphical representation of the node (in the concrete tree)
+     *
+     * A problem:
+     * it's only needed for the GraphicsSolidNodeItem itself (to traverse
+     * the tree while drawing it) and it may be deleted without the node
+     * being aware of it.
     */
-    GraphicsSolidNodeItem *graphics = nullptr;
+    GraphicsSolidNodeItem *concrete_tree_graphics = nullptr;
+
+    /*
+     * A corresponding abstract node. Needed to construct the abstract tree
+     * for displaying it.
+    */
+    AbstractNode abstract;
 
 
     Node(int weight = 0);
-    Node(Node * parent, int value = 0);
+    Node(Node * parent, int weight = 0);
     ~Node();
-
-
-    /* ========= STEP BY STEP OPERATIONS START ========= */
-
-    /*
-     * The following functions are used to start a new operation.
-     *
-     * After an operation has been started, call make_step() to make
-     * each next step of the operation or finish_operation() to finish
-     * it immediately.
-     *
-     * If another operation has already been started, it will be
-     * finished immediately using finish_operation() function; after
-     * that, the new operation will be started;
-    */
-    void start_splay();
-//    void start_split(Node * v);
-
-    /*
-     * after an operation has been started, call this function
-     * to make each next step of the operation
-    */
-    bool make_step();
-
-    /*
-     * Call this function if there's no need to show the
-     * operation step by step, the operation will be finished
-     * immediatey
-    */
-    void finish_operation();
-
-
 
     /* ========= INTSTANT OPERATIONS START ========= */
 
@@ -117,15 +76,19 @@ public:
 
     void splay();
 
-    Node * get_solid_root();
-    Node * get_abstart_root();
-    Node * get_path_parent();
 
-    bool is_solid_root();
-    bool is_abstract_root();
-    bool is_left_child();
-    bool is_right_child();
-    bool is_child();
+    // [n] -- number of nodes in the path
+
+    Node * get_solid_root();        // O(logn)
+    Node * get_abstract_parent();   // O(logn)
+    Node * get_path_parent();       // O(logn)
+
+    bool is_solid_root();           // O(n)
+    bool is_abstract_root();        // O(logn)
+    bool is_left_child();           // O(n)
+    bool is_right_child();          // O(n)
+    bool is_solid_child();          // O(n)
+    bool is_prefered_child();       // O(logn)
 };
 
 

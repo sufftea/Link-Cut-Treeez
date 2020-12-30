@@ -10,7 +10,7 @@
 
 #include "Tree/Graphics/GraphicsLinkCutTree.h"
 #include "Tree/Node.h"
-#include "Helpers/Sequance.h"
+#include "Helpers/Sequence.h"
 #include "FrameUiComponetns.h"
 
 
@@ -43,7 +43,7 @@ private:
 
     GraphicsLinkCutTree graphics_tree;
     LinkCutTree * tree;
-    QQueue<GraphicsSolidNodeItem*> selected_nodes;
+    QQueue<Node*> selected_nodes;
 
 };
 #endif // MAINWINDOW_H

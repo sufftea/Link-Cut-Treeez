@@ -17,10 +17,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     FrameUiComponetns.cpp \
+    Helpers/Sequence.cpp \
+    Tree/Graphics/GraphicsAbstractNodeItem.cpp \
+    Tree/Graphics/GraphicsNodeItem.cpp \
+    Tree/Graphics/Helpers/AbstractNode.cpp \
     Tree/Graphics/Helpers/PathSmoother.cpp \
     Tree/LinkCutTree.cpp \
     Tree/Node.cpp \
-    Helpers/Sequance.cpp \
     Tree/Graphics/GraphicsLinkCutTree.cpp \
     Tree/Graphics/Helpers/Animation.cpp \
     Tree/Graphics/GraphicsSolidNodeItem.cpp \
@@ -31,11 +34,14 @@ SOURCES += \
 HEADERS += \
     FrameUiComponetns.h \
     Helpers/Colors.h \
+    Helpers/Sequence.h \
+    Tree/Graphics/GraphicsAbstractNodeItem.h \
+    Tree/Graphics/GraphicsNodeItem.h \
+    Tree/Graphics/Helpers/AbstractNode.h \
     Tree/Graphics/Helpers/PathSmoother.h \
     Tree/LinkCutTree.h \
     Tree/Node.h \
     Helpers/StepByStepOperation.h \
-    Helpers/Sequance.h \
     Tree/Graphics/GraphicsLinkCutTree.h \
     Tree/Graphics/Helpers/Animation.h \
     Tree/Graphics/GraphicsSolidNodeItem.h \
