@@ -22,6 +22,10 @@ FrameUiComponetns::FrameUiComponetns(GraphicsLinkCutTree &graphics_tree,
     ui->gridLayoutTopPart->addLayout(ui->gridLayoutPopUpMenu, 0, 0);
     ui->gridLayoutPopUpMenu->setParent(ui->gridLayoutTopPart);
 
+    ui->gridLayoutPopUpDialog->setParent(nullptr);
+    ui->gridLayoutTopPart->addLayout(ui->gridLayoutPopUpDialog, 0, 0);
+    ui->gridLayoutPopUpDialog->setParent(ui->gridLayoutTopPart);
+
     ui->scrollAreaLog->stackUnder(ui->framePresetsList);
 
 
