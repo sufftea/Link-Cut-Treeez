@@ -39,19 +39,14 @@ private slots:
     void mouseReleaseEvent(QMouseEvent *e) override;
 
     void on_pushButtonMakeStep_clicked();
-
     void on_horizontalSliderAnimationSpeed_valueChanged(int value);
-
     void on_pushButtonReset_clicked();
-
     void on_pushButtonExpose_clicked();
-
     void on_pushButtonCut_clicked();
-
     void on_pushButtonLink_clicked();
-
+    void on_pushButtonOpenAddDialog_clicked();
+    void on_pushButtonAdd_clicked();
     void on_pushButtonEndOperation_clicked();
-
     void on_pushButtonOpenPresets_clicked();
 
     void on_pushButtonPreset1_clicked();
@@ -62,23 +57,19 @@ private slots:
     void on_pushButtonPreset6_clicked();
     void on_pushButtonPreset7_clicked();
 
-
     void on_pushButtonClearLog_clicked();
-
     void on_pushButtonHideLog_clicked();
-
     void on_pushButtonShowDelta_clicked();
-
-    void on_pushButtonAdd_clicked();
-
     void on_pushButtonFindLCA_clicked();
-
     void on_pushButtonSwitchTree_clicked();
 
 private:
 
     QPropertyAnimation * showPresetsListAnimation;
     QPropertyAnimation * hidePresetsListAnimation;
+
+    QPropertyAnimation * showPopUpDialogAnimation;
+    QPropertyAnimation * hidePopUpDialogAnimation;
 
     QGraphicsView * graphics_view_ui;
 

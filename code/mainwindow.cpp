@@ -97,7 +97,7 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 
             ui_components_frame->ui->pushButtonCut->setEnabled(true);
             ui_components_frame->ui->pushButtonExpose->setEnabled(true);
-            ui_components_frame->ui->pushButtonAdd->setEnabled(true);
+            ui_components_frame->ui->pushButtonOpenAddDialog->setEnabled(true);
         } else if (selected_nodes.size() == 2) {
             ui_components_frame->disable_operations_buttons();
 

@@ -211,6 +211,7 @@ Makefile: ../code/LInk-Cut-Tree.pro ../../../5.13.0/mingw73_64/mkspecs/win32-g++
 		../../../5.13.0/mingw73_64/mkspecs/features/qt_config.prf \
 		../../../5.13.0/mingw73_64/mkspecs/win32-g++/qmake.conf \
 		../../../5.13.0/mingw73_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../5.13.0/mingw73_64/mkspecs/features/exclusive_builds.prf \
 		../../../5.13.0/mingw73_64/mkspecs/features/toolchain.prf \
 		../../../5.13.0/mingw73_64/mkspecs/features/default_pre.prf \
@@ -387,6 +388,7 @@ Makefile: ../code/LInk-Cut-Tree.pro ../../../5.13.0/mingw73_64/mkspecs/win32-g++
 ../../../5.13.0/mingw73_64/mkspecs/features/qt_config.prf:
 ../../../5.13.0/mingw73_64/mkspecs/win32-g++/qmake.conf:
 ../../../5.13.0/mingw73_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../5.13.0/mingw73_64/mkspecs/features/exclusive_builds.prf:
 ../../../5.13.0/mingw73_64/mkspecs/features/toolchain.prf:
 ../../../5.13.0/mingw73_64/mkspecs/features/default_pre.prf:

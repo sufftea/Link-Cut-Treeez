@@ -19,6 +19,7 @@
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -58,10 +59,14 @@ public:
     QGridLayout *gridLayoutPopUpDialog;
     QSpacerItem *verticalSpacer_4;
     QSpacerItem *verticalSpacer_5;
-    QFrame *frame_2;
+    QFrame *framePopUpDialog;
     QVBoxLayout *verticalLayout_3;
     QSpacerItem *verticalSpacer_7;
-    QFrame *frame_3;
+    QFrame *frame_1234;
+    QGridLayout *gridLayout_3;
+    QSpinBox *spinBoxAddValue;
+    QPushButton *pushButtonAdd;
+    QLabel *label_3;
     QSpacerItem *verticalSpacer_6;
     QSpacerItem *horizontalSpacer_6;
     QSpacerItem *horizontalSpacer_7;
@@ -76,7 +81,7 @@ public:
     QGridLayout *gridLayout;
     QPushButton *pushButtonFindLCA;
     QPushButton *pushButtonLink;
-    QPushButton *pushButtonAdd;
+    QPushButton *pushButtonOpenAddDialog;
     QPushButton *pushButtonCut;
     QPushButton *pushButtonExpose;
     QSpacerItem *horizontalSpacer;
@@ -112,7 +117,7 @@ public:
         scrollAreaLog->setWidgetResizable(true);
         scrollAreaWidgetContents_2 = new QWidget();
         scrollAreaWidgetContents_2->setObjectName(QString::fromUtf8("scrollAreaWidgetContents_2"));
-        scrollAreaWidgetContents_2->setGeometry(QRect(0, 0, 450, 173));
+        scrollAreaWidgetContents_2->setGeometry(QRect(0, 0, 450, 190));
         verticalLayout_4 = new QVBoxLayout(scrollAreaWidgetContents_2);
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
         verticalLayout_4->setContentsMargins(0, 0, 0, 0);
@@ -481,32 +486,85 @@ public:
 
         gridLayoutPopUpDialog->addItem(verticalSpacer_5, 0, 1, 1, 1);
 
-        frame_2 = new QFrame(FrameUiComponetns);
-        frame_2->setObjectName(QString::fromUtf8("frame_2"));
-        frame_2->setMinimumSize(QSize(300, 200));
-        frame_2->setMaximumSize(QSize(300, 200));
-        frame_2->setStyleSheet(QString::fromUtf8("border: 0;"));
-        frame_2->setFrameShape(QFrame::StyledPanel);
-        frame_2->setFrameShadow(QFrame::Raised);
-        verticalLayout_3 = new QVBoxLayout(frame_2);
+        framePopUpDialog = new QFrame(FrameUiComponetns);
+        framePopUpDialog->setObjectName(QString::fromUtf8("framePopUpDialog"));
+        framePopUpDialog->setMinimumSize(QSize(300, 0));
+        framePopUpDialog->setMaximumSize(QSize(300, 200));
+        framePopUpDialog->setStyleSheet(QString::fromUtf8("border: 0;"));
+        framePopUpDialog->setFrameShape(QFrame::StyledPanel);
+        framePopUpDialog->setFrameShadow(QFrame::Raised);
+        verticalLayout_3 = new QVBoxLayout(framePopUpDialog);
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
         verticalSpacer_7 = new QSpacerItem(20, 74, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_3->addItem(verticalSpacer_7);
 
-        frame_3 = new QFrame(frame_2);
-        frame_3->setObjectName(QString::fromUtf8("frame_3"));
-        frame_3->setFrameShape(QFrame::StyledPanel);
-        frame_3->setFrameShadow(QFrame::Raised);
+        frame_1234 = new QFrame(framePopUpDialog);
+        frame_1234->setObjectName(QString::fromUtf8("frame_1234"));
+        sizePolicy.setHeightForWidth(frame_1234->sizePolicy().hasHeightForWidth());
+        frame_1234->setSizePolicy(sizePolicy);
+        frame_1234->setFrameShape(QFrame::StyledPanel);
+        frame_1234->setFrameShadow(QFrame::Raised);
+        gridLayout_3 = new QGridLayout(frame_1234);
+        gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
+        spinBoxAddValue = new QSpinBox(frame_1234);
+        spinBoxAddValue->setObjectName(QString::fromUtf8("spinBoxAddValue"));
+        spinBoxAddValue->setMinimumSize(QSize(0, 50));
+        QFont font3;
+        font3.setPointSize(14);
+        spinBoxAddValue->setFont(font3);
+        spinBoxAddValue->setStyleSheet(QString::fromUtf8("border-radius: 4px;\n"
+"background-color: white;\n"
+"border: 0;"));
+        spinBoxAddValue->setMinimum(-100);
+        spinBoxAddValue->setMaximum(100);
+        spinBoxAddValue->setValue(1);
 
-        verticalLayout_3->addWidget(frame_3);
+        gridLayout_3->addWidget(spinBoxAddValue, 1, 0, 1, 1);
+
+        pushButtonAdd = new QPushButton(frame_1234);
+        pushButtonAdd->setObjectName(QString::fromUtf8("pushButtonAdd"));
+        sizePolicy.setHeightForWidth(pushButtonAdd->sizePolicy().hasHeightForWidth());
+        pushButtonAdd->setSizePolicy(sizePolicy);
+        pushButtonAdd->setMinimumSize(QSize(100, 50));
+        pushButtonAdd->setMaximumSize(QSize(100, 16777215));
+        QFont font4;
+        font4.setFamily(QString::fromUtf8("Microsoft YaHei Light"));
+        font4.setPointSize(14);
+        font4.setBold(true);
+        font4.setWeight(75);
+        pushButtonAdd->setFont(font4);
+        pushButtonAdd->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"color: rgb(243, 234, 226);\n"
+"background-color: rgb(0, 125, 176);\n"
+"border-radius: 5px;\n"
+"}\n"
+"QPushButton:hover {\n"
+"border: 2px solid;\n"
+"border-color: rgb(243, 234, 226);\n"
+"}\n"
+"QPushButton:pressed {\n"
+"background-color:  rgb(0, 105, 156);\n"
+"}"));
+
+        gridLayout_3->addWidget(pushButtonAdd, 1, 1, 1, 1);
+
+        label_3 = new QLabel(frame_1234);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_3->setFont(font3);
+        label_3->setStyleSheet(QString::fromUtf8("color: rgb(243, 234, 226);"));
+
+        gridLayout_3->addWidget(label_3, 0, 0, 1, 2);
+
+
+        verticalLayout_3->addWidget(frame_1234);
 
         verticalSpacer_6 = new QSpacerItem(20, 74, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_3->addItem(verticalSpacer_6);
 
 
-        gridLayoutPopUpDialog->addWidget(frame_2, 1, 1, 1, 1);
+        gridLayoutPopUpDialog->addWidget(framePopUpDialog, 1, 1, 1, 1);
 
         horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -541,10 +599,10 @@ public:
         pushButtonReset->setSizePolicy(sizePolicy);
         pushButtonReset->setMinimumSize(QSize(100, 0));
         pushButtonReset->setMaximumSize(QSize(100, 16777215));
-        QFont font3;
-        font3.setFamily(QString::fromUtf8("Microsoft YaHei Light"));
-        font3.setPointSize(14);
-        pushButtonReset->setFont(font3);
+        QFont font5;
+        font5.setFamily(QString::fromUtf8("Microsoft YaHei Light"));
+        font5.setPointSize(14);
+        pushButtonReset->setFont(font5);
         pushButtonReset->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "color: rgb(243, 234, 226);\n"
 "background-color: rgb(182, 47, 68);\n"
@@ -576,7 +634,7 @@ public:
         pushButtonOpenPresets->setSizePolicy(sizePolicy);
         pushButtonOpenPresets->setMinimumSize(QSize(150, 0));
         pushButtonOpenPresets->setMaximumSize(QSize(150, 16777215));
-        pushButtonOpenPresets->setFont(font3);
+        pushButtonOpenPresets->setFont(font5);
         pushButtonOpenPresets->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "color: rgb(243, 234, 226);\n"
 "background-color: rgb(0, 125, 176);\n"
@@ -598,7 +656,7 @@ public:
         pushButtonShowDelta->setSizePolicy(sizePolicy);
         pushButtonShowDelta->setMinimumSize(QSize(150, 0));
         pushButtonShowDelta->setMaximumSize(QSize(150, 16777215));
-        pushButtonShowDelta->setFont(font3);
+        pushButtonShowDelta->setFont(font5);
         pushButtonShowDelta->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "color: rgb(243, 234, 226);\n"
 "background-color: rgb(0, 125, 176);\n"
@@ -618,7 +676,7 @@ public:
         pushButtonSwitchTree->setSizePolicy(sizePolicy);
         pushButtonSwitchTree->setMinimumSize(QSize(170, 0));
         pushButtonSwitchTree->setMaximumSize(QSize(170, 16777215));
-        pushButtonSwitchTree->setFont(font3);
+        pushButtonSwitchTree->setFont(font5);
         pushButtonSwitchTree->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "color: rgb(243, 234, 226);\n"
 "background-color: transparent;\n"
@@ -649,7 +707,7 @@ public:
         pushButtonFindLCA->setSizePolicy(sizePolicy);
         pushButtonFindLCA->setMinimumSize(QSize(100, 0));
         pushButtonFindLCA->setMaximumSize(QSize(100, 16777215));
-        pushButtonFindLCA->setFont(font3);
+        pushButtonFindLCA->setFont(font5);
         pushButtonFindLCA->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "color: rgb(243, 234, 226);\n"
 "background-color: transparent;\n"
@@ -678,7 +736,7 @@ public:
         pushButtonLink->setSizePolicy(sizePolicy);
         pushButtonLink->setMinimumSize(QSize(100, 0));
         pushButtonLink->setMaximumSize(QSize(100, 16777215));
-        pushButtonLink->setFont(font3);
+        pushButtonLink->setFont(font5);
         pushButtonLink->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "color: rgb(243, 234, 226);\n"
 "background-color: transparent;\n"
@@ -701,14 +759,14 @@ public:
 
         gridLayout->addWidget(pushButtonLink, 0, 3, 1, 1);
 
-        pushButtonAdd = new QPushButton(frameOperationsButtons);
-        pushButtonAdd->setObjectName(QString::fromUtf8("pushButtonAdd"));
-        sizePolicy.setHeightForWidth(pushButtonAdd->sizePolicy().hasHeightForWidth());
-        pushButtonAdd->setSizePolicy(sizePolicy);
-        pushButtonAdd->setMinimumSize(QSize(100, 0));
-        pushButtonAdd->setMaximumSize(QSize(100, 16777215));
-        pushButtonAdd->setFont(font3);
-        pushButtonAdd->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+        pushButtonOpenAddDialog = new QPushButton(frameOperationsButtons);
+        pushButtonOpenAddDialog->setObjectName(QString::fromUtf8("pushButtonOpenAddDialog"));
+        sizePolicy.setHeightForWidth(pushButtonOpenAddDialog->sizePolicy().hasHeightForWidth());
+        pushButtonOpenAddDialog->setSizePolicy(sizePolicy);
+        pushButtonOpenAddDialog->setMinimumSize(QSize(100, 0));
+        pushButtonOpenAddDialog->setMaximumSize(QSize(100, 16777215));
+        pushButtonOpenAddDialog->setFont(font5);
+        pushButtonOpenAddDialog->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "color: rgb(243, 234, 226);\n"
 "background-color: transparent;\n"
 "\n"
@@ -728,7 +786,7 @@ public:
 "background-color: rgba(255, 255, 255, 20);\n"
 "}"));
 
-        gridLayout->addWidget(pushButtonAdd, 1, 1, 1, 1);
+        gridLayout->addWidget(pushButtonOpenAddDialog, 1, 1, 1, 1);
 
         pushButtonCut = new QPushButton(frameOperationsButtons);
         pushButtonCut->setObjectName(QString::fromUtf8("pushButtonCut"));
@@ -736,7 +794,7 @@ public:
         pushButtonCut->setSizePolicy(sizePolicy);
         pushButtonCut->setMinimumSize(QSize(100, 0));
         pushButtonCut->setMaximumSize(QSize(100, 16777215));
-        pushButtonCut->setFont(font3);
+        pushButtonCut->setFont(font5);
         pushButtonCut->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "color: rgb(243, 234, 226);\n"
 "background-color: transparent;\n"
@@ -765,7 +823,7 @@ public:
         pushButtonExpose->setSizePolicy(sizePolicy);
         pushButtonExpose->setMinimumSize(QSize(100, 0));
         pushButtonExpose->setMaximumSize(QSize(100, 16777215));
-        pushButtonExpose->setFont(font3);
+        pushButtonExpose->setFont(font5);
         pushButtonExpose->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "color: rgb(243, 234, 226);\n"
 "background-color: transparent;\n"
@@ -799,10 +857,10 @@ public:
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         label = new QLabel(frame);
         label->setObjectName(QString::fromUtf8("label"));
-        QFont font4;
-        font4.setFamily(QString::fromUtf8("Microsoft YaHei Light"));
-        font4.setPointSize(10);
-        label->setFont(font4);
+        QFont font6;
+        font6.setFamily(QString::fromUtf8("Microsoft YaHei Light"));
+        font6.setPointSize(10);
+        label->setFont(font6);
         label->setStyleSheet(QString::fromUtf8("background-color: transparent;\n"
 "color: rgb(243, 234, 226);"));
 
@@ -852,7 +910,7 @@ public:
         pushButtonEndOperation->setSizePolicy(sizePolicy);
         pushButtonEndOperation->setMinimumSize(QSize(100, 0));
         pushButtonEndOperation->setMaximumSize(QSize(100, 16777215));
-        pushButtonEndOperation->setFont(font3);
+        pushButtonEndOperation->setFont(font5);
         pushButtonEndOperation->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "color: rgb(243, 234, 226);\n"
 "background-color: rgb(0, 125, 176);\n"
@@ -874,7 +932,7 @@ public:
         pushButtonMakeStep->setSizePolicy(sizePolicy);
         pushButtonMakeStep->setMinimumSize(QSize(100, 0));
         pushButtonMakeStep->setMaximumSize(QSize(100, 16777215));
-        pushButtonMakeStep->setFont(font3);
+        pushButtonMakeStep->setFont(font5);
         pushButtonMakeStep->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "color: rgb(243, 234, 226);\n"
 "background-color: rgb(0, 125, 176);\n"
@@ -913,13 +971,15 @@ public:
         pushButtonPreset3->setText(QCoreApplication::translate("FrameUiComponetns", "3", nullptr));
         pushButtonPreset2->setText(QCoreApplication::translate("FrameUiComponetns", "2 - fork", nullptr));
         pushButtonPreset1->setText(QCoreApplication::translate("FrameUiComponetns", "1 - stairway", nullptr));
+        pushButtonAdd->setText(QCoreApplication::translate("FrameUiComponetns", "Add", nullptr));
+        label_3->setText(QCoreApplication::translate("FrameUiComponetns", "Add constant to path", nullptr));
         pushButtonReset->setText(QCoreApplication::translate("FrameUiComponetns", "Reset", nullptr));
         pushButtonOpenPresets->setText(QCoreApplication::translate("FrameUiComponetns", "Presets", nullptr));
         pushButtonShowDelta->setText(QCoreApplication::translate("FrameUiComponetns", "Show delta", nullptr));
         pushButtonSwitchTree->setText(QCoreApplication::translate("FrameUiComponetns", "Concrete tree", nullptr));
         pushButtonFindLCA->setText(QCoreApplication::translate("FrameUiComponetns", "LCA", nullptr));
         pushButtonLink->setText(QCoreApplication::translate("FrameUiComponetns", "Link", nullptr));
-        pushButtonAdd->setText(QCoreApplication::translate("FrameUiComponetns", "Add 1", nullptr));
+        pushButtonOpenAddDialog->setText(QCoreApplication::translate("FrameUiComponetns", "Add 1", nullptr));
         pushButtonCut->setText(QCoreApplication::translate("FrameUiComponetns", "Cut", nullptr));
         pushButtonExpose->setText(QCoreApplication::translate("FrameUiComponetns", "Expose", nullptr));
         label->setText(QCoreApplication::translate("FrameUiComponetns", "animation speed", nullptr));

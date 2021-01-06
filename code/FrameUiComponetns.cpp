@@ -40,6 +40,7 @@ FrameUiComponetns::FrameUiComponetns(GraphicsLinkCutTree &graphics_tree,
 
     ui->pushButtonShowDelta->setStyleSheet(ButtonStyles::switch_button_off);
 
+    ui->framePopUpDialog->setMaximumHeight(0);
 
     // animations
     showPresetsListAnimation = new QPropertyAnimation(this);
@@ -55,6 +56,21 @@ FrameUiComponetns::FrameUiComponetns(GraphicsLinkCutTree &graphics_tree,
     hidePresetsListAnimation->setEasingCurve(QEasingCurve::OutExpo);
     hidePresetsListAnimation->setDuration(300);
     hidePresetsListAnimation->setEndValue(0);
+
+
+    showPopUpDialogAnimation = new QPropertyAnimation(this);
+    showPopUpDialogAnimation->setPropertyName("maximumHeight");
+    showPopUpDialogAnimation->setTargetObject(ui->framePopUpDialog);
+    showPopUpDialogAnimation->setEasingCurve(QEasingCurve::OutExpo);
+    showPopUpDialogAnimation->setDuration(300);
+    showPopUpDialogAnimation->setEndValue(200);
+
+    hidePopUpDialogAnimation = new QPropertyAnimation(this);
+    hidePopUpDialogAnimation->setPropertyName("maximumHeight");
+    hidePopUpDialogAnimation->setTargetObject(ui->framePopUpDialog);
+    hidePopUpDialogAnimation->setEasingCurve(QEasingCurve::OutExpo);
+    hidePopUpDialogAnimation->setDuration(300);
+    hidePopUpDialogAnimation->setEndValue(0);
 }
 
 FrameUiComponetns::~FrameUiComponetns()
@@ -172,12 +188,18 @@ void FrameUiComponetns::on_pushButtonLink_clicked()
     }
 }
 
+void FrameUiComponetns::on_pushButtonOpenAddDialog_clicked()
+{
+    showPopUpDialogAnimation->start();
+
+}
+
 void FrameUiComponetns::on_pushButtonAdd_clicked()
 {
     if (selected_nodes.size() == 1) {
         tree->finish_operation();
         SequenceLog::clear();
-        tree->start_add(selected_nodes[0], 1);
+        tree->start_add(selected_nodes[0], ui->spinBoxAddValue->value());
         ui->labelSequence->setText(SequenceLog::get_text());
 
         selected_nodes[0]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
@@ -186,6 +208,8 @@ void FrameUiComponetns::on_pushButtonAdd_clicked()
 
         disable_operations_buttons();
     }
+
+    hidePopUpDialogAnimation->start();
 }
 
 void FrameUiComponetns::on_pushButtonEndOperation_clicked()
