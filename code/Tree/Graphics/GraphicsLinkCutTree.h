@@ -15,7 +15,6 @@ class GraphicsLinkCutTree : public QObject
     Q_OBJECT
 
     QTimer * animation_timer;
-    bool show_delta = false;
 
     QGraphicsScene * abstract_tree_scene;
     QGraphicsScene * concrete_tree_scene;
@@ -59,11 +58,6 @@ public:
     Node * node_at(QPoint pos);
 
     void unselect_all_nodes();
-
-
-    void set_show_delta(bool show_delta);
-    bool is_show_delta();
-
 
     QGraphicsScene * get_abstract_tree_scene();
     QGraphicsScene * get_concrete_tree_scene();

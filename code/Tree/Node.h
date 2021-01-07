@@ -36,9 +36,11 @@ public:
     Node * left = nullptr;
     Node * right = nullptr;
 
-    int delta_w = 0;  // this.weight - parent.weight; for the root value is its weight
-    int subtree_min;  // the smallest value of the subtree
-    int subtree_max;  // the biggest value of the subtree
+    int value;
+    // aggregate functions
+    int min_agg;
+    int max_agg;
+    int sum_agg;
 
     /*
      * Stores graphical representation of the node (in the concrete tree)
@@ -57,13 +59,11 @@ public:
     AbstractNode abstract;
 
 
-    Node(int weight = 0);
-    Node(Node * parent, int weight = 0);
+    Node(int value = 0);
+    Node(Node * parent, int value = 0);
     ~Node();
 
     /* ========= INTSTANT OPERATIONS START ========= */
-
-    int get_value();
 
     bool try_zig_left();
     bool try_zig_right();
@@ -76,19 +76,21 @@ public:
 
     void splay();
 
+    void update_my_aggregates(); // updates min/max/sum only for the node
+    void update_aggregates_up(); // updates aggregates from the node to the root
 
     // [n] -- number of nodes in the path
 
-    Node * get_solid_root();        // O(logn)
-    Node * get_abstract_parent();   // O(logn)
-    Node * get_path_parent();       // O(logn)
+    Node * get_solid_root();        // O(log n)
+    Node * get_abstract_parent();   // O(log n)
+    Node * get_path_parent();       // O(log n)
 
-    bool is_solid_root();           // O(n)
-    bool is_abstract_root();        // O(logn)
-    bool is_left_child();           // O(n)
-    bool is_right_child();          // O(n)
-    bool is_solid_child();          // O(n)
-    bool is_prefered_child();       // O(logn)
+    bool is_solid_root();           // O(1)
+    bool is_abstract_root();        // O(log n)
+    bool is_left_child();           // O(1)
+    bool is_right_child();          // O(1)
+    bool is_solid_child();          // O(1)
+    bool is_prefered_child();       // O(log n)
 };
 
 

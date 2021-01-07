@@ -80,13 +80,13 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 
 
     if (node != nullptr) {
-        if (node->concrete_tree_graphics->get_selection_type() == GraphicsNodeItem::SelectionType::no_selection) {
-            node->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::user_selected);
-            node->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::user_selected);
+        if (node->concrete_tree_graphics->get_view_type() == GraphicsSolidNodeItem::ViewType::normal) {
+            node->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::user_selected);
+            node->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::user_selected);
             selected_nodes << node;
-        } else if (node->concrete_tree_graphics->get_selection_type() == GraphicsNodeItem::SelectionType::user_selected) {
-            node->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
-            node->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        } else if (node->concrete_tree_graphics->get_view_type() == GraphicsSolidNodeItem::ViewType::user_selected) {
+            node->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::normal);
+            node->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
             selected_nodes.removeOne(node);
         }
 
@@ -97,15 +97,16 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 
             ui_components_frame->ui->pushButtonCut->setEnabled(true);
             ui_components_frame->ui->pushButtonExpose->setEnabled(true);
-            ui_components_frame->ui->pushButtonOpenAddDialog->setEnabled(true);
+            ui_components_frame->ui->pushButtonPathMax->setEnabled(true);
+            ui_components_frame->ui->pushButtonPathMin->setEnabled(true);
+            ui_components_frame->ui->pushButtonPathSum->setEnabled(true);
+            ui_components_frame->ui->pushButtonPathProduct->setEnabled(true);
         } else if (selected_nodes.size() == 2) {
             ui_components_frame->disable_operations_buttons();
-
             ui_components_frame->ui->pushButtonLink->setEnabled(true);
-            ui_components_frame->ui->pushButtonFindLCA->setEnabled(true);
         } else if (selected_nodes.size() == 3) {
-            selected_nodes.first()->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
-            selected_nodes.first()->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+            selected_nodes.first()->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::normal);
+            selected_nodes.first()->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
             selected_nodes.pop_front();
         }
     }

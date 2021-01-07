@@ -80,7 +80,7 @@ void GraphicsLinkCutTree::init(int size)
 
     for (Node * node : tree.nodes) {
         // set concrete tree graphics
-        node->concrete_tree_graphics = new GraphicsSolidNodeItem(node, this->show_delta, this->concrete_tree_scene);
+        node->concrete_tree_graphics = new GraphicsSolidNodeItem(node, this->concrete_tree_scene);
 
         concrete_tree_scene->addItem(node->concrete_tree_graphics);
         node->concrete_tree_graphics->set_my_scene(this->concrete_tree_scene);
@@ -170,24 +170,9 @@ Node *GraphicsLinkCutTree::node_at(QPoint pos)
 void GraphicsLinkCutTree::unselect_all_nodes()
 {
     for (Node * node : tree.nodes) {
-        node->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
-        node->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        node->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::normal);
+        node->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
     }
-}
-
-void GraphicsLinkCutTree::set_show_delta(bool show_delta)
-{
-    this->show_delta = show_delta;
-    for (Node * node : tree.nodes) {
-        node->concrete_tree_graphics->set_show_delta(show_delta);
-    }
-
-    concrete_tree_scene->update();
-}
-
-bool GraphicsLinkCutTree::is_show_delta()
-{
-    return this->show_delta;
 }
 
 QGraphicsScene *GraphicsLinkCutTree::get_abstract_tree_scene()

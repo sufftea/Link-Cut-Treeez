@@ -17,28 +17,21 @@ class Node;
 
 class GraphicsSolidNodeItem : public GraphicsNodeItem
 {
+
 public:
-    enum class SelectionType
+    enum class ViewType
     {
-        no_selection = 0,
+        normal = 0,
         user_selected,
-        selection0,
-        selection1,
     };
 
-private:
-
-    QGraphicsScene * my_scene = nullptr;
-    bool show_delta = false;
-
-public:
-    static const int node_size_px = 60;
+    static const int node_size_px = 70;
     static const int node_bound_size_px = 100;
 
     Node * my_node = nullptr;
 
 
-    GraphicsSolidNodeItem(Node * my_node, bool show_delta = false, QGraphicsScene * my_scene = nullptr);
+    GraphicsSolidNodeItem(Node * my_node, QGraphicsScene * my_scene = nullptr);
     ~GraphicsSolidNodeItem() override;
 
 
@@ -54,13 +47,10 @@ public:
      * Should be called frome the root node in order to draw the entire solid tree.
     */
     int traverse_and_update_position(int offset, int solid_depth = 0);
-
     void update_position(int node_offset, int solid_depth);
 
     // updates node's pixmap after a display parameter
-    void update_pixmap() override;
-
-    void set_show_delta(bool show);
+    void update_pixmap();
 
     /*
      * To draw path-parent connections with other nodes, the node needs to know the
@@ -69,9 +59,17 @@ public:
     */
     void set_my_scene(QGraphicsScene * scene);
 
+    void set_view_type(ViewType type);
+    ViewType get_view_type();
+
 
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+
+private:
+    ViewType view_type = ViewType::normal;
+    QGraphicsScene * my_scene = nullptr;
+    QPixmap pix;
 };
 
 #endif // GRAPHICSNODE_H

@@ -25,21 +25,25 @@ void LinkCutTree::link(Node * v, Node * to)
     expose(v);
     expose(to);
 
-    to->delta_w -= v->delta_w;
-
     v->left = to;
     v->parent = to->parent;
     to->parent = v;
+
+    // there are only two nodes at the top - to and v
+    to->update_aggregates_up();
 }
 
 void LinkCutTree::cut(Node *v)
 {
     expose(v);
-    v->left->delta_w += v->delta_w;
-    if (v->left != nullptr) {
+    if (v->left) {
         v->left->parent = nullptr;
     }
     v->left = nullptr;
+
+    // after the expose(v), v is the only node that needs updating
+    // since no other nodes are higher than it (in the solid tree)
+    v->update_my_aggregates();
 }
 
 void LinkCutTree::expose(Node *v)
@@ -47,25 +51,20 @@ void LinkCutTree::expose(Node *v)
     while (true) {
         v->splay();
 
-        if (v->parent == nullptr) {
+        if (!v->parent) {
             break;
         }
 
         v->parent->splay();
-
-        v->delta_w -= v->parent->delta_w;
-
-        if (v->parent->right != nullptr) {
-            v->parent->right->delta_w += v->parent->delta_w;
-        }
-
         v->parent->right = v;
+
+        // v.parent (path-parent of v) is the root of its solid
+        // tree so, again, the update is needed only for v.parent
+        v->parent->update_my_aggregates();
     }
 
-    if (v->right != nullptr) {
-        v->right->delta_w += v->delta_w;
-        v->right = nullptr;
-    }
+    v->right = nullptr;
+    v->update_my_aggregates();
 }
 
 Node *LinkCutTree::get_abstract_root()
@@ -114,17 +113,6 @@ void LinkCutTree::start_cut(Node *v)
     current_operation = new OperationCut(v);
 }
 
-void LinkCutTree::start_lca(Node *a, Node *b)
-{
-
-}
-
-void LinkCutTree::start_add(Node *v, int c)
-{
-    finish_operation();
-    current_operation = new OperationAddConst(v, c);
-}
-
 bool LinkCutTree::make_step()
 {
     if (current_operation != nullptr) {
@@ -152,7 +140,7 @@ void LinkCutTree::finish_operation()
 LinkCutTree::OperationExpose::OperationExpose(Node *v)
 {
     SequenceLog::add("Expose("
-                  + QString::number(v->get_value())
+                  + QString::number(v->value)
                   + "):");
     SequenceLog::step_in();
 
@@ -168,7 +156,7 @@ LinkCutTree::OperationExpose::~OperationExpose()
 bool LinkCutTree::OperationExpose::make_step()
 {
     if (current_step == Step::start_splaying_v) {
-        if (splayer != nullptr) delete splayer;
+        if (splayer) delete splayer;
         splayer = new OperationSplay(v);
         current_step = Step::splaying_v;
     }
@@ -182,21 +170,18 @@ bool LinkCutTree::OperationExpose::make_step()
     }
 
     else if (current_step == Step::start_splaying_pp) {
-        if (v->parent == nullptr) {
+        if (!v->parent) {
+            // v is the root of the abstract tree. finish the operation.
             SequenceLog::add("cut the rest of the path");
-
-            if (v->right != nullptr) {
-                v->right->delta_w += v->delta_w;
-                v->right = nullptr;
-            }
-
+            v->right = nullptr;
+            v->update_my_aggregates();
             current_step = Step::finished;
             return 0;
         }
 
         pp = v->parent;
 
-        if (splayer != nullptr) delete splayer;
+        if (splayer) delete splayer;
         splayer = new OperationSplay(pp);
         current_step = Step::splaying_pp;
     }
@@ -211,13 +196,8 @@ bool LinkCutTree::OperationExpose::make_step()
 
     else if (current_step == Step::link) {
         SequenceLog::add("connect to path parent");
-        if (pp->right != nullptr) {
-            pp->right->delta_w += pp->delta_w;
-        }
-        v->delta_w -= pp->delta_w;
-
         pp->right = v;
-
+        v->update_aggregates_up();
         current_step = Step::start_splaying_v;
     }
 
@@ -235,7 +215,7 @@ LinkCutTree::OperationLink::OperationLink(Node *v, Node *to)
 {
     if (! v->is_abstract_root()) {
         SequenceLog::add("Cannot link. "
-                         + QString::number(v->get_value())
+                         + QString::number(v->value)
                          + " must be the root of an abstract tree");
         current_step = Step::finished;
 
@@ -244,9 +224,9 @@ LinkCutTree::OperationLink::OperationLink(Node *v, Node *to)
 
 
     SequenceLog::add("Link "
-                  + QString::number(v->get_value())
+                  + QString::number(v->value)
                   + " to "
-                  + QString::number(to->get_value())
+                  + QString::number(to->value)
                   + ":");
     SequenceLog::step_in();
 
@@ -296,10 +276,10 @@ bool LinkCutTree::OperationLink::make_step()
     else if (current_step == Step::link) {
         SequenceLog::add("connect trees");
 
-        to->delta_w -= v->delta_w;
         v->left = to;
-        v->parent = to->parent; // if [to] has a path-parent
+        v->parent = to->parent;
         to->parent = v;
+        to->update_aggregates_up();
 
         current_step = finished;
 
@@ -321,11 +301,11 @@ LinkCutTree::OperationCut::OperationCut(Node *v)
 {
     this->v = v;
 
-    SequenceLog::add("cut(" + QString::number(v->get_value()) + "):");
+    SequenceLog::add("cut(" + QString::number(v->value) + "):");
     SequenceLog::step_in();
 
     if (v->is_abstract_root()) {
-        SequenceLog::add(QString::number(v->get_value()) + " is already a root");
+        SequenceLog::add(QString::number(v->value) + " is already a root");
         current_step = Step::finished;
     }
 }
@@ -337,14 +317,14 @@ LinkCutTree::OperationCut::~OperationCut()
         delete this->expose_operation;
     }
 
-    SequenceLog::add("cut(" + QString::number(v->get_value()) + ") finished");
+    SequenceLog::add("cut(" + QString::number(v->value) + ") finished");
     SequenceLog::step_out();
 }
 
 bool LinkCutTree::OperationCut::make_step()
 {
     if (current_step == Step::start_expose_v) {
-        if (expose_operation != nullptr) {
+        if (expose_operation) {
             delete expose_operation;
         }
 
@@ -356,82 +336,36 @@ bool LinkCutTree::OperationCut::make_step()
         if (! expose_operation->make_step()) {
             delete expose_operation;
             expose_operation = nullptr;
-
             current_step = Step::cut;
         }
     }
 
     else if (current_step == Step::cut) {
         if (v->left != nullptr) {
-            SequenceLog::add("disconnect the left child");
-            v->left->delta_w += v->delta_w;
+            SequenceLog::add("disconnect the left subtree");
             v->left->parent = nullptr;
             v->left = nullptr;
+            v->update_my_aggregates();
         }
 
         current_step = Step::finished;
     }
 
     else if (current_step == Step::finished) {
-
-        return 0;
-    }
-
-
-    return 1;
-}
-
-
-
-// ================ ADD CONSTANT STEP BY STEP ==================
-
-LinkCutTree::OperationAddConst::OperationAddConst(Node *v, int value)
-{
-    this->v = v;
-    this->value = value;
-
-    SequenceLog::add("Add constant form the root to " + QString::number(v->get_value()) + ":");
-    SequenceLog::step_in();
-}
-
-LinkCutTree::OperationAddConst::~OperationAddConst()
-{
-    if (expose_operation != nullptr) {
-        delete expose_operation;
-    }
-
-    SequenceLog::add("Done!");
-    SequenceLog::step_out();
-}
-
-bool LinkCutTree::OperationAddConst::make_step()
-{
-    if (current_step == Step::start_expose_v) {
-        this->expose_operation = new OperationExpose(v);
-        current_step = expose_v;
-    } else if (current_step == Step::expose_v) {
-        if ( ! expose_operation->make_step()) {
-            current_step = Step::add;
-
-            delete expose_operation;
-            expose_operation = nullptr;
-        }
-    } else if (current_step == Step::add) {
-        SequenceLog::add("adding the constant to the root's delta");
-        v->delta_w += value;
-
         return 0;
     }
 
     return 1;
 }
+
+
 
 /* ========= STEP BY STEP SPLAY ========= */
 
 LinkCutTree::OperationSplay::OperationSplay(Node * v)
 {
     SequenceLog::add("splay("
-                  + QString::number(v->get_value())
+                  + QString::number(v->value)
                   + ")");
     SequenceLog::step_in();
 

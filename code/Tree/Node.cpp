@@ -3,7 +3,10 @@
 Node::Node(int weight)
     : abstract(this)
 {   
-    this->delta_w = weight;
+    this->value = weight;
+    this->sum_agg = weight;
+    this->min_agg = weight;
+    this->max_agg = weight;
 }
 
 Node::Node(Node * parent, int weight)
@@ -17,25 +20,9 @@ Node::~Node()
 
 }
 
-int Node::get_value()
-{    
-    Node * it = this;
-    int sum = 0;
-    while (! it->is_solid_root()) {
-        sum += it->delta_w;
-        it = it->parent;
-    }
-    sum += it->delta_w;
-
-    return sum;
-}
-
 bool Node::try_zig_left()
 {
-    Node * p = this->parent;
-    if (this->is_right_child()) {
 /*
-
         g                                   g
         *                                   *
         *                                   *
@@ -46,24 +33,15 @@ bool Node::try_zig_left()
              * *                     * *
             *   *                   *   *
            B     C                 A     B
-
 */
+    Node * p = this->parent;
+    if (this->is_right_child()) {
+        Node * A = p->left;
         Node * B = this->left;
+        Node * C = this->right;
         Node * g = p->parent;
 
-        // deltas
-        int v_new_delta = this->delta_w + p->delta_w;
-        int p_new_delta = p->delta_w - v_new_delta;
-        int b_new_delta = 0;
-        if (B != nullptr) {
-            b_new_delta = B->delta_w + this->delta_w;
-        }
 
-        this->delta_w = v_new_delta;
-        p->delta_w = p_new_delta;
-        if (B != nullptr) {
-            B->delta_w = b_new_delta;
-        }
 
 
         // pointers
@@ -84,6 +62,14 @@ bool Node::try_zig_left()
             }
         }
 
+        // aggregates
+//        int p_new_sum = p->sum_agg - this->value - (C ? C->sum_agg : 0);
+//        int v_new_sum = this->sum_agg + p->value + (A ? A->sum_agg : 0);
+//        p->sum_agg = p_new_sum;
+//        this->sum_agg = v_new_sum;
+        p->update_my_aggregates();
+        this->update_my_aggregates();
+
         return true;
     }
 
@@ -92,10 +78,7 @@ bool Node::try_zig_left()
 
 bool Node::try_zig_right()
 {
-    Node * p = this->parent;
-    if (this->is_left_child()) {
 /*
-
               g                     g
               *                     *
               *                     *
@@ -108,25 +91,12 @@ bool Node::try_zig_right()
      A     B                           B     C
 
 */
-
-
+    Node * p = this->parent;
+    if (this->is_left_child()) {
+        Node * A = this->left;
         Node * B = this->right;
+        Node * C = p->right;
         Node * g = p->parent;
-
-        // deltas
-        int v_new_delta = this->delta_w + p->delta_w;
-        int p_new_delta = p->delta_w - v_new_delta;
-        int b_new_delta = 0;
-        if (B != nullptr) {
-            b_new_delta = B->delta_w + this->delta_w;
-        }
-
-        this->delta_w = v_new_delta;
-        p->delta_w = p_new_delta;
-        if (B != nullptr) {
-            B->delta_w = b_new_delta;
-        }
-
 
 
         // pointers
@@ -147,6 +117,14 @@ bool Node::try_zig_right()
             }
         }
 
+        // aggregates
+//        int p_new_sum = p->sum_agg - this->value - (A ? A->sum_agg : 0);
+//        int v_new_sum = this->sum_agg + p->value + (C ? C->sum_agg : 0);
+//        p->sum_agg = p_new_sum;
+//        this->sum_agg = v_new_sum;
+        p->update_my_aggregates();
+        this->update_my_aggregates();
+
         return true;
     }
 
@@ -157,7 +135,6 @@ bool Node::try_zig_zig_left()
 {
 
 /*
-
       gg                                     gg
       *                                      *
       *                                      *
@@ -171,71 +148,13 @@ bool Node::try_zig_zig_left()
                  * *            * *
                 *   *          *   *
                C     D        A     B
-
-
 */
-    Node * p = this->parent; // can't be nullptr (after the if statement)
-    if (this->is_right_child() && p->is_right_child()) {
-        Node * g = p->parent; // can't be nullptr;
-        Node * gg = g->parent; // CAN be nullptr
+    Node * p = this->parent;
+    if (!this->is_right_child() || !p->is_right_child()) return false;
 
-        Node * B = p->left;  // CAN be nullptr
-        Node * C = this->left;  // CAN be nullptr
-
-        // deltas
-        int g_new_delta = - p->delta_w;
-        int p_new_delta = - this->delta_w;
-        int v_new_delta = this->delta_w + p->delta_w + g->delta_w;
-        int b_new_delta = 0;
-        if (B != nullptr) {
-            b_new_delta = B->delta_w + p->delta_w;
-        }
-        int c_new_delta = 0;
-        if (C != nullptr) {
-            c_new_delta = C->delta_w + this->delta_w;
-        }
-
-        g->delta_w = g_new_delta;
-        p->delta_w = p_new_delta;
-        this->delta_w = v_new_delta;
-        if (B != nullptr) {
-            B->delta_w = b_new_delta;
-        }
-        if (C != nullptr) {
-            C->delta_w = c_new_delta;
-        }
-
-
-        // pointers
-        g->right = B;
-        if (B != nullptr) {
-            B->parent = g;
-        }
-
-        p->left = g;
-        g->parent = p;
-
-        p->right = C;
-        if (C != nullptr) {
-            C->parent = p;
-        }
-
-        this->left = p;
-        p->parent = this;
-
-        this->parent = gg;
-        if (gg != nullptr) {
-            if (gg->left == g) {
-                gg->left = this;
-            } else if (gg->right == g) {
-                gg->right = this;
-            }
-        }
-
-        return true;
-    }
-
-    return false;
+    p->try_zig_left();
+    this->try_zig_left();
+    return true;
 }
 
 bool Node::try_zig_zig_right()
@@ -254,69 +173,13 @@ bool Node::try_zig_zig_right()
     * *                                   * *
    *   *                                 *   *
   A     B                               C     D
-
-
 */
     Node * p = this->parent;
-    if (this->is_left_child() && p->is_left_child()) {
-        Node * g = p->parent;
-        Node * gg = g->parent;
-        Node * B = this->right;
-        Node * C = p->right;
+    if (!this->is_left_child() || !p->is_left_child()) return false;
 
-        // deltas
-        int g_new_delta = - p->delta_w;
-        int p_new_delta = - this->delta_w;
-        int v_new_delta = this->delta_w + p->delta_w + g->delta_w;
-        int b_new_delta = 0;
-        if (B != nullptr) {
-            b_new_delta = B->delta_w + this->delta_w;
-        }
-        int c_new_delta = 0;
-        if (C != nullptr) {
-            c_new_delta = C->delta_w + p->delta_w;
-        }
-
-        g->delta_w = g_new_delta;
-        p->delta_w = p_new_delta;
-        this->delta_w = v_new_delta;
-        if (B != nullptr) {
-            B->delta_w = b_new_delta;
-        }
-        if (C != nullptr) {
-            C->delta_w = c_new_delta;
-        }
-
-
-        // pointers
-        g->left = C;
-        if (C != nullptr) {
-            C->parent = g;
-        }
-
-        p->right = g;
-        g->parent = p;
-        p->left = B;
-        if (B != nullptr) {
-            B->parent = p;
-        }
-
-        this->right = p;
-        p->parent = this;
-
-        this->parent = gg;
-        if (gg != nullptr) {
-            if (gg->left == g) {
-                gg->left = this;
-            } else if (gg->right == g) {
-                gg->right = this;
-            }
-        }
-
-        return true;
-    }
-
-    return false;
+    p->try_zig_right();
+    this->try_zig_right();
+    return true;
 }
 
 bool Node::try_zig_zag_left()
@@ -337,62 +200,12 @@ bool Node::try_zig_zag_left()
            *   *
           B     C
 */
-
     Node * p = this->parent;
-    if (this->is_left_child() && p->is_right_child()) {
-        Node * g = p->parent;
-        Node * gg = g->parent;
-        Node * B = this->left;
-        Node * C = this->right;
+    if (!this->is_left_child() || !p->is_right_child()) return false;
 
-        // deltas
-        int v_new_delta = this->delta_w + p->delta_w + g->delta_w;
-        int p_new_delta = p->delta_w + g->delta_w - v_new_delta;
-        int g_new_delta = g->delta_w - v_new_delta;
-
-        if (B != nullptr) {
-            int b_new_delta = B->delta_w + this->delta_w + p->delta_w;
-            B->delta_w = b_new_delta;
-        }
-        if (C != nullptr) {
-            int c_new_delta = C->delta_w + this->delta_w;
-            C->delta_w  = c_new_delta;
-        }
-        this->delta_w = v_new_delta;
-        p->delta_w = p_new_delta;
-        g->delta_w = g_new_delta;
-
-
-        // pointers
-        g->right = B;
-        if (B != nullptr) {
-            B->parent = g;
-        }
-
-        p->left = C;
-        if (C != nullptr) {
-            C->parent = p;
-        }
-
-        this->left = g;
-        g->parent = this;
-
-        this->right = p;
-        p->parent = this;
-
-        this->parent = gg;
-        if (gg != nullptr) {
-            if (gg->left == g) {
-                gg->left = this;
-            } else if (gg->right == g) {
-                gg->right = this;
-            }
-        }
-
-        return true;
-    }
-
-    return false;
+    this->try_zig_right();
+    this->try_zig_left();
+    return true;
 }
 
 bool Node::try_zig_zag_right()
@@ -415,60 +228,11 @@ bool Node::try_zig_zag_right()
 
 */
     Node * p = this->parent;
-    if (this->is_right_child() && p->is_left_child()) {
-        Node * g = p->parent;
-        Node * gg = g->parent;
-        Node * B = this->left;
-        Node * C = this->right;
+    if (!this->is_right_child() || !p->is_left_child()) return false;
 
-        // deltas
-        int v_new_delta = this->delta_w + p->delta_w + g->delta_w;
-        int p_new_delta = p->delta_w + g->delta_w - v_new_delta;
-        int g_new_delta = g->delta_w - v_new_delta;
-
-        if (B != nullptr) {
-            int b_new_delta = B->delta_w + this->delta_w;
-            B->delta_w = b_new_delta;
-        }
-        if (C != nullptr) {
-            int c_new_delta = C->delta_w + this->delta_w + p->delta_w;
-            C->delta_w  = c_new_delta;
-        }
-        this->delta_w = v_new_delta;
-        p->delta_w = p_new_delta;
-        g->delta_w = g_new_delta;
-
-
-        // pointers
-        p->right = B;
-        if (B != nullptr) {
-            B->parent = p;
-        }
-
-        g->left = C;
-        if (C != nullptr) {
-            C->parent = g;
-        }
-
-        this->left = p;
-        p->parent = this;
-
-        this->right = g;
-        g->parent = this;
-
-        this->parent = gg;
-        if (gg != nullptr) {
-            if (gg->left == g) {
-                gg->left = this;
-            } else if (gg->right == g) {
-                gg->right = this;
-            }
-        }
-
-        return true;
-    }
-
-    return false;
+    this->try_zig_left();
+    this->try_zig_right();
+    return true;
 }
 
 
@@ -483,6 +247,31 @@ void Node::splay()
 
         if (try_zig_left()) continue;
         if (try_zig_right()) continue;
+    }
+}
+
+
+void Node::update_my_aggregates()
+{
+    this->sum_agg = this->value
+            + (this->right ? this->right->sum_agg : 0)
+            + (this->left ? this->left->sum_agg : 0);
+
+    this->min_agg = qMin((this->right ? this->right->min_agg : INT32_MAX),
+                      (this->left ? this->left->min_agg : INT32_MAX));
+    this->min_agg = qMin(this->min_agg, this->value);
+
+    this->max_agg = qMax((this->right ? this->right->max_agg : INT32_MIN),
+                      (this->left ? this->left->max_agg : INT32_MIN));
+    this->max_agg = qMax(this->max_agg, this->value);
+}
+
+void Node::update_aggregates_up()
+{
+    Node * p = this;
+    while (p) {
+        p->update_my_aggregates();
+        p = p->parent;
     }
 }
 

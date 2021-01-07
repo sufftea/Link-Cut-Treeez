@@ -44,8 +44,6 @@ private slots:
     void on_pushButtonExpose_clicked();
     void on_pushButtonCut_clicked();
     void on_pushButtonLink_clicked();
-    void on_pushButtonOpenAddDialog_clicked();
-    void on_pushButtonAdd_clicked();
     void on_pushButtonEndOperation_clicked();
     void on_pushButtonOpenPresets_clicked();
 
@@ -59,8 +57,6 @@ private slots:
 
     void on_pushButtonClearLog_clicked();
     void on_pushButtonHideLog_clicked();
-    void on_pushButtonShowDelta_clicked();
-    void on_pushButtonFindLCA_clicked();
     void on_pushButtonSwitchTree_clicked();
 
 private:

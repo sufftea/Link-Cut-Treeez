@@ -3,6 +3,7 @@
 #include "Tree/Node.h"
 
 GraphicsAbstractNodeItem::GraphicsAbstractNodeItem(AbstractNode *my_abstract_node)
+    : pix(node_size_px, node_size_px)
 {
     this->my_abstract_node = my_abstract_node;
     update_pixmap();
@@ -24,26 +25,20 @@ void GraphicsAbstractNodeItem::update_pixmap()
     painter.setFont(font);
 
 
-    if (this->selection == GraphicsNodeItem::SelectionType::no_selection) {
+    if (this->view_type == ViewType::normal) {
         painter.setBrush(MyColors::blue);
         painter.drawEllipse(QRect(5, 5, node_size_px - 10, node_size_px - 10));
-    } else if (this->selection == GraphicsNodeItem::SelectionType::user_selected) {
+    } else if (this->view_type == ViewType::user_selected) {
         QPen thicker_pen(MyColors::white);
         thicker_pen.setWidth(6);
         painter.setPen(thicker_pen);
 
         painter.setBrush(MyColors::red);
         painter.drawEllipse(QRect(3, 3, node_size_px - 6, node_size_px - 6));
-    } else if (this->selection == GraphicsNodeItem::SelectionType::selection0) {
-        painter.setBrush(MyColors::light_red);
-        painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
-    } else if (this->selection == GraphicsNodeItem::SelectionType::selection1) {
-        painter.setBrush(MyColors::red);
-        painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
     }
 
     QString text;
-    text = QString::number(my_abstract_node->my_solid_node->get_value());
+    text = QString::number(my_abstract_node->my_solid_node->value);
 
     QPen text_pen(MyColors::white);
     text_pen.setWidth(3);
@@ -67,6 +62,19 @@ void GraphicsAbstractNodeItem::update_position(int node_offset, int solid_depth)
     }
 }
 
+void GraphicsAbstractNodeItem::set_view_type(GraphicsAbstractNodeItem::ViewType type)
+{
+    if (this->view_type != type) {
+        this->view_type = type;
+        update_pixmap();
+    }
+}
+
+GraphicsAbstractNodeItem::ViewType GraphicsAbstractNodeItem::get_view_type()
+{
+    return this->view_type;
+}
+
 QRectF GraphicsAbstractNodeItem::boundingRect() const
 {
     return QRectF(0, 0, this->node_size_px, this->node_size_px);
@@ -83,8 +91,8 @@ void GraphicsAbstractNodeItem::paint(QPainter *painter, const QStyleOptionGraphi
         QPointF a = QPoint(0, 0);
         QPointF b = my_abstract_node->parent->graphics->pos() - this->pos();
 
-        QPoint offset(GraphicsNodeItem::node_size_px / 2,
-                      GraphicsNodeItem::node_size_px / 2);
+        QPoint offset(node_size_px / 2,
+                      node_size_px / 2);
 
         a += offset;
         b += offset;
@@ -94,7 +102,7 @@ void GraphicsAbstractNodeItem::paint(QPainter *painter, const QStyleOptionGraphi
 
         QVector2D tang(-ab.y(), ab.x());
         tang.normalize();
-        tang *= GraphicsNodeItem::node_size_px / 2 - 5;
+        tang *= node_size_px / 2 - 5;
 
         QPointF a1 = a + tang.toPointF();
         QPointF b1 = b + tang.toPointF();
@@ -110,8 +118,8 @@ void GraphicsAbstractNodeItem::paint(QPainter *painter, const QStyleOptionGraphi
         QPointF a = QPoint(0, 0);
         QPointF b = my_abstract_node->parent->graphics->pos() - this->pos();
 
-        QPoint offset(GraphicsNodeItem::node_size_px / 2,
-                      GraphicsNodeItem::node_size_px / 2);
+        QPoint offset(node_size_px / 2,
+                      node_size_px / 2);
 
         a += offset;
         b += offset;
@@ -122,8 +130,8 @@ void GraphicsAbstractNodeItem::paint(QPainter *painter, const QStyleOptionGraphi
         ab.normalize();
         ba.normalize();
 
-        ab *= GraphicsNodeItem::node_size_px / 2;
-        ba *= GraphicsNodeItem::node_size_px / 2;
+        ab *= node_size_px / 2;
+        ba *= node_size_px / 2;
 
         a += ab.toPoint();
         b += ba.toPoint();

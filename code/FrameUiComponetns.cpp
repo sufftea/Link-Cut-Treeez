@@ -38,8 +38,6 @@ FrameUiComponetns::FrameUiComponetns(GraphicsLinkCutTree &graphics_tree,
 
     ui->labelSequence->setAttribute(Qt::WA_TransparentForMouseEvents);
 
-    ui->pushButtonShowDelta->setStyleSheet(ButtonStyles::switch_button_off);
-
     ui->framePopUpDialog->setMaximumHeight(0);
 
     // animations
@@ -135,8 +133,8 @@ void FrameUiComponetns::disable_operations_buttons()
 void FrameUiComponetns::on_pushButtonExpose_clicked()
 {
     if (selected_nodes.size() == 1) {
-        selected_nodes[0]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
-        selected_nodes[0]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::normal);
+        selected_nodes[0]->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
 
         tree->finish_operation();
         SequenceLog::clear();
@@ -159,8 +157,8 @@ void FrameUiComponetns::on_pushButtonCut_clicked()
 
         tree->start_cut(selected_nodes[0]);
 
-        selected_nodes[0]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
-        selected_nodes[0]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::normal);
+        selected_nodes[0]->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
         selected_nodes.clear();
 
         disable_operations_buttons();
@@ -177,10 +175,10 @@ void FrameUiComponetns::on_pushButtonLink_clicked()
 
         ui->labelSequence->setText(SequenceLog::get_text());
 
-        selected_nodes[0]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
-        selected_nodes[1]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
-        selected_nodes[0]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
-        selected_nodes[1]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
+        selected_nodes[0]->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::normal);
+        selected_nodes[1]->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::normal);
+        selected_nodes[0]->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
+        selected_nodes[1]->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
 
         selected_nodes.clear();
 
@@ -188,29 +186,7 @@ void FrameUiComponetns::on_pushButtonLink_clicked()
     }
 }
 
-void FrameUiComponetns::on_pushButtonOpenAddDialog_clicked()
-{
-    showPopUpDialogAnimation->start();
 
-}
-
-void FrameUiComponetns::on_pushButtonAdd_clicked()
-{
-    if (selected_nodes.size() == 1) {
-        tree->finish_operation();
-        SequenceLog::clear();
-        tree->start_add(selected_nodes[0], ui->spinBoxAddValue->value());
-        ui->labelSequence->setText(SequenceLog::get_text());
-
-        selected_nodes[0]->concrete_tree_graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
-        selected_nodes[0]->abstract.graphics->set_selection_type(GraphicsNodeItem::SelectionType::no_selection);
-        selected_nodes.clear();
-
-        disable_operations_buttons();
-    }
-
-    hidePopUpDialogAnimation->start();
-}
 
 void FrameUiComponetns::on_pushButtonEndOperation_clicked()
 {
@@ -362,23 +338,6 @@ void FrameUiComponetns::on_pushButtonHideLog_clicked()
         ui->pushButtonClearLog->hide();
         ui->pushButtonHideLog->setText("Show Log");
     }
-}
-
-void FrameUiComponetns::on_pushButtonShowDelta_clicked()
-{
-    if (graphics_tree.is_show_delta()) {
-        ui->pushButtonShowDelta->setStyleSheet(ButtonStyles::switch_button_off);
-        graphics_tree.set_show_delta(false);
-    } else {
-        ui->pushButtonShowDelta->setStyleSheet(ButtonStyles::switch_button_on);
-        graphics_tree.set_show_delta(true);
-    }
-}
-
-
-void FrameUiComponetns::on_pushButtonFindLCA_clicked()
-{
-
 }
 
 void FrameUiComponetns::on_pushButtonSwitchTree_clicked()

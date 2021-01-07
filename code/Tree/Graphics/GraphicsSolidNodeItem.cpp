@@ -3,12 +3,11 @@
 #include "Helpers/Colors.h"
 
 
-GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, bool show_delta, QGraphicsScene *my_scene)
-    : GraphicsNodeItem()
+GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, QGraphicsScene *my_scene)
+    : pix(node_size_px, node_size_px)
 {
     this->my_node = my_node;
     this->my_scene = my_scene;
-    this->show_delta = show_delta;
 
     update_pixmap();
 }
@@ -19,18 +18,22 @@ GraphicsSolidNodeItem::~GraphicsSolidNodeItem()
 }
 
 
-
-void GraphicsSolidNodeItem::set_show_delta(bool show)
-{
-    if (this->show_delta != show) {
-        this->show_delta = show;
-        this->update_pixmap();
-    }
-}
-
 void GraphicsSolidNodeItem::set_my_scene(QGraphicsScene *scene)
 {
     this->my_scene = scene;
+}
+
+void GraphicsSolidNodeItem::set_view_type(GraphicsSolidNodeItem::ViewType type)
+{
+    if (this->view_type != type) {
+        this->view_type = type;
+        update_pixmap();
+    }
+}
+
+GraphicsSolidNodeItem::ViewType GraphicsSolidNodeItem::get_view_type()
+{
+    return this->view_type;
 }
 
 
@@ -39,36 +42,28 @@ void GraphicsSolidNodeItem::update_pixmap()
     pix.fill(Qt::transparent);
 
     QPainter painter(&pix);
-    painter.setRenderHint(QPainter::RenderHint::Antialiasing);
+    painter.setRenderHints(QPainter::RenderHint::TextAntialiasing
+                           | QPainter::RenderHint::HighQualityAntialiasing);
     QPen white_pen(MyColors::white);
     white_pen.setWidth(3);
     painter.setPen(white_pen);
 
     QFont font;
-    font.setPixelSize(27);
+    font.setPixelSize(20);
     painter.setFont(font);
 
 
-    if (this->selection == GraphicsNodeItem::SelectionType::no_selection) {
+    if (this->view_type == ViewType::normal) {
         painter.setBrush(MyColors::blue);
         painter.drawEllipse(QRect(5, 5, node_size_px - 10, node_size_px - 10));
-    } else if (this->selection == GraphicsNodeItem::SelectionType::user_selected) {
-        painter.setBrush(MyColors::red);
-        painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
-    } else if (this->selection == GraphicsNodeItem::SelectionType::selection0) {
-        painter.setBrush(MyColors::light_red);
-        painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
-    } else if (this->selection == GraphicsNodeItem::SelectionType::selection1) {
+    } else if (this->view_type == ViewType::user_selected) {
         painter.setBrush(MyColors::red);
         painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
     }
 
     QString text;
-    if (this->show_delta) {
-        text = "Δ" + QString::number(my_node->delta_w);
-    } else {
-        text = QString::number(my_node->get_value());
-    }
+    text = QString::number(my_node->value);
+    text += "\n" + QString::number(my_node->min_agg);
 
     painter.drawText(QRect(0, 0, node_size_px, node_size_px),
                       Qt::AlignHCenter | Qt::AlignVCenter,

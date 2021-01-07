@@ -113,29 +113,6 @@ private:
         bool make_step() override;
     };
 
-    class OperationAddConst : public StepByStepOperation
-    {
-    private:
-        enum Step {
-            start_expose_v = 0,
-            expose_v,
-            add
-        };
-
-        Step current_step = Step::start_expose_v;
-        Node * v;
-        int value;
-        OperationExpose * expose_operation = nullptr;
-
-    public:
-        OperationAddConst(Node * v, int value);
-        ~OperationAddConst() override;
-
-        bool make_step() override;
-    };
-
-
-
     StepByStepOperation * current_operation = nullptr;
 
 public:
@@ -163,10 +140,6 @@ public:
     void start_expose(Node * v); // DONE
     void start_link(Node * v, Node * u); // DONE
     void start_cut(Node * v); // DONE
-
-    void start_lca(Node * a, Node * b);
-    void start_add(Node * v, int c); // DONE
-
 
     /*
      * after an operation has been started, call this function

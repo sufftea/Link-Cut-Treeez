@@ -1,7 +1,6 @@
 #include "GraphicsNodeItem.h"
 
 GraphicsNodeItem::GraphicsNodeItem()
-    : pix(QSize(node_size_px, node_size_px))
 {
 
 }
@@ -19,17 +18,4 @@ void GraphicsNodeItem::animate()
         QPointF m = (next_pos - last_pos) * v;
         this->setPos(last_pos + m);
     }
-}
-
-void GraphicsNodeItem::set_selection_type(GraphicsNodeItem::SelectionType type)
-{
-    if (this->selection != type) {
-        this->selection = type;
-        update_pixmap();
-    }
-}
-
-GraphicsNodeItem::SelectionType GraphicsNodeItem::get_selection_type()
-{
-    return this->selection;
 }
