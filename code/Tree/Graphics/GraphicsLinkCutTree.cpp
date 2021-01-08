@@ -1,6 +1,8 @@
 #include "Tree/Graphics/GraphicsLinkCutTree.h"
 #include "Helpers/Colors.h"
 
+std::function<qreal(qreal)> GraphicsLinkCutTree::easing_curve = Animation::linear;
+
 GraphicsLinkCutTree::GraphicsLinkCutTree()
 {
     concrete_tree_scene = new QGraphicsScene;
@@ -10,6 +12,8 @@ GraphicsLinkCutTree::GraphicsLinkCutTree()
     animation_timer->setInterval(20);
     connect(animation_timer, SIGNAL(timeout()), this, SLOT(animate_scene()));
     animation_timer->start();
+
+
 }
 
 GraphicsLinkCutTree::~GraphicsLinkCutTree()
@@ -100,8 +104,9 @@ void GraphicsLinkCutTree::update_scene()
     }
 }
 
-void GraphicsLinkCutTree::set_animation_easing_curve(std::function<double (double)> f)
+void GraphicsLinkCutTree::set_animation_easing_curve(std::function<qreal (qreal)> f)
 {
+    this->easing_curve = f;
     for (Node * node : tree.nodes) {
         node->concrete_tree_graphics->movement_anim.set_easing_curve(f);
         node->abstract.graphics->movement_anim.set_easing_curve(f);
@@ -167,11 +172,18 @@ Node *GraphicsLinkCutTree::node_at(QPoint pos)
     return nullptr;
 }
 
-void GraphicsLinkCutTree::unselect_all_nodes()
+void GraphicsLinkCutTree::reset_all_nodes()
 {
     for (Node * node : tree.nodes) {
-        node->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::normal);
+        node->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeView::normal);
         node->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
+    }
+}
+
+void GraphicsLinkCutTree::set_displayed_data(GraphicsSolidNodeItem::NodeData type)
+{
+    for (Node * node: tree.nodes) {
+        node->concrete_tree_graphics->set_displayed_data(type);
     }
 }
 

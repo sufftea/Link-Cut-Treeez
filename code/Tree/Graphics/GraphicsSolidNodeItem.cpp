@@ -23,17 +23,25 @@ void GraphicsSolidNodeItem::set_my_scene(QGraphicsScene *scene)
     this->my_scene = scene;
 }
 
-void GraphicsSolidNodeItem::set_view_type(GraphicsSolidNodeItem::ViewType type)
+void GraphicsSolidNodeItem::set_displayed_data(GraphicsSolidNodeItem::NodeData type)
 {
-    if (this->view_type != type) {
-        this->view_type = type;
+    if (this->displayed_data != type) {
+        this->displayed_data = type;
         update_pixmap();
     }
 }
 
-GraphicsSolidNodeItem::ViewType GraphicsSolidNodeItem::get_view_type()
+void GraphicsSolidNodeItem::set_node_view(GraphicsSolidNodeItem::NodeView type)
 {
-    return this->view_type;
+    if (this->node_view != type) {
+        this->node_view = type;
+        update_pixmap();
+    }
+}
+
+GraphicsSolidNodeItem::NodeView GraphicsSolidNodeItem::get_node_view()
+{
+    return this->node_view;
 }
 
 
@@ -53,18 +61,25 @@ void GraphicsSolidNodeItem::update_pixmap()
     painter.setFont(font);
 
 
-    if (this->view_type == ViewType::normal) {
+    if (this->node_view == NodeView::normal) {
         painter.setBrush(MyColors::blue);
         painter.drawEllipse(QRect(5, 5, node_size_px - 10, node_size_px - 10));
-    } else if (this->view_type == ViewType::user_selected) {
+    } else if (this->node_view == NodeView::user_selected) {
         painter.setBrush(MyColors::red);
         painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
     }
 
     QString text;
-    text = QString::number(my_node->value);
-    text += "\n" + QString::number(my_node->min_agg);
 
+    text = QString::number(my_node->value);
+
+    if (displayed_data == NodeData::max) {
+        text += "\n" + QString::number(my_node->max_agg);
+    } else if (displayed_data == NodeData::min) {
+        text += "\n" + QString::number(my_node->min_agg);
+    } else if (displayed_data == NodeData::sum) {
+        text += "\n" + QString::number(my_node->sum_agg);
+    }
     painter.drawText(QRect(0, 0, node_size_px, node_size_px),
                       Qt::AlignHCenter | Qt::AlignVCenter,
                       text);
@@ -112,13 +127,7 @@ QRectF GraphicsSolidNodeItem::boundingRect() const
 
 void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    QPen white_pen(MyColors::white);
-    white_pen.setWidth(5);
-    painter->setPen(white_pen);
-
-
-    // draw node's parent line
-    // either just a parant edge [2] or a path-parent pointer [1]
+    // draw node's parent edge (can be a path-parent pointer or a normal edge)
     if (this->my_node->is_solid_root()) {
         // since the node is a solid root, its parent is the path-parent
         if (this->my_node->parent != nullptr) {
@@ -129,7 +138,7 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
             red_dot_pen.setWidth(5);
 
             QPen eraser(MyColors::black);
-            eraser.setWidth(12);
+            eraser.setWidth(10);
             eraser.setStyle(Qt::PenStyle::SolidLine);
 
             QPoint offset(GraphicsSolidNodeItem::node_size_px / 2,
@@ -148,13 +157,15 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
 
             // draw an arrow at the end of the path
             red_dot_pen.setStyle(Qt::PenStyle::SolidLine);
-            painter->setPen(red_dot_pen);
+            QPen red_pen(MyColors::red);
+            red_pen.setWidth(3);
+            painter->setPen(red_pen);
             painter->setBrush(MyColors::red);
 
             QPolygonF arrow({
-                              QPointF(-13, 0),
-                              QPointF(0, -5),
-                              QPointF(0, 5)
+                              QPointF(-17, 0),
+                              QPointF(0, -8),
+                              QPointF(0, 8)
                           });
 
             qreal angle = -path_parent_path.angleAtPercent(0);
@@ -187,6 +198,10 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
 
         a += ab.toPoint();
         b += ba.toPoint();
+
+        QPen white_pen(MyColors::white);
+        white_pen.setWidth(7);
+        painter->setPen(white_pen);
 
         painter->drawLine(QLineF(a, b));
     }

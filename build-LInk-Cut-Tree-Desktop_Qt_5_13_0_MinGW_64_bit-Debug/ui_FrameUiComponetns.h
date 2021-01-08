@@ -72,16 +72,17 @@ public:
     QFrame *line;
     QPushButton *pushButtonOpenPresets;
     QPushButton *pushButtonSwitchTree;
-    QFrame *frameOperationsButtons;
-    QGridLayout *gridLayout;
-    QPushButton *pushButtonExpose;
-    QSpacerItem *horizontalSpacer;
-    QPushButton *pushButtonLink;
-    QPushButton *pushButtonCut;
+    QFrame *frame_2;
+    QGridLayout *gridLayout_4;
     QPushButton *pushButtonPathMin;
     QPushButton *pushButtonPathMax;
     QPushButton *pushButtonPathSum;
-    QPushButton *pushButtonPathProduct;
+    QFrame *frameOperationsButtons;
+    QGridLayout *gridLayout;
+    QPushButton *pushButtonCut;
+    QPushButton *pushButtonLink;
+    QSpacerItem *horizontalSpacer;
+    QPushButton *pushButtonExpose;
     QVBoxLayout *verticalLayout_2;
     QLabel *label;
     QSlider *horizontalSliderAnimationSpeed;
@@ -92,7 +93,7 @@ public:
     {
         if (FrameUiComponetns->objectName().isEmpty())
             FrameUiComponetns->setObjectName(QString::fromUtf8("FrameUiComponetns"));
-        FrameUiComponetns->resize(1478, 650);
+        FrameUiComponetns->resize(1725, 670);
         verticalLayout = new QVBoxLayout(FrameUiComponetns);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         gridLayoutTopPart = new QGridLayout();
@@ -114,7 +115,7 @@ public:
         scrollAreaLog->setWidgetResizable(true);
         scrollAreaWidgetContents_2 = new QWidget();
         scrollAreaWidgetContents_2->setObjectName(QString::fromUtf8("scrollAreaWidgetContents_2"));
-        scrollAreaWidgetContents_2->setGeometry(QRect(0, 0, 450, 190));
+        scrollAreaWidgetContents_2->setGeometry(QRect(0, 0, 450, 203));
         verticalLayout_4 = new QVBoxLayout(scrollAreaWidgetContents_2);
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
         verticalLayout_4->setContentsMargins(0, 0, 0, 0);
@@ -622,21 +623,22 @@ public:
 
         horizontalLayout->addWidget(pushButtonSwitchTree);
 
-        frameOperationsButtons = new QFrame(frame);
-        frameOperationsButtons->setObjectName(QString::fromUtf8("frameOperationsButtons"));
-        frameOperationsButtons->setFrameShape(QFrame::StyledPanel);
-        frameOperationsButtons->setFrameShadow(QFrame::Raised);
-        gridLayout = new QGridLayout(frameOperationsButtons);
-        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        gridLayout->setContentsMargins(0, 0, 0, 0);
-        pushButtonExpose = new QPushButton(frameOperationsButtons);
-        pushButtonExpose->setObjectName(QString::fromUtf8("pushButtonExpose"));
-        sizePolicy.setHeightForWidth(pushButtonExpose->sizePolicy().hasHeightForWidth());
-        pushButtonExpose->setSizePolicy(sizePolicy);
-        pushButtonExpose->setMinimumSize(QSize(100, 0));
-        pushButtonExpose->setMaximumSize(QSize(100, 16777215));
-        pushButtonExpose->setFont(font3);
-        pushButtonExpose->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+        frame_2 = new QFrame(frame);
+        frame_2->setObjectName(QString::fromUtf8("frame_2"));
+        frame_2->setMaximumSize(QSize(230, 16777215));
+        frame_2->setFrameShape(QFrame::StyledPanel);
+        frame_2->setFrameShadow(QFrame::Raised);
+        gridLayout_4 = new QGridLayout(frame_2);
+        gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
+        gridLayout_4->setContentsMargins(0, 0, 0, 0);
+        pushButtonPathMin = new QPushButton(frame_2);
+        pushButtonPathMin->setObjectName(QString::fromUtf8("pushButtonPathMin"));
+        sizePolicy.setHeightForWidth(pushButtonPathMin->sizePolicy().hasHeightForWidth());
+        pushButtonPathMin->setSizePolicy(sizePolicy);
+        pushButtonPathMin->setMinimumSize(QSize(110, 0));
+        pushButtonPathMin->setMaximumSize(QSize(100, 16777215));
+        pushButtonPathMin->setFont(font3);
+        pushButtonPathMin->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "color: rgb(243, 234, 226);\n"
 "background-color: transparent;\n"
 "\n"
@@ -656,11 +658,104 @@ public:
 "background-color: rgba(255, 255, 255, 20);\n"
 "}"));
 
-        gridLayout->addWidget(pushButtonExpose, 0, 3, 2, 1);
+        gridLayout_4->addWidget(pushButtonPathMin, 0, 0, 1, 1);
 
-        horizontalSpacer = new QSpacerItem(482, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        pushButtonPathMax = new QPushButton(frame_2);
+        pushButtonPathMax->setObjectName(QString::fromUtf8("pushButtonPathMax"));
+        sizePolicy.setHeightForWidth(pushButtonPathMax->sizePolicy().hasHeightForWidth());
+        pushButtonPathMax->setSizePolicy(sizePolicy);
+        pushButtonPathMax->setMinimumSize(QSize(110, 0));
+        pushButtonPathMax->setMaximumSize(QSize(100, 16777215));
+        pushButtonPathMax->setFont(font3);
+        pushButtonPathMax->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"color: rgb(243, 234, 226);\n"
+"background-color: transparent;\n"
+"\n"
+"border-radius: 5px;\n"
+"border: 2px solid;\n"
+"border-color: rgb(243, 234, 226);\n"
+"}\n"
+"QPushButton:enabled:hover {\n"
+"background-color: rgb(0, 125, 176);\n"
+"}\n"
+"QPushButton:enabled:pressed {\n"
+"background-color:  rgb(0, 105, 156);\n"
+"}\n"
+"QPushButton:disabled {\n"
+"border-color: rgba(243, 234, 226, 100);\n"
+"color:  rgba(243, 234, 226, 100);\n"
+"background-color: rgba(255, 255, 255, 20);\n"
+"}"));
 
-        gridLayout->addItem(horizontalSpacer, 0, 0, 1, 1);
+        gridLayout_4->addWidget(pushButtonPathMax, 1, 0, 1, 1);
+
+        pushButtonPathSum = new QPushButton(frame_2);
+        pushButtonPathSum->setObjectName(QString::fromUtf8("pushButtonPathSum"));
+        sizePolicy.setHeightForWidth(pushButtonPathSum->sizePolicy().hasHeightForWidth());
+        pushButtonPathSum->setSizePolicy(sizePolicy);
+        pushButtonPathSum->setMinimumSize(QSize(110, 0));
+        pushButtonPathSum->setMaximumSize(QSize(100, 16777215));
+        pushButtonPathSum->setFont(font3);
+        pushButtonPathSum->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"color: rgb(243, 234, 226);\n"
+"background-color: transparent;\n"
+"\n"
+"border-radius: 5px;\n"
+"border: 2px solid;\n"
+"border-color: rgb(243, 234, 226);\n"
+"}\n"
+"QPushButton:enabled:hover {\n"
+"background-color: rgb(0, 125, 176);\n"
+"}\n"
+"QPushButton:enabled:pressed {\n"
+"background-color:  rgb(0, 105, 156);\n"
+"}\n"
+"QPushButton:disabled {\n"
+"border-color: rgba(243, 234, 226, 100);\n"
+"color:  rgba(243, 234, 226, 100);\n"
+"background-color: rgba(255, 255, 255, 20);\n"
+"}"));
+
+        gridLayout_4->addWidget(pushButtonPathSum, 0, 1, 2, 1);
+
+
+        horizontalLayout->addWidget(frame_2);
+
+        frameOperationsButtons = new QFrame(frame);
+        frameOperationsButtons->setObjectName(QString::fromUtf8("frameOperationsButtons"));
+        frameOperationsButtons->setFrameShape(QFrame::StyledPanel);
+        frameOperationsButtons->setFrameShadow(QFrame::Raised);
+        gridLayout = new QGridLayout(frameOperationsButtons);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        gridLayout->setContentsMargins(0, 0, 0, 0);
+        pushButtonCut = new QPushButton(frameOperationsButtons);
+        pushButtonCut->setObjectName(QString::fromUtf8("pushButtonCut"));
+        sizePolicy.setHeightForWidth(pushButtonCut->sizePolicy().hasHeightForWidth());
+        pushButtonCut->setSizePolicy(sizePolicy);
+        pushButtonCut->setMinimumSize(QSize(100, 0));
+        pushButtonCut->setMaximumSize(QSize(100, 16777215));
+        pushButtonCut->setFont(font3);
+        pushButtonCut->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"color: rgb(243, 234, 226);\n"
+"background-color: transparent;\n"
+"\n"
+"border-radius: 5px;\n"
+"border: 2px solid;\n"
+"border-color: rgb(243, 234, 226);\n"
+"}\n"
+"QPushButton:enabled:hover {\n"
+"background-color: rgb(0, 125, 176);\n"
+"}\n"
+"QPushButton:enabled:pressed {\n"
+"background-color:  rgb(0, 105, 156);\n"
+"}\n"
+"QPushButton:disabled {\n"
+"border-color: rgba(243, 234, 226, 100);\n"
+"color:  rgba(243, 234, 226, 100);\n"
+"background-color: rgba(255, 255, 255, 20);\n"
+"}"));
+
+        gridLayout->addWidget(pushButtonCut, 1, 2, 1, 1);
 
         pushButtonLink = new QPushButton(frameOperationsButtons);
         pushButtonLink->setObjectName(QString::fromUtf8("pushButtonLink"));
@@ -689,16 +784,20 @@ public:
 "background-color: rgba(255, 255, 255, 20);\n"
 "}"));
 
-        gridLayout->addWidget(pushButtonLink, 0, 4, 1, 1);
+        gridLayout->addWidget(pushButtonLink, 0, 2, 1, 1);
 
-        pushButtonCut = new QPushButton(frameOperationsButtons);
-        pushButtonCut->setObjectName(QString::fromUtf8("pushButtonCut"));
-        sizePolicy.setHeightForWidth(pushButtonCut->sizePolicy().hasHeightForWidth());
-        pushButtonCut->setSizePolicy(sizePolicy);
-        pushButtonCut->setMinimumSize(QSize(100, 0));
-        pushButtonCut->setMaximumSize(QSize(100, 16777215));
-        pushButtonCut->setFont(font3);
-        pushButtonCut->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+        horizontalSpacer = new QSpacerItem(482, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout->addItem(horizontalSpacer, 0, 0, 1, 1);
+
+        pushButtonExpose = new QPushButton(frameOperationsButtons);
+        pushButtonExpose->setObjectName(QString::fromUtf8("pushButtonExpose"));
+        sizePolicy.setHeightForWidth(pushButtonExpose->sizePolicy().hasHeightForWidth());
+        pushButtonExpose->setSizePolicy(sizePolicy);
+        pushButtonExpose->setMinimumSize(QSize(100, 0));
+        pushButtonExpose->setMaximumSize(QSize(100, 16777215));
+        pushButtonExpose->setFont(font3);
+        pushButtonExpose->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "color: rgb(243, 234, 226);\n"
 "background-color: transparent;\n"
 "\n"
@@ -718,123 +817,7 @@ public:
 "background-color: rgba(255, 255, 255, 20);\n"
 "}"));
 
-        gridLayout->addWidget(pushButtonCut, 1, 4, 1, 1);
-
-        pushButtonPathMin = new QPushButton(frameOperationsButtons);
-        pushButtonPathMin->setObjectName(QString::fromUtf8("pushButtonPathMin"));
-        sizePolicy.setHeightForWidth(pushButtonPathMin->sizePolicy().hasHeightForWidth());
-        pushButtonPathMin->setSizePolicy(sizePolicy);
-        pushButtonPathMin->setMinimumSize(QSize(110, 0));
-        pushButtonPathMin->setMaximumSize(QSize(100, 16777215));
-        pushButtonPathMin->setFont(font3);
-        pushButtonPathMin->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"color: rgb(243, 234, 226);\n"
-"background-color: transparent;\n"
-"\n"
-"border-radius: 5px;\n"
-"border: 2px solid;\n"
-"border-color: rgb(243, 234, 226);\n"
-"}\n"
-"QPushButton:enabled:hover {\n"
-"background-color: rgb(0, 125, 176);\n"
-"}\n"
-"QPushButton:enabled:pressed {\n"
-"background-color:  rgb(0, 105, 156);\n"
-"}\n"
-"QPushButton:disabled {\n"
-"border-color: rgba(243, 234, 226, 100);\n"
-"color:  rgba(243, 234, 226, 100);\n"
-"background-color: rgba(255, 255, 255, 20);\n"
-"}"));
-
-        gridLayout->addWidget(pushButtonPathMin, 0, 2, 1, 1);
-
-        pushButtonPathMax = new QPushButton(frameOperationsButtons);
-        pushButtonPathMax->setObjectName(QString::fromUtf8("pushButtonPathMax"));
-        sizePolicy.setHeightForWidth(pushButtonPathMax->sizePolicy().hasHeightForWidth());
-        pushButtonPathMax->setSizePolicy(sizePolicy);
-        pushButtonPathMax->setMinimumSize(QSize(110, 0));
-        pushButtonPathMax->setMaximumSize(QSize(100, 16777215));
-        pushButtonPathMax->setFont(font3);
-        pushButtonPathMax->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"color: rgb(243, 234, 226);\n"
-"background-color: transparent;\n"
-"\n"
-"border-radius: 5px;\n"
-"border: 2px solid;\n"
-"border-color: rgb(243, 234, 226);\n"
-"}\n"
-"QPushButton:enabled:hover {\n"
-"background-color: rgb(0, 125, 176);\n"
-"}\n"
-"QPushButton:enabled:pressed {\n"
-"background-color:  rgb(0, 105, 156);\n"
-"}\n"
-"QPushButton:disabled {\n"
-"border-color: rgba(243, 234, 226, 100);\n"
-"color:  rgba(243, 234, 226, 100);\n"
-"background-color: rgba(255, 255, 255, 20);\n"
-"}"));
-
-        gridLayout->addWidget(pushButtonPathMax, 1, 2, 1, 1);
-
-        pushButtonPathSum = new QPushButton(frameOperationsButtons);
-        pushButtonPathSum->setObjectName(QString::fromUtf8("pushButtonPathSum"));
-        sizePolicy.setHeightForWidth(pushButtonPathSum->sizePolicy().hasHeightForWidth());
-        pushButtonPathSum->setSizePolicy(sizePolicy);
-        pushButtonPathSum->setMinimumSize(QSize(110, 0));
-        pushButtonPathSum->setMaximumSize(QSize(100, 16777215));
-        pushButtonPathSum->setFont(font3);
-        pushButtonPathSum->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"color: rgb(243, 234, 226);\n"
-"background-color: transparent;\n"
-"\n"
-"border-radius: 5px;\n"
-"border: 2px solid;\n"
-"border-color: rgb(243, 234, 226);\n"
-"}\n"
-"QPushButton:enabled:hover {\n"
-"background-color: rgb(0, 125, 176);\n"
-"}\n"
-"QPushButton:enabled:pressed {\n"
-"background-color:  rgb(0, 105, 156);\n"
-"}\n"
-"QPushButton:disabled {\n"
-"border-color: rgba(243, 234, 226, 100);\n"
-"color:  rgba(243, 234, 226, 100);\n"
-"background-color: rgba(255, 255, 255, 20);\n"
-"}"));
-
-        gridLayout->addWidget(pushButtonPathSum, 0, 1, 1, 1);
-
-        pushButtonPathProduct = new QPushButton(frameOperationsButtons);
-        pushButtonPathProduct->setObjectName(QString::fromUtf8("pushButtonPathProduct"));
-        sizePolicy.setHeightForWidth(pushButtonPathProduct->sizePolicy().hasHeightForWidth());
-        pushButtonPathProduct->setSizePolicy(sizePolicy);
-        pushButtonPathProduct->setMinimumSize(QSize(110, 0));
-        pushButtonPathProduct->setMaximumSize(QSize(100, 16777215));
-        pushButtonPathProduct->setFont(font3);
-        pushButtonPathProduct->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"color: rgb(243, 234, 226);\n"
-"background-color: transparent;\n"
-"\n"
-"border-radius: 5px;\n"
-"border: 2px solid;\n"
-"border-color: rgb(243, 234, 226);\n"
-"}\n"
-"QPushButton:enabled:hover {\n"
-"background-color: rgb(0, 125, 176);\n"
-"}\n"
-"QPushButton:enabled:pressed {\n"
-"background-color:  rgb(0, 105, 156);\n"
-"}\n"
-"QPushButton:disabled {\n"
-"border-color: rgba(243, 234, 226, 100);\n"
-"color:  rgba(243, 234, 226, 100);\n"
-"background-color: rgba(255, 255, 255, 20);\n"
-"}"));
-
-        gridLayout->addWidget(pushButtonPathProduct, 1, 1, 1, 1);
+        gridLayout->addWidget(pushButtonExpose, 0, 1, 2, 1);
 
 
         horizontalLayout->addWidget(frameOperationsButtons);
@@ -954,19 +937,18 @@ public:
         pushButtonPreset6->setText(QCoreApplication::translate("FrameUiComponetns", "6", nullptr));
         pushButtonPreset5->setText(QCoreApplication::translate("FrameUiComponetns", "5", nullptr));
         pushButtonPreset4->setText(QCoreApplication::translate("FrameUiComponetns", "4", nullptr));
-        pushButtonPreset3->setText(QCoreApplication::translate("FrameUiComponetns", "3", nullptr));
+        pushButtonPreset3->setText(QCoreApplication::translate("FrameUiComponetns", "3 - octopus", nullptr));
         pushButtonPreset2->setText(QCoreApplication::translate("FrameUiComponetns", "2 - fork", nullptr));
         pushButtonPreset1->setText(QCoreApplication::translate("FrameUiComponetns", "1 - stairway", nullptr));
         pushButtonReset->setText(QCoreApplication::translate("FrameUiComponetns", "Reset", nullptr));
         pushButtonOpenPresets->setText(QCoreApplication::translate("FrameUiComponetns", "Presets", nullptr));
         pushButtonSwitchTree->setText(QCoreApplication::translate("FrameUiComponetns", "Concrete tree", nullptr));
-        pushButtonExpose->setText(QCoreApplication::translate("FrameUiComponetns", "Expose", nullptr));
-        pushButtonLink->setText(QCoreApplication::translate("FrameUiComponetns", "Link", nullptr));
-        pushButtonCut->setText(QCoreApplication::translate("FrameUiComponetns", "Cut", nullptr));
         pushButtonPathMin->setText(QCoreApplication::translate("FrameUiComponetns", "Min", nullptr));
         pushButtonPathMax->setText(QCoreApplication::translate("FrameUiComponetns", "Max", nullptr));
         pushButtonPathSum->setText(QCoreApplication::translate("FrameUiComponetns", "Sum", nullptr));
-        pushButtonPathProduct->setText(QCoreApplication::translate("FrameUiComponetns", "Prod", nullptr));
+        pushButtonCut->setText(QCoreApplication::translate("FrameUiComponetns", "Cut", nullptr));
+        pushButtonLink->setText(QCoreApplication::translate("FrameUiComponetns", "Link", nullptr));
+        pushButtonExpose->setText(QCoreApplication::translate("FrameUiComponetns", "Expose", nullptr));
         label->setText(QCoreApplication::translate("FrameUiComponetns", "animation speed", nullptr));
         pushButtonEndOperation->setText(QCoreApplication::translate("FrameUiComponetns", "End", nullptr));
         pushButtonMakeStep->setText(QCoreApplication::translate("FrameUiComponetns", "Step", nullptr));

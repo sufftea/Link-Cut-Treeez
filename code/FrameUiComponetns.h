@@ -59,6 +59,12 @@ private slots:
     void on_pushButtonHideLog_clicked();
     void on_pushButtonSwitchTree_clicked();
 
+    void on_pushButtonPathSum_clicked();
+
+    void on_pushButtonPathMin_clicked();
+
+    void on_pushButtonPathMax_clicked();
+
 private:
 
     QPropertyAnimation * showPresetsListAnimation;

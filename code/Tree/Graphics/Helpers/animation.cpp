@@ -1,8 +1,9 @@
-#include "Tree/Graphics/Helpers/Animation.h"
+#include "Tree/Graphics/Helpers/animation.h"
+#include"Tree/Graphics/GraphicsLinkCutTree.h"
 
 Animation::Animation()
 {
-
+    this->easing_curve = GraphicsLinkCutTree::easing_curve;
 }
 
 qreal Animation::get_value(bool dont_increment)
@@ -24,11 +25,7 @@ qreal Animation::get_value(bool dont_increment)
         v = 1 - v;
     }
 
-    qreal res = easing_curve(v);
-    if (res > 1) res = 1;
-    if (res < 0) res = 0;
-
-    return res;
+    return easing_curve(v);
 }
 
 void Animation::set_reversed(bool is_inversed)
@@ -78,12 +75,14 @@ double Animation::ease_out_cubic(qreal t)
     return 1 - pow(1 - t, 3);
 }
 
-double Animation::ease_in(qreal t)
+double Animation::ease_out_circ(qreal t)
 {
-    return t;
+    return sqrt(1 - pow(t - 1, 2));
 }
 
-double Animation::ease_in_out(double t)
+double Animation::ease_in_out_circ(qreal t)
 {
-    return t;
+    return t < 0.5
+      ? (1 - sqrt(1 - pow(2 * t, 2))) / 2
+      : (sqrt(1 - pow(-2 * t + 2, 2)) + 1) / 2;
 }

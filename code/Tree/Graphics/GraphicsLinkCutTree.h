@@ -25,12 +25,12 @@ class GraphicsLinkCutTree : public QObject
     void update_abstract_tree_scene();
 
 public:   
+    static std::function<qreal(qreal)> easing_curve;
+    LinkCutTree tree;
+
     GraphicsLinkCutTree();
     ~GraphicsLinkCutTree();
 
-
-
-    LinkCutTree tree;
 
     /*
      * Initializes a Link-cut tree of size [size] and all the graphics for it.
@@ -49,7 +49,7 @@ public:
     /*
      * Two following functions are applied to every GraphicsNode on the scene.
     */
-    void set_animation_easing_curve(std::function<double(double)> f);
+    void set_animation_easing_curve(std::function<qreal(qreal)> f);
     bool set_animation_speed(qreal p);
 
     /*
@@ -57,7 +57,8 @@ public:
     */
     Node * node_at(QPoint pos);
 
-    void unselect_all_nodes();
+    void reset_all_nodes();
+    void set_displayed_data(GraphicsSolidNodeItem::NodeData type);
 
     QGraphicsScene * get_abstract_tree_scene();
     QGraphicsScene * get_concrete_tree_scene();

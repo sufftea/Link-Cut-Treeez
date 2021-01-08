@@ -36,8 +36,8 @@ public:
     // easing curves
     static qreal linear(qreal t);
     static qreal ease_out_cubic(qreal t);
-    static qreal ease_in(qreal t);
-    static qreal ease_in_out(qreal t);
+    static qreal ease_out_circ(qreal t);
+    static qreal ease_in_out_circ(qreal t);
 };
 
 #endif // ANIMATION_H

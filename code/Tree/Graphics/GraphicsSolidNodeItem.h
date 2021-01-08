@@ -19,10 +19,18 @@ class GraphicsSolidNodeItem : public GraphicsNodeItem
 {
 
 public:
-    enum class ViewType
+    enum class NodeView
     {
         normal = 0,
-        user_selected,
+        user_selected
+    };
+
+    enum class NodeData
+    {
+        value = 0,
+        sum,
+        min,
+        max
     };
 
     static const int node_size_px = 70;
@@ -59,15 +67,17 @@ public:
     */
     void set_my_scene(QGraphicsScene * scene);
 
-    void set_view_type(ViewType type);
-    ViewType get_view_type();
+    void set_displayed_data(NodeData type);
+    void set_node_view(NodeView type);
+    NodeView get_node_view();
 
 
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
 private:
-    ViewType view_type = ViewType::normal;
+    NodeView node_view = NodeView::normal;
+    NodeData displayed_data = NodeData::value;
     QGraphicsScene * my_scene = nullptr;
     QPixmap pix;
 };

@@ -3,7 +3,7 @@
 
 #include <QGraphicsItem>
 
-#include "Tree/Graphics/Helpers/Animation.h"
+#include "Tree/Graphics/Helpers/animation.h"
 
 class GraphicsNodeItem : public QGraphicsItem
 {

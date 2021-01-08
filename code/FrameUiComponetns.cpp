@@ -133,7 +133,7 @@ void FrameUiComponetns::disable_operations_buttons()
 void FrameUiComponetns::on_pushButtonExpose_clicked()
 {
     if (selected_nodes.size() == 1) {
-        selected_nodes[0]->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::normal);
+        selected_nodes[0]->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeView::normal);
         selected_nodes[0]->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
 
         tree->finish_operation();
@@ -157,7 +157,7 @@ void FrameUiComponetns::on_pushButtonCut_clicked()
 
         tree->start_cut(selected_nodes[0]);
 
-        selected_nodes[0]->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::normal);
+        selected_nodes[0]->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeView::normal);
         selected_nodes[0]->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
         selected_nodes.clear();
 
@@ -175,8 +175,8 @@ void FrameUiComponetns::on_pushButtonLink_clicked()
 
         ui->labelSequence->setText(SequenceLog::get_text());
 
-        selected_nodes[0]->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::normal);
-        selected_nodes[1]->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::normal);
+        selected_nodes[0]->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeView::normal);
+        selected_nodes[1]->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeView::normal);
         selected_nodes[0]->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
         selected_nodes[1]->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
 
@@ -295,6 +295,44 @@ void FrameUiComponetns::on_pushButtonPreset3_clicked()
 {
     selected_nodes.clear();
     hidePresetsListAnimation->start();
+
+    graphics_tree.init(21);
+
+    QVector<Node*> &nodes = tree->nodes;
+
+    for (Node * node : nodes) {
+        node->value = qrand() % 100;
+    }
+
+    tree->link(nodes[1], nodes[0]);
+    tree->link(nodes[2], nodes[0]);
+    tree->link(nodes[3], nodes[0]);
+    tree->link(nodes[4], nodes[1]);
+    tree->link(nodes[5], nodes[2]);
+    tree->link(nodes[6], nodes[2]);
+    tree->link(nodes[7], nodes[2]);
+    tree->link(nodes[8], nodes[3]);
+    tree->link(nodes[9], nodes[4]);
+    tree->link(nodes[10], nodes[5]);
+    tree->link(nodes[11], nodes[6]);
+    tree->link(nodes[12], nodes[6]);
+    tree->link(nodes[13], nodes[7]);
+    tree->link(nodes[14], nodes[8]);
+    tree->link(nodes[15], nodes[10]);
+    tree->link(nodes[16], nodes[11]);
+    tree->link(nodes[17], nodes[12]);
+    tree->link(nodes[18], nodes[13]);
+    tree->link(nodes[19], nodes[16]);
+    tree->link(nodes[20], nodes[17]);
+
+    tree->expose(nodes[9]);
+    tree->expose(nodes[15]);
+    tree->expose(nodes[19]);
+    tree->expose(nodes[20]);
+    tree->expose(nodes[18]);
+    tree->expose(nodes[14]);
+
+    graphics_tree.update_scene();
 }
 
 void FrameUiComponetns::on_pushButtonPreset4_clicked()
@@ -357,4 +395,28 @@ void FrameUiComponetns::on_pushButtonSwitchTree_clicked()
 
         graphics_tree.activate_concrete_tree_scene();
     }
+}
+
+void FrameUiComponetns::on_pushButtonPathSum_clicked()
+{
+    graphics_tree.set_displayed_data(GraphicsSolidNodeItem::NodeData::sum);
+    ui->pushButtonPathSum->setStyleSheet(ButtonStyles::switch_button_on);
+    ui->pushButtonPathMin->setStyleSheet(ButtonStyles::switch_button_off);
+    ui->pushButtonPathMax->setStyleSheet(ButtonStyles::switch_button_off);
+}
+
+void FrameUiComponetns::on_pushButtonPathMin_clicked()
+{
+    graphics_tree.set_displayed_data(GraphicsSolidNodeItem::NodeData::min);
+    ui->pushButtonPathSum->setStyleSheet(ButtonStyles::switch_button_off);
+    ui->pushButtonPathMin->setStyleSheet(ButtonStyles::switch_button_on);
+    ui->pushButtonPathMax->setStyleSheet(ButtonStyles::switch_button_off);
+}
+
+void FrameUiComponetns::on_pushButtonPathMax_clicked()
+{
+    graphics_tree.set_displayed_data(GraphicsSolidNodeItem::NodeData::max);
+    ui->pushButtonPathSum->setStyleSheet(ButtonStyles::switch_button_off);
+    ui->pushButtonPathMin->setStyleSheet(ButtonStyles::switch_button_off);
+    ui->pushButtonPathMax->setStyleSheet(ButtonStyles::switch_button_on);
 }

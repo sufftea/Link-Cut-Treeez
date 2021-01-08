@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     // set other stuff
-    graphics_tree.set_animation_easing_curve(Animation::ease_out_cubic);
+    graphics_tree.set_animation_easing_curve(Animation::ease_in_out_circ);
     tree = & graphics_tree.tree;
 
     ui->graphicsView->setScene(graphics_tree.get_concrete_tree_scene());
@@ -80,12 +80,12 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 
 
     if (node != nullptr) {
-        if (node->concrete_tree_graphics->get_view_type() == GraphicsSolidNodeItem::ViewType::normal) {
-            node->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::user_selected);
+        if (node->concrete_tree_graphics->get_node_view() == GraphicsSolidNodeItem::NodeView::normal) {
+            node->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeView::user_selected);
             node->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::user_selected);
             selected_nodes << node;
-        } else if (node->concrete_tree_graphics->get_view_type() == GraphicsSolidNodeItem::ViewType::user_selected) {
-            node->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::normal);
+        } else if (node->concrete_tree_graphics->get_node_view() == GraphicsSolidNodeItem::NodeView::user_selected) {
+            node->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeView::normal);
             node->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
             selected_nodes.removeOne(node);
         }
@@ -97,15 +97,11 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 
             ui_components_frame->ui->pushButtonCut->setEnabled(true);
             ui_components_frame->ui->pushButtonExpose->setEnabled(true);
-            ui_components_frame->ui->pushButtonPathMax->setEnabled(true);
-            ui_components_frame->ui->pushButtonPathMin->setEnabled(true);
-            ui_components_frame->ui->pushButtonPathSum->setEnabled(true);
-            ui_components_frame->ui->pushButtonPathProduct->setEnabled(true);
         } else if (selected_nodes.size() == 2) {
             ui_components_frame->disable_operations_buttons();
             ui_components_frame->ui->pushButtonLink->setEnabled(true);
         } else if (selected_nodes.size() == 3) {
-            selected_nodes.first()->concrete_tree_graphics->set_view_type(GraphicsSolidNodeItem::ViewType::normal);
+            selected_nodes.first()->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeView::normal);
             selected_nodes.first()->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
             selected_nodes.pop_front();
         }

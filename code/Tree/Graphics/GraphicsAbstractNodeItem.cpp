@@ -51,7 +51,7 @@ void GraphicsAbstractNodeItem::update_pixmap()
 
 void GraphicsAbstractNodeItem::update_position(int node_offset, int solid_depth)
 {
-    int pos_x = node_offset * GraphicsAbstractNodeItem::node_size_px * 0.8;
+    int pos_x = node_offset * GraphicsAbstractNodeItem::node_size_px * 1.1;
     int pos_y = solid_depth * GraphicsAbstractNodeItem::node_size_px * 1.2;
 
     this->last_pos = this->pos();
@@ -86,7 +86,6 @@ void GraphicsAbstractNodeItem::paint(QPainter *painter, const QStyleOptionGraphi
     white_pen.setWidth(3);
     painter->setPen(white_pen);
 
-    // draw the edge
     if (my_abstract_node->is_prefered_child()) {
         QPointF a = QPoint(0, 0);
         QPointF b = my_abstract_node->parent->graphics->pos() - this->pos();
@@ -141,4 +140,19 @@ void GraphicsAbstractNodeItem::paint(QPainter *painter, const QStyleOptionGraphi
 
     // draw the node
     painter->drawPixmap(0, 0, this->pix);
+
+    // draw the path info (min max sum)
+    if ( ! my_abstract_node->my_solid_node->is_prefered_child()) {
+        Node * root = my_abstract_node->my_solid_node->get_solid_root();
+
+        QString text;
+        text += "sum: " + QString::number(root->sum_agg);
+        text += "\nmin: " + QString::number(root->min_agg);
+        text += "\nmax: " + QString::number(root->max_agg);
+
+//        painter->draw(node_size_px, node_size_px * 0.8, text);
+        painter->drawText(QRect(node_size_px, 0, 100, 100),
+                          Qt::AlignLeft | Qt::AlignVCenter,
+                          text);
+    }
 }
