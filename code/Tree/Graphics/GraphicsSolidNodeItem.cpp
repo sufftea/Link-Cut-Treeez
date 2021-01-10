@@ -1,13 +1,17 @@
 #include "Tree/Graphics/GraphicsSolidNodeItem.h"
 #include "Tree/Node.h"
 #include "Helpers/Colors.h"
+#include "Tree/Graphics/GraphicsLinkCutTree.h"
 
 
-GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, QGraphicsScene *my_scene)
-    : pix(node_size_px, node_size_px)
+GraphicsSolidNodeItem::GraphicsSolidNodeItem(Node * my_node, GraphicsLinkCutTree *graphcis_tree, QGraphicsScene *my_scene)
+    : GraphicsNodeItem(graphcis_tree),
+      pix(node_size_px, node_size_px)
 {
     this->my_node = my_node;
     this->my_scene = my_scene;
+
+    this->movement_anim.set_easing_curve(graphcis_tree->get_animation_easing_curve());
 
     update_pixmap();
 }
@@ -23,15 +27,7 @@ void GraphicsSolidNodeItem::set_my_scene(QGraphicsScene *scene)
     this->my_scene = scene;
 }
 
-void GraphicsSolidNodeItem::set_displayed_data(GraphicsSolidNodeItem::NodeData type)
-{
-    if (this->displayed_data != type) {
-        this->displayed_data = type;
-        update_pixmap();
-    }
-}
-
-void GraphicsSolidNodeItem::set_node_view(GraphicsSolidNodeItem::NodeView type)
+void GraphicsSolidNodeItem::set_node_view(GraphicsSolidNodeItem::NodeLooks type)
 {
     if (this->node_view != type) {
         this->node_view = type;
@@ -39,7 +35,7 @@ void GraphicsSolidNodeItem::set_node_view(GraphicsSolidNodeItem::NodeView type)
     }
 }
 
-GraphicsSolidNodeItem::NodeView GraphicsSolidNodeItem::get_node_view()
+GraphicsSolidNodeItem::NodeLooks GraphicsSolidNodeItem::get_node_view()
 {
     return this->node_view;
 }
@@ -56,15 +52,11 @@ void GraphicsSolidNodeItem::update_pixmap()
     white_pen.setWidth(3);
     painter.setPen(white_pen);
 
-    QFont font;
-    font.setPixelSize(20);
-    painter.setFont(font);
 
-
-    if (this->node_view == NodeView::normal) {
+    if (this->node_view == NodeLooks::normal) {
         painter.setBrush(MyColors::blue);
         painter.drawEllipse(QRect(5, 5, node_size_px - 10, node_size_px - 10));
-    } else if (this->node_view == NodeView::user_selected) {
+    } else if (this->node_view == NodeLooks::user_selected) {
         painter.setBrush(MyColors::red);
         painter.drawEllipse(QRect(2, 2, node_size_px - 4, node_size_px - 4));
     }
@@ -73,13 +65,18 @@ void GraphicsSolidNodeItem::update_pixmap()
 
     text = QString::number(my_node->value);
 
-    if (displayed_data == NodeData::max) {
+    if (graphics_tree->get_displayed_data() == NodeData::max) {
         text += "\n" + QString::number(my_node->max_agg);
-    } else if (displayed_data == NodeData::min) {
+    } else if (graphics_tree->get_displayed_data() == NodeData::min) {
         text += "\n" + QString::number(my_node->min_agg);
-    } else if (displayed_data == NodeData::sum) {
+    } else if (graphics_tree->get_displayed_data() == NodeData::sum) {
         text += "\n" + QString::number(my_node->sum_agg);
     }
+
+    QFont font;
+    font.setPixelSize(25);
+    painter.setFont(font);
+
     painter.drawText(QRect(0, 0, node_size_px, node_size_px),
                       Qt::AlignHCenter | Qt::AlignVCenter,
                       text);

@@ -748,35 +748,6 @@ background-color: rgba(255, 255, 255, 20);
      </item>
      <item row="2" column="0">
       <layout class="QGridLayout" name="gridLayoutPopUpDialog">
-       <item row="2" column="1">
-        <spacer name="verticalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="1">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="1" column="1">
         <widget class="QFrame" name="framePopUpDialog">
          <property name="minimumSize">
@@ -847,6 +818,19 @@ background-color: rgba(255, 255, 255, 20);
          </layout>
         </widget>
        </item>
+       <item row="0" column="1">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item row="1" column="0">
         <spacer name="horizontalSpacer_6">
          <property name="orientation">
@@ -856,6 +840,22 @@ background-color: rgba(255, 255, 255, 20);
           <size>
            <width>40</width>
            <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="1">
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
           </size>
          </property>
         </spacer>
@@ -909,7 +909,7 @@ border: 0;</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="spacing">
-       <number>12</number>
+       <number>7</number>
       </property>
       <property name="leftMargin">
        <number>0</number>
@@ -1078,6 +1078,19 @@ background-color:  rgb(0, 105, 156);
        </widget>
       </item>
       <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <widget class="QFrame" name="frame_2">
         <property name="maximumSize">
          <size>
@@ -1104,7 +1117,7 @@ background-color:  rgb(0, 105, 156);
          <property name="bottomMargin">
           <number>0</number>
          </property>
-         <item row="0" column="0">
+         <item row="0" column="1">
           <widget class="QPushButton" name="pushButtonPathMin">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1156,7 +1169,7 @@ background-color: rgba(255, 255, 255, 20);
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item row="1" column="1">
           <widget class="QPushButton" name="pushButtonPathMax">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1208,7 +1221,7 @@ background-color: rgba(255, 255, 255, 20);
            </property>
           </widget>
          </item>
-         <item row="0" column="1" rowspan="2">
+         <item row="0" column="0" rowspan="2">
           <widget class="QPushButton" name="pushButtonPathSum">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1265,6 +1278,12 @@ background-color: rgba(255, 255, 255, 20);
       </item>
       <item>
        <widget class="QFrame" name="frameOperationsButtons">
+        <property name="maximumSize">
+         <size>
+          <width>207</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -1284,7 +1303,59 @@ background-color: rgba(255, 255, 255, 20);
          <property name="bottomMargin">
           <number>0</number>
          </property>
-         <item row="1" column="2">
+         <item row="0" column="0" rowspan="2">
+          <widget class="QPushButton" name="pushButtonExpose">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Microsoft YaHei Light</family>
+             <pointsize>14</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+color: rgb(243, 234, 226);
+background-color: transparent;
+
+border-radius: 5px;
+border: 2px solid;
+border-color: rgb(243, 234, 226);
+}
+QPushButton:enabled:hover {
+background-color: rgb(0, 125, 176);
+}
+QPushButton:enabled:pressed {
+background-color:  rgb(0, 105, 156);
+}
+QPushButton:disabled {
+border-color: rgba(243, 234, 226, 100);
+color:  rgba(243, 234, 226, 100);
+background-color: rgba(255, 255, 255, 20);
+}</string>
+           </property>
+           <property name="text">
+            <string>Expose</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
           <widget class="QPushButton" name="pushButtonCut">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1336,7 +1407,7 @@ background-color: rgba(255, 255, 255, 20);
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
+         <item row="0" column="1">
           <widget class="QPushButton" name="pushButtonLink">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1385,71 +1456,6 @@ background-color: rgba(255, 255, 255, 20);
            </property>
            <property name="text">
             <string>Link</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>482</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="0" column="1" rowspan="2">
-          <widget class="QPushButton" name="pushButtonExpose">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Microsoft YaHei Light</family>
-             <pointsize>14</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton {
-color: rgb(243, 234, 226);
-background-color: transparent;
-
-border-radius: 5px;
-border: 2px solid;
-border-color: rgb(243, 234, 226);
-}
-QPushButton:enabled:hover {
-background-color: rgb(0, 125, 176);
-}
-QPushButton:enabled:pressed {
-background-color:  rgb(0, 105, 156);
-}
-QPushButton:disabled {
-border-color: rgba(243, 234, 226, 100);
-color:  rgba(243, 234, 226, 100);
-background-color: rgba(255, 255, 255, 20);
-}</string>
-           </property>
-           <property name="text">
-            <string>Expose</string>
            </property>
           </widget>
          </item>

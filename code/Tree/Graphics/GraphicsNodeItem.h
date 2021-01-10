@@ -5,17 +5,21 @@
 
 #include "Tree/Graphics/Helpers/animation.h"
 
+class GraphicsLinkCutTree;
+
 class GraphicsNodeItem : public QGraphicsItem
 {
 protected:
     QPointF last_pos = QPointF(0, 0);
     QPointF next_pos = QPointF(0, 0);
 
+    GraphicsLinkCutTree *graphics_tree;
+
 public:
     Animation movement_anim;
 
 
-    GraphicsNodeItem();
+    GraphicsNodeItem(GraphicsLinkCutTree *graphics_tree);
     ~GraphicsNodeItem() override;
 
 

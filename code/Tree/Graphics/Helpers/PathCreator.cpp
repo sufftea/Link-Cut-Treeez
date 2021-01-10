@@ -2,7 +2,7 @@
 #include "Tree/Graphics/GraphicsSolidNodeItem.h"
 #include "Tree/Graphics/Helpers/PathSmoother.h"
 
-int PathCreator::step_length_px = 25;
+int PathCreator::step_length_px = 20;
 
 
 void PathCreator::add_to_opened(const Cell &cell,

@@ -3,7 +3,7 @@
 
 Animation::Animation()
 {
-    this->easing_curve = GraphicsLinkCutTree::easing_curve;
+
 }
 
 qreal Animation::get_value(bool dont_increment)

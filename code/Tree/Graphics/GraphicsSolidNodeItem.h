@@ -7,19 +7,20 @@
 #include <QGraphicsLineItem>
 #include <QHash>
 
-#include "Tree/Graphics/Helpers/Animation.h"
+#include "Tree/Graphics/Helpers/animation.h"
 #include "Tree/Graphics/Helpers/PathCreator.h"
 #include "Tree/Graphics/Helpers/PathSmoother.h"
 #include "Tree/Graphics/GraphicsNodeItem.h"
 
 class Node;
+class GraphicsLinkCutTree;
 
 
 class GraphicsSolidNodeItem : public GraphicsNodeItem
 {
 
 public:
-    enum class NodeView
+    enum class NodeLooks
     {
         normal = 0,
         user_selected
@@ -39,7 +40,7 @@ public:
     Node * my_node = nullptr;
 
 
-    GraphicsSolidNodeItem(Node * my_node, QGraphicsScene * my_scene = nullptr);
+    GraphicsSolidNodeItem(Node * my_node, GraphicsLinkCutTree *graphcis_tree, QGraphicsScene * my_scene = nullptr);
     ~GraphicsSolidNodeItem() override;
 
 
@@ -67,17 +68,16 @@ public:
     */
     void set_my_scene(QGraphicsScene * scene);
 
-    void set_displayed_data(NodeData type);
-    void set_node_view(NodeView type);
-    NodeView get_node_view();
+
+    void set_node_view(NodeLooks type);
+    NodeLooks get_node_view();
 
 
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 
 private:
-    NodeView node_view = NodeView::normal;
-    NodeData displayed_data = NodeData::value;
+    NodeLooks node_view = NodeLooks::normal;
     QGraphicsScene * my_scene = nullptr;
     QPixmap pix;
 };

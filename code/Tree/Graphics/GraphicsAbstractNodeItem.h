@@ -21,7 +21,7 @@ public:
     AbstractNode * my_abstract_node = nullptr;
 
 
-    GraphicsAbstractNodeItem(AbstractNode * my_abstract_node);
+    GraphicsAbstractNodeItem(AbstractNode * my_abstract_node, GraphicsLinkCutTree *graphics_tree);
 
     void update_pixmap();
     void update_position(int node_offset, int solid_depth);

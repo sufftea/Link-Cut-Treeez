@@ -2,6 +2,8 @@
 #include "Helpers/Colors.h"
 
 std::function<qreal(qreal)> GraphicsLinkCutTree::easing_curve = Animation::linear;
+GraphicsSolidNodeItem::NodeData GraphicsLinkCutTree::displayed_data = GraphicsSolidNodeItem::NodeData::value;
+
 
 GraphicsLinkCutTree::GraphicsLinkCutTree()
 {
@@ -79,18 +81,18 @@ void GraphicsLinkCutTree::init(int size)
 {
     concrete_tree_scene->clear();
     abstract_tree_scene->clear();
-
+    
     tree.init(size);
-
+    
     for (Node * node : tree.nodes) {
         // set concrete tree graphics
-        node->concrete_tree_graphics = new GraphicsSolidNodeItem(node, this->concrete_tree_scene);
+        node->concrete_tree_graphics = new GraphicsSolidNodeItem(node, this, this->concrete_tree_scene);
 
         concrete_tree_scene->addItem(node->concrete_tree_graphics);
         node->concrete_tree_graphics->set_my_scene(this->concrete_tree_scene);
 
         // set abstract tree graphics
-        node->abstract.graphics = new GraphicsAbstractNodeItem(&node->abstract);
+        node->abstract.graphics = new GraphicsAbstractNodeItem(&node->abstract, this);
         abstract_tree_scene->addItem(node->abstract.graphics);
     }
 }
@@ -111,6 +113,11 @@ void GraphicsLinkCutTree::set_animation_easing_curve(std::function<qreal (qreal)
         node->concrete_tree_graphics->movement_anim.set_easing_curve(f);
         node->abstract.graphics->movement_anim.set_easing_curve(f);
     }
+}
+
+std::function<qreal (qreal)> GraphicsLinkCutTree::get_animation_easing_curve()
+{
+    return this->easing_curve;
 }
 
 bool GraphicsLinkCutTree::set_animation_speed(qreal p)
@@ -175,16 +182,22 @@ Node *GraphicsLinkCutTree::node_at(QPoint pos)
 void GraphicsLinkCutTree::reset_all_nodes()
 {
     for (Node * node : tree.nodes) {
-        node->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeView::normal);
+        node->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeLooks::normal);
         node->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
     }
 }
 
 void GraphicsLinkCutTree::set_displayed_data(GraphicsSolidNodeItem::NodeData type)
 {
+    this->displayed_data = type;
     for (Node * node: tree.nodes) {
-        node->concrete_tree_graphics->set_displayed_data(type);
+        node->concrete_tree_graphics->update_pixmap();
     }
+}
+
+GraphicsSolidNodeItem::NodeData GraphicsLinkCutTree::get_displayed_data()
+{
+    return this->displayed_data;
 }
 
 QGraphicsScene *GraphicsLinkCutTree::get_abstract_tree_scene()

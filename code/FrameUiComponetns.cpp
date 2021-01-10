@@ -133,7 +133,7 @@ void FrameUiComponetns::disable_operations_buttons()
 void FrameUiComponetns::on_pushButtonExpose_clicked()
 {
     if (selected_nodes.size() == 1) {
-        selected_nodes[0]->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeView::normal);
+        selected_nodes[0]->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeLooks::normal);
         selected_nodes[0]->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
 
         tree->finish_operation();
@@ -157,7 +157,7 @@ void FrameUiComponetns::on_pushButtonCut_clicked()
 
         tree->start_cut(selected_nodes[0]);
 
-        selected_nodes[0]->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeView::normal);
+        selected_nodes[0]->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeLooks::normal);
         selected_nodes[0]->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
         selected_nodes.clear();
 
@@ -175,8 +175,8 @@ void FrameUiComponetns::on_pushButtonLink_clicked()
 
         ui->labelSequence->setText(SequenceLog::get_text());
 
-        selected_nodes[0]->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeView::normal);
-        selected_nodes[1]->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeView::normal);
+        selected_nodes[0]->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeLooks::normal);
+        selected_nodes[1]->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeLooks::normal);
         selected_nodes[0]->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
         selected_nodes[1]->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
 
@@ -399,6 +399,11 @@ void FrameUiComponetns::on_pushButtonSwitchTree_clicked()
 
 void FrameUiComponetns::on_pushButtonPathSum_clicked()
 {
+    if (graphics_tree.get_displayed_data() == GraphicsSolidNodeItem::NodeData::sum) {
+        graphics_tree.set_displayed_data(GraphicsSolidNodeItem::NodeData::value);
+        ui->pushButtonPathSum->setStyleSheet(ButtonStyles::switch_button_off);
+        return;
+    }
     graphics_tree.set_displayed_data(GraphicsSolidNodeItem::NodeData::sum);
     ui->pushButtonPathSum->setStyleSheet(ButtonStyles::switch_button_on);
     ui->pushButtonPathMin->setStyleSheet(ButtonStyles::switch_button_off);
@@ -407,6 +412,11 @@ void FrameUiComponetns::on_pushButtonPathSum_clicked()
 
 void FrameUiComponetns::on_pushButtonPathMin_clicked()
 {
+    if (graphics_tree.get_displayed_data() == GraphicsSolidNodeItem::NodeData::min) {
+        graphics_tree.set_displayed_data(GraphicsSolidNodeItem::NodeData::value);
+        ui->pushButtonPathMin->setStyleSheet(ButtonStyles::switch_button_off);
+        return;
+    }
     graphics_tree.set_displayed_data(GraphicsSolidNodeItem::NodeData::min);
     ui->pushButtonPathSum->setStyleSheet(ButtonStyles::switch_button_off);
     ui->pushButtonPathMin->setStyleSheet(ButtonStyles::switch_button_on);
@@ -415,6 +425,11 @@ void FrameUiComponetns::on_pushButtonPathMin_clicked()
 
 void FrameUiComponetns::on_pushButtonPathMax_clicked()
 {
+    if (graphics_tree.get_displayed_data() == GraphicsSolidNodeItem::NodeData::max) {
+        graphics_tree.set_displayed_data(GraphicsSolidNodeItem::NodeData::value);
+        ui->pushButtonPathMax->setStyleSheet(ButtonStyles::switch_button_off);
+        return;
+    }
     graphics_tree.set_displayed_data(GraphicsSolidNodeItem::NodeData::max);
     ui->pushButtonPathSum->setStyleSheet(ButtonStyles::switch_button_off);
     ui->pushButtonPathMin->setStyleSheet(ButtonStyles::switch_button_off);

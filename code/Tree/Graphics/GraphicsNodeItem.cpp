@@ -1,8 +1,8 @@
 #include "GraphicsNodeItem.h"
 
-GraphicsNodeItem::GraphicsNodeItem()
+GraphicsNodeItem::GraphicsNodeItem(GraphicsLinkCutTree *graphics_tree)
 {
-
+    this->graphics_tree = graphics_tree;
 }
 
 GraphicsNodeItem::~GraphicsNodeItem()

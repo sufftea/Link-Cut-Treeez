@@ -1,11 +1,15 @@
 #include "GraphicsAbstractNodeItem.h"
 #include "Tree/Graphics/Helpers/AbstractNode.h"
 #include "Tree/Node.h"
+#include "Tree/Graphics/GraphicsLinkCutTree.h"
 
-GraphicsAbstractNodeItem::GraphicsAbstractNodeItem(AbstractNode *my_abstract_node)
-    : pix(node_size_px, node_size_px)
+GraphicsAbstractNodeItem::GraphicsAbstractNodeItem(AbstractNode *my_abstract_node, GraphicsLinkCutTree *graphics_tree)
+    : GraphicsNodeItem(graphics_tree),
+      pix(node_size_px, node_size_px)
 {
     this->my_abstract_node = my_abstract_node;
+
+    this->movement_anim.set_easing_curve(graphics_tree->get_animation_easing_curve());
     update_pixmap();
 }
 
