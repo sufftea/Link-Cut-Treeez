@@ -44,3 +44,6 @@
 
 ![](pics/Update6.gif?raw=true "Title")
 
+
+# Update7: почти все!
+no gif:(
