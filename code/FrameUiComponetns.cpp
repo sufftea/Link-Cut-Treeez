@@ -234,6 +234,12 @@ void FrameUiComponetns::on_pushButtonPreset1_clicked()
     tree->expose(nodes[10]);
     tree->expose(nodes[6]);
     tree->expose(nodes[3]);
+    tree->expose(nodes[12]);
+    tree->expose(nodes[2]);
+
+    for (Node * node : tree->nodes) {
+        node->value = qrand() & 100;
+    }
 
     graphics_tree.update_scene();
 }
@@ -246,6 +252,10 @@ void FrameUiComponetns::on_pushButtonPreset2_clicked()
     graphics_tree.init(26);
 
     QVector<Node*> &nodes = tree->nodes;
+
+    for (Node * node : nodes) {
+        node->value = qrand() & 100;
+    }
 
     tree->link(nodes[1], nodes[0]);
     tree->link(nodes[2], nodes[1]);
@@ -286,7 +296,8 @@ void FrameUiComponetns::on_pushButtonPreset2_clicked()
     tree->expose(nodes[22]);
     tree->expose(nodes[6]);
     tree->expose(nodes[2]);
-
+    tree->expose(nodes[13]);
+    tree->expose(nodes[9]);
 
     graphics_tree.update_scene();
 }
@@ -331,6 +342,8 @@ void FrameUiComponetns::on_pushButtonPreset3_clicked()
     tree->expose(nodes[20]);
     tree->expose(nodes[18]);
     tree->expose(nodes[14]);
+    tree->expose(nodes[5]);
+    tree->expose(nodes[3]);
 
     graphics_tree.update_scene();
 }
@@ -339,12 +352,64 @@ void FrameUiComponetns::on_pushButtonPreset4_clicked()
 {
     selected_nodes.clear();
     hidePresetsListAnimation->start();
+
+    graphics_tree.init(10);
+
+    QVector<Node*> &nodes = tree->nodes;
+
+    for (Node * node : nodes) {
+        node->value = qrand() % 100;
+    }
+
+    tree->link(nodes[1], nodes[0]);
+    tree->link(nodes[2], nodes[1]);
+    tree->link(nodes[3], nodes[1]);
+    tree->link(nodes[4], nodes[1]);
+    tree->link(nodes[5], nodes[2]);
+    tree->link(nodes[6], nodes[2]);
+    tree->link(nodes[7], nodes[4]);
+    tree->link(nodes[8], nodes[6]);
+    tree->link(nodes[9], nodes[7]);
+
+    tree->expose(nodes[8]);
+
+    graphics_tree.update_scene();
 }
 
 void FrameUiComponetns::on_pushButtonPreset5_clicked()
 {
     selected_nodes.clear();
     hidePresetsListAnimation->start();
+
+    graphics_tree.init(20);
+
+    QVector<Node*> &nodes = tree->nodes;
+
+    tree->link(nodes[1], nodes[0]);
+    tree->link(nodes[2], nodes[1]);
+    tree->link(nodes[3], nodes[2]);
+    tree->link(nodes[4], nodes[3]);
+    tree->link(nodes[5], nodes[4]);
+    tree->link(nodes[6], nodes[4]);
+    tree->link(nodes[7], nodes[6]);
+    tree->link(nodes[8], nodes[7]);
+    tree->link(nodes[9], nodes[8]);
+    tree->link(nodes[10], nodes[8]);
+    tree->link(nodes[11], nodes[9]);
+    tree->link(nodes[12], nodes[5]);
+    tree->link(nodes[13], nodes[12]);
+    tree->link(nodes[14], nodes[13]);
+    tree->link(nodes[15], nodes[14]);
+    tree->link(nodes[16], nodes[19]);
+    tree->link(nodes[17], nodes[15]);
+    tree->link(nodes[18], nodes[11]);
+    tree->link(nodes[19], nodes[10]);
+
+    tree->expose(nodes[16]);
+    tree->expose(nodes[13]);
+    tree->expose(nodes[3]);
+
+    graphics_tree.update_scene();
 }
 
 void FrameUiComponetns::on_pushButtonPreset6_clicked()

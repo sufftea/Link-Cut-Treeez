@@ -936,8 +936,8 @@ public:
         pushButtonClearLog->setText(QCoreApplication::translate("FrameUiComponetns", "Clear", nullptr));
         pushButtonPreset7->setText(QCoreApplication::translate("FrameUiComponetns", "7", nullptr));
         pushButtonPreset6->setText(QCoreApplication::translate("FrameUiComponetns", "6", nullptr));
-        pushButtonPreset5->setText(QCoreApplication::translate("FrameUiComponetns", "5", nullptr));
-        pushButtonPreset4->setText(QCoreApplication::translate("FrameUiComponetns", "4", nullptr));
+        pushButtonPreset5->setText(QCoreApplication::translate("FrameUiComponetns", "5 - expose", nullptr));
+        pushButtonPreset4->setText(QCoreApplication::translate("FrameUiComponetns", "4 - simple", nullptr));
         pushButtonPreset3->setText(QCoreApplication::translate("FrameUiComponetns", "3 - octopus", nullptr));
         pushButtonPreset2->setText(QCoreApplication::translate("FrameUiComponetns", "2 - fork", nullptr));
         pushButtonPreset1->setText(QCoreApplication::translate("FrameUiComponetns", "1 - stairway", nullptr));

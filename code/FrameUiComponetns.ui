@@ -491,7 +491,7 @@ background-color: rgba(255, 255, 255, 20);
 }</string>
             </property>
             <property name="text">
-             <string>5</string>
+             <string>5 - expose</string>
             </property>
            </widget>
           </item>
@@ -542,7 +542,7 @@ background-color: rgba(255, 255, 255, 20);
 }</string>
             </property>
             <property name="text">
-             <string>4</string>
+             <string>4 - simple</string>
             </property>
            </widget>
           </item>

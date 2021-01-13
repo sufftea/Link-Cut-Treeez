@@ -3,11 +3,13 @@
 
 #include <QGraphicsScene>
 #include <QVector2D>
+#include <QStack>
 
 #include "Helpers/StepByStepOperation.h"
 #include "Tree/Graphics/GraphicsSolidNodeItem.h"
 #include "Helpers/Sequence.h"
 #include "Tree/Graphics/Helpers/AbstractNode.h"
+
 
 
 /*
@@ -41,6 +43,8 @@ public:
     int min_agg;
     int max_agg;
     int sum_agg;
+
+    QStack<QString> current_operations;
 
     /*
      * Stores graphical representation of the node (in the concrete tree)
@@ -76,8 +80,8 @@ public:
 
     void splay();
 
-    void update_my_aggregates(); // updates min/max/sum only for the node
-    void update_aggregates_up(); // updates aggregates from the node to the root
+    void update_aggregates(); // updates min/max/sum only for the node
+//    void update_aggregates_up(); // updates aggregates from the node to the root
 
     // [n] -- number of nodes in the path
 

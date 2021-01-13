@@ -87,63 +87,46 @@ QRectF GraphicsAbstractNodeItem::boundingRect() const
 void GraphicsAbstractNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     QPen white_pen(MyColors::white);
-    white_pen.setWidth(3);
+    white_pen.setWidth(4);
     painter->setPen(white_pen);
 
-    if (my_abstract_node->is_prefered_child()) {
+    // draw parent edge
+    if (my_abstract_node->parent) {
         QPointF a = QPoint(0, 0);
         QPointF b = my_abstract_node->parent->graphics->pos() - this->pos();
-
         QPoint offset(node_size_px / 2,
                       node_size_px / 2);
-
         a += offset;
         b += offset;
-
-        QVector2D ab(b.x() - a.x(), b.y() - a.y());
-
-
-        QVector2D tang(-ab.y(), ab.x());
-        tang.normalize();
-        tang *= node_size_px / 2 - 5;
-
-        QPointF a1 = a + tang.toPointF();
-        QPointF b1 = b + tang.toPointF();
-        QPointF a2 = a - tang.toPointF();
-        QPointF b2 = b - tang.toPointF();
-
-        painter->drawLine(a1, b1);
-        painter->drawLine(a2, b2);
-
-    }
-
-    if (this->my_abstract_node->parent != nullptr) {
-        QPointF a = QPoint(0, 0);
-        QPointF b = my_abstract_node->parent->graphics->pos() - this->pos();
-
-        QPoint offset(node_size_px / 2,
-                      node_size_px / 2);
-
-        a += offset;
-        b += offset;
-
-        QVector2D ab(b.x() - a.x(), b.y() - a.y());
-        QVector2D ba(a.x() - b.x(), a.y() - b.y());
-
+        QVector2D ab(float(b.x() - a.x()), float(b.y() - a.y()));
+        QVector2D ba(float(a.x() - b.x()), float(a.y() - b.y()));
         ab.normalize();
         ba.normalize();
 
-        ab *= node_size_px / 2;
-        ba *= node_size_px / 2;
+        if (my_abstract_node->is_prefered_child()) {
+            ab *= node_size_px / 2 + 5;
+            ba *= node_size_px / 2 + 5;
 
-        a += ab.toPoint();
-        b += ba.toPoint();
+            a += ab.toPoint();
+            b += ba.toPoint();
 
-        painter->drawLine(QLineF(a, b));
+            QPen red_pen(MyColors::red);
+            red_pen.setWidth(14);
+            painter->setPen(red_pen);
+            painter->drawLine(QLineF(a, b));
+
+            painter->setPen(white_pen);
+        } else if (this->my_abstract_node->parent != nullptr) {
+            ab *= node_size_px / 2;
+            ba *= node_size_px / 2;
+
+            a += ab.toPoint();
+            b += ba.toPoint();
+
+            painter->drawLine(QLineF(a, b));
+
+        }
     }
-
-    // draw the node
-    painter->drawPixmap(0, 0, this->pix);
 
     // draw the path info (min max sum)
     if ( ! my_abstract_node->my_solid_node->is_prefered_child()) {
@@ -154,9 +137,13 @@ void GraphicsAbstractNodeItem::paint(QPainter *painter, const QStyleOptionGraphi
         text += "\nmin: " + QString::number(root->min_agg);
         text += "\nmax: " + QString::number(root->max_agg);
 
-//        painter->draw(node_size_px, node_size_px * 0.8, text);
-        painter->drawText(QRect(node_size_px, 0, 100, 100),
-                          Qt::AlignLeft | Qt::AlignVCenter,
+        painter->drawText(QRect(60, -10, 100, 100),
+                          Qt::AlignLeft | Qt::AlignTop,
                           text);
     }
+
+    // draw the node
+    painter->drawPixmap(0, 0, this->pix);
+
+
 }

@@ -67,8 +67,8 @@ bool Node::try_zig_left()
 //        int v_new_sum = this->sum_agg + p->value + (A ? A->sum_agg : 0);
 //        p->sum_agg = p_new_sum;
 //        this->sum_agg = v_new_sum;
-        p->update_my_aggregates();
-        this->update_my_aggregates();
+        p->update_aggregates();
+        this->update_aggregates();
 
         return true;
     }
@@ -122,8 +122,8 @@ bool Node::try_zig_right()
 //        int v_new_sum = this->sum_agg + p->value + (C ? C->sum_agg : 0);
 //        p->sum_agg = p_new_sum;
 //        this->sum_agg = v_new_sum;
-        p->update_my_aggregates();
-        this->update_my_aggregates();
+        p->update_aggregates();
+        this->update_aggregates();
 
         return true;
     }
@@ -251,7 +251,7 @@ void Node::splay()
 }
 
 
-void Node::update_my_aggregates()
+void Node::update_aggregates()
 {
     this->sum_agg = this->value
             + (this->right ? this->right->sum_agg : 0)
@@ -266,14 +266,14 @@ void Node::update_my_aggregates()
     this->max_agg = qMax(this->max_agg, this->value);
 }
 
-void Node::update_aggregates_up()
-{
-    Node * p = this;
-    while (p) {
-        p->update_my_aggregates();
-        p = p->parent;
-    }
-}
+//void Node::update_aggregates_up()
+//{
+//    Node * p = this;
+//    while (p) {
+//        p->update_my_aggregates();
+//        p = p->parent;
+//    }
+//}
 
 Node *Node::get_solid_root()
 {

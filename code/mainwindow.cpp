@@ -30,14 +30,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->graphicsView->setScene(graphics_tree.get_concrete_tree_scene());
     ui->graphicsView->setRenderHints(QPainter::RenderHint::Antialiasing);
     ui->graphicsView->setTransformationAnchor(QGraphicsView::ViewportAnchor::AnchorUnderMouse);
-
-    selected_nodes.reserve(3);
-
-    timer_fit_in_view = new QTimer(this);
-    connect(timer_fit_in_view, &QTimer::timeout, this, &MainWindow::fit_tree_in_view);
-    timer_fit_in_view->start(20);
-
-
     // set background tiling for the graphicsview
     QPixmap tile(20, 20);
     QPainter painter(&tile);
@@ -49,7 +41,15 @@ MainWindow::MainWindow(QWidget *parent)
     painter.drawPoint(10, 10);
 
     ui->graphicsView->setBackgroundBrush(tile);
+//    ui->graphicsView->setBackgroundBrush(MyColors::black);
 
+
+    selected_nodes.reserve(3);
+
+
+    timer_fit_in_view = new QTimer(this);
+    connect(timer_fit_in_view, &QTimer::timeout, this, &MainWindow::fit_tree_in_view);
+    timer_fit_in_view->start(20);
 }
 
 MainWindow::~MainWindow()

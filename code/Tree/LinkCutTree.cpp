@@ -29,8 +29,8 @@ void LinkCutTree::link(Node * v, Node * to)
     v->parent = to->parent;
     to->parent = v;
 
-    // there are only two nodes at the top - to and v
-    to->update_aggregates_up();
+    to->update_aggregates();
+    v->update_aggregates();
 }
 
 void LinkCutTree::cut(Node *v)
@@ -43,7 +43,7 @@ void LinkCutTree::cut(Node *v)
 
     // after the expose(v), v is the only node that needs updating
     // since no other nodes are higher than it (in the solid tree)
-    v->update_my_aggregates();
+    v->update_aggregates();
 }
 
 void LinkCutTree::expose(Node *v)
@@ -60,11 +60,11 @@ void LinkCutTree::expose(Node *v)
 
         // v.parent (path-parent of v) is the root of its solid
         // tree so, again, the update is needed only for v.parent
-        v->parent->update_my_aggregates();
+        v->parent->update_aggregates();
     }
 
     v->right = nullptr;
-    v->update_my_aggregates();
+    v->update_aggregates();
 }
 
 Node *LinkCutTree::get_abstract_root()
@@ -145,12 +145,15 @@ LinkCutTree::OperationExpose::OperationExpose(Node *v)
     SequenceLog::step_in();
 
     this->v = v;
+    v->current_operations.push("expose");
 }
 
 LinkCutTree::OperationExpose::~OperationExpose()
 {
     SequenceLog::add("expose finished!");
     SequenceLog::step_out();
+
+    v->current_operations.pop();
 }
 
 bool LinkCutTree::OperationExpose::make_step()
@@ -174,7 +177,7 @@ bool LinkCutTree::OperationExpose::make_step()
             // v is the root of the abstract tree. finish the operation.
             SequenceLog::add("cut the rest of the path");
             v->right = nullptr;
-            v->update_my_aggregates();
+            v->update_aggregates();
             current_step = Step::finished;
             return 0;
         }
@@ -197,7 +200,8 @@ bool LinkCutTree::OperationExpose::make_step()
     else if (current_step == Step::link) {
         SequenceLog::add("connect to path parent");
         pp->right = v;
-        v->update_aggregates_up();
+//        v->update_aggregates_up();
+        pp->update_aggregates();
         current_step = Step::start_splaying_v;
     }
 
@@ -234,6 +238,9 @@ LinkCutTree::OperationLink::OperationLink(Node *v, Node *to)
     this->to = to;
 
     current_step = Step::start_expose_v;
+
+    v->current_operations.push("link");
+    to->current_operations.push("link to");
 }
 
 LinkCutTree::OperationLink::~OperationLink()
@@ -244,6 +251,9 @@ LinkCutTree::OperationLink::~OperationLink()
     if (expose_operation != nullptr) {
         delete expose_operation;
     }
+
+    v->current_operations.pop();
+    to->current_operations.pop();
 }
 
 bool LinkCutTree::OperationLink::make_step()
@@ -279,7 +289,9 @@ bool LinkCutTree::OperationLink::make_step()
         v->left = to;
         v->parent = to->parent;
         to->parent = v;
-        to->update_aggregates_up();
+//        to->update_aggregates_up();
+        to->update_aggregates();
+        v->update_aggregates();
 
         current_step = finished;
 
@@ -308,17 +320,20 @@ LinkCutTree::OperationCut::OperationCut(Node *v)
         SequenceLog::add(QString::number(v->value) + " is already a root");
         current_step = Step::finished;
     }
+
+    v->current_operations.push("cut");
 }
 
 LinkCutTree::OperationCut::~OperationCut()
-{
-
+{   
     if (this->expose_operation != nullptr) {
         delete this->expose_operation;
     }
 
     SequenceLog::add("cut(" + QString::number(v->value) + ") finished");
     SequenceLog::step_out();
+
+    v->current_operations.pop();
 }
 
 bool LinkCutTree::OperationCut::make_step()
@@ -345,7 +360,7 @@ bool LinkCutTree::OperationCut::make_step()
             SequenceLog::add("disconnect the left subtree");
             v->left->parent = nullptr;
             v->left = nullptr;
-            v->update_my_aggregates();
+            v->update_aggregates();
         }
 
         current_step = Step::finished;
@@ -370,12 +385,15 @@ LinkCutTree::OperationSplay::OperationSplay(Node * v)
     SequenceLog::step_in();
 
     this->v = v;
+    v->current_operations.push("splay");
 }
 
 LinkCutTree::OperationSplay::~OperationSplay()
 {
     SequenceLog::add("Splay finished!");
     SequenceLog::step_out();
+
+    v->current_operations.pop();
 }
 
 bool LinkCutTree::OperationSplay::make_step()

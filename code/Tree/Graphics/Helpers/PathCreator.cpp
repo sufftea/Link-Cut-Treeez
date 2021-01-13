@@ -2,7 +2,7 @@
 #include "Tree/Graphics/GraphicsSolidNodeItem.h"
 #include "Tree/Graphics/Helpers/PathSmoother.h"
 
-int PathCreator::step_length_px = 20;
+int PathCreator::step_length_px = 15;
 
 
 void PathCreator::add_to_opened(const Cell &cell,
@@ -12,7 +12,7 @@ void PathCreator::add_to_opened(const Cell &cell,
                                 QPoint startingPoint)
 {
     QGraphicsItem * obst = scene->itemAt(cell.pos, QTransform());
-    if (obst != nullptr) {
+    if (obst) {
         if (!is_inside(cell.pos, startingPoint, GraphicsSolidNodeItem::node_bound_size_px / 2)) {
             return;
         }
@@ -37,8 +37,8 @@ bool PathCreator::is_inside(QPoint point, QPoint item_pos, int item_size)
 
 QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsScene *scene, int skip_points)
 {
-    from.rx() += (from.x() + from.y()) % 3;
-    from.ry() += (from.x() + from.y()) % 3;
+    from.rx() += (from.x() + from.y()) % 10;
+    from.ry() += (from.x() + from.y()) % 10;
 
     QHash<QPoint, Cell> opened;
     QHash<QPoint, Cell> closed;
@@ -56,7 +56,7 @@ QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsS
             }
         }
 
-        if (closed.size() > 2000) {
+        if (closed.size() > 4000) {
             closed[targ] = Cell(targ, curr.pos, targ, curr.f + 1);
             break;
         }
@@ -95,13 +95,14 @@ QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsS
     QPoint curr_pos = closed[targ].prev;
     int i = 0;
     while (curr_pos != from) {
+        // skip some points (to make the path look smoother)
         if ( ! (i++ % (skip_points + 1)) ) {
             path.push_back(curr_pos);
         }
-
         curr_pos = closed[curr_pos].prev;
 
-        if (i > 70) {
+        // a hack to prevent infinite loop
+        if (i > 500) {
             break;
         }
     }

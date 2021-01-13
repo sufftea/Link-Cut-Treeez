@@ -123,10 +123,9 @@ QRectF GraphicsSolidNodeItem::boundingRect() const
 }
 
 void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
-{
+{ 
     // draw node's parent edge (can be a path-parent pointer or a normal edge)
     if (this->my_node->is_solid_root()) {
-        // since the node is a solid root, its parent is the path-parent
         if (this->my_node->parent != nullptr) {
             // draw the path-parent pointer
 
@@ -164,7 +163,6 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
                               QPointF(0, -8),
                               QPointF(0, 8)
                           });
-
             qreal angle = -path_parent_path.angleAtPercent(0);
             QMatrix rot;
             rot.rotate(angle);
@@ -177,33 +175,41 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
         // draw the edge
         QPointF a = QPoint(0, 0);
         QPointF b = this->my_node->parent->concrete_tree_graphics->pos() - this->pos();
-
         QPoint offset(GraphicsSolidNodeItem::node_size_px / 2,
                       GraphicsSolidNodeItem::node_size_px / 2);
-
         a += offset;
         b += offset;
-
         QVector2D ab(b.x() - a.x(), b.y() - a.y());
         QVector2D ba(a.x() - b.x(), a.y() - b.y());
-
         ab.normalize();
         ba.normalize();
-
         ab *= GraphicsSolidNodeItem::node_size_px / 2;
         ba *= GraphicsSolidNodeItem::node_size_px / 2;
-
         a += ab.toPoint();
         b += ba.toPoint();
 
         QPen white_pen(MyColors::white);
         white_pen.setWidth(7);
         painter->setPen(white_pen);
-
         painter->drawLine(QLineF(a, b));
     }
 
     // draw the node
     painter->drawPixmap(0, 0, this->pix);
+
+    // write the operations that are being performed on the node
+    QString operations;
+    for (QString &o : my_node->current_operations) {
+        operations += o + "\n";
+    }
+
+    QPen white_pen(MyColors::white);
+    painter->setPen(white_pen);
+
+    QFont font;
+    font.setPixelSize(20);
+    painter->setFont(font);
+
+    painter->drawText(QRect(node_size_px, 0, 100, 100), operations);
 }
 
