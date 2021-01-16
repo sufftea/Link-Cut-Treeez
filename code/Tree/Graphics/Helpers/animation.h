@@ -10,7 +10,7 @@
 class Animation
 {
     qreal t = 1;
-    qreal inc = 0.1;
+    qreal inc = 0.05;
     bool is_inversed = false;
     bool is_active = false;
     std::function<qreal(qreal)> easing_curve = Animation::linear;

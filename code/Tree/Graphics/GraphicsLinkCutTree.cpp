@@ -11,7 +11,7 @@ GraphicsLinkCutTree::GraphicsLinkCutTree()
     abstract_tree_scene = new QGraphicsScene;
 
     animation_timer = new QTimer;
-    animation_timer->setInterval(20);
+    animation_timer->setInterval(10);
     connect(animation_timer, SIGNAL(timeout()), this, SLOT(animate_scene()));
     animation_timer->start();
 
@@ -125,7 +125,7 @@ bool GraphicsLinkCutTree::set_animation_speed(qreal p)
     if (p <= 0 || p > 1) {
         return false;
     }
-    qreal max_inc = 0.2;
+    qreal max_inc = 0.04;
     qreal inc = max_inc * p;
 
     for (Node * node : tree.nodes) {

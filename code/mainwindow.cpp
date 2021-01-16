@@ -100,6 +100,7 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
         } else if (selected_nodes.size() == 2) {
             ui_components_frame->disable_operations_buttons();
             ui_components_frame->ui->pushButtonLink->setEnabled(true);
+            ui_components_frame->ui->pushButtonLCA->setEnabled(true);
         } else if (selected_nodes.size() == 3) {
             selected_nodes.first()->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeLooks::normal);
             selected_nodes.first()->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);

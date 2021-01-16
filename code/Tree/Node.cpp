@@ -1,12 +1,13 @@
 #include "Tree/Node.h"
 
-Node::Node(int weight)
+
+Node::Node(int value)
     : abstract(this)
 {   
-    this->value = weight;
-    this->sum_agg = weight;
-    this->min_agg = weight;
-    this->max_agg = weight;
+    this->value = value;
+    this->sum_agg = value;
+    this->min_agg = value;
+    this->max_agg = value;
 }
 
 Node::Node(Node * parent, int weight)
@@ -63,10 +64,6 @@ bool Node::try_zig_left()
         }
 
         // aggregates
-//        int p_new_sum = p->sum_agg - this->value - (C ? C->sum_agg : 0);
-//        int v_new_sum = this->sum_agg + p->value + (A ? A->sum_agg : 0);
-//        p->sum_agg = p_new_sum;
-//        this->sum_agg = v_new_sum;
         p->update_aggregates();
         this->update_aggregates();
 
@@ -118,10 +115,6 @@ bool Node::try_zig_right()
         }
 
         // aggregates
-//        int p_new_sum = p->sum_agg - this->value - (A ? A->sum_agg : 0);
-//        int v_new_sum = this->sum_agg + p->value + (C ? C->sum_agg : 0);
-//        p->sum_agg = p_new_sum;
-//        this->sum_agg = v_new_sum;
         p->update_aggregates();
         this->update_aggregates();
 
@@ -265,15 +258,6 @@ void Node::update_aggregates()
                       (this->left ? this->left->max_agg : INT32_MIN));
     this->max_agg = qMax(this->max_agg, this->value);
 }
-
-//void Node::update_aggregates_up()
-//{
-//    Node * p = this;
-//    while (p) {
-//        p->update_my_aggregates();
-//        p = p->parent;
-//    }
-//}
 
 Node *Node::get_solid_root()
 {

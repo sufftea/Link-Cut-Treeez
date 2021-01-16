@@ -29,16 +29,6 @@ FrameUiComponetns::FrameUiComponetns(GraphicsLinkCutTree &graphics_tree,
     ui->scrollAreaLog->stackUnder(ui->framePresetsList);
 
 
-    // other
-    ui->horizontalSliderAnimationSpeed->setValue(50);
-
-    disable_operations_buttons();
-
-    ui->framePresetsList->setMaximumHeight(0);
-
-    ui->labelSequence->setAttribute(Qt::WA_TransparentForMouseEvents);
-
-    ui->framePopUpDialog->setMaximumHeight(0);
 
     // animations
     showPresetsListAnimation = new QPropertyAnimation(this);
@@ -69,6 +59,21 @@ FrameUiComponetns::FrameUiComponetns(GraphicsLinkCutTree &graphics_tree,
     hidePopUpDialogAnimation->setEasingCurve(QEasingCurve::OutExpo);
     hidePopUpDialogAnimation->setDuration(300);
     hidePopUpDialogAnimation->setEndValue(0);
+
+
+    // other
+    connect(&auto_step_timer, &QTimer::timeout, this, &FrameUiComponetns::on_pushButtonMakeStep_clicked);
+
+    ui->horizontalSliderAnimationSpeed->setValue(50);
+    on_horizontalSliderAnimationSpeed_valueChanged(50);
+
+    disable_operations_buttons();
+
+    ui->framePresetsList->setMaximumHeight(0);
+
+    ui->labelSequence->setAttribute(Qt::WA_TransparentForMouseEvents);
+
+    ui->framePopUpDialog->setMaximumHeight(0);
 }
 
 FrameUiComponetns::~FrameUiComponetns()
@@ -103,6 +108,9 @@ void FrameUiComponetns::on_pushButtonMakeStep_clicked()
 void FrameUiComponetns::on_horizontalSliderAnimationSpeed_valueChanged(int value)
 {
     graphics_tree.set_animation_speed(qreal(value) / 100.0);
+
+    int max_interval = 3000;
+    auto_step_timer.setInterval(max_interval * (qreal(100 - value) / 100.0) + 100);
 }
 
 void FrameUiComponetns::on_pushButtonReset_clicked()
@@ -112,6 +120,8 @@ void FrameUiComponetns::on_pushButtonReset_clicked()
 
 void FrameUiComponetns::reset_tree()
 {
+    auto_step_timer.stop();
+
     selected_nodes.clear();
 
     graphics_tree.init(8);
@@ -137,6 +147,8 @@ void FrameUiComponetns::on_pushButtonExpose_clicked()
         selected_nodes[0]->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::normal);
 
         tree->finish_operation();
+        auto_step_timer.stop();
+
         SequenceLog::clear();
         tree->start_expose(selected_nodes[0]);
         ui->labelSequence->setText(SequenceLog::get_text());
@@ -153,6 +165,8 @@ void FrameUiComponetns::on_pushButtonCut_clicked()
 {
     if (selected_nodes.size() == 1) {
         tree->finish_operation();
+        auto_step_timer.stop();
+
         SequenceLog::clear();
 
         tree->start_cut(selected_nodes[0]);
@@ -169,6 +183,8 @@ void FrameUiComponetns::on_pushButtonLink_clicked()
 {
     if (selected_nodes.size() == 2) {
         tree->finish_operation();
+        auto_step_timer.stop();
+
         SequenceLog::clear();
 
         tree->start_link(selected_nodes[0], selected_nodes[1]);
@@ -191,10 +207,25 @@ void FrameUiComponetns::on_pushButtonLink_clicked()
 void FrameUiComponetns::on_pushButtonEndOperation_clicked()
 {
     tree->finish_operation();
+    auto_step_timer.stop();
+
     graphics_tree.update_scene();
     ui->labelSequence->setText(SequenceLog::get_text());
 
     ui->scrollAreaLog->verticalScrollBar()->setSliderPosition(ui->scrollAreaLog->height());
+}
+
+void FrameUiComponetns::on_pushButtonAutoStep_clicked()
+{
+    if (auto_step_timer.isActive()) {
+        auto_step_timer.stop();
+        ui->pushButtonAutoStep->setText("Auto");
+        ui->pushButtonAutoStep->setStyleSheet(ButtonStyles::switch_button_off);
+    } else {
+        auto_step_timer.start();
+        ui->pushButtonAutoStep->setText("Stop");
+        ui->pushButtonAutoStep->setStyleSheet(ButtonStyles::switch_button_on);
+    }
 }
 
 void FrameUiComponetns::on_pushButtonOpenPresets_clicked()
@@ -209,6 +240,8 @@ void FrameUiComponetns::on_pushButtonOpenPresets_clicked()
 
 void FrameUiComponetns::on_pushButtonPreset1_clicked()
 {
+    auto_step_timer.stop();
+
     selected_nodes.clear();
     hidePresetsListAnimation->start();
 
@@ -246,6 +279,8 @@ void FrameUiComponetns::on_pushButtonPreset1_clicked()
 
 void FrameUiComponetns::on_pushButtonPreset2_clicked()
 {
+    auto_step_timer.stop();
+
     selected_nodes.clear();
     hidePresetsListAnimation->start();
 
@@ -304,6 +339,8 @@ void FrameUiComponetns::on_pushButtonPreset2_clicked()
 
 void FrameUiComponetns::on_pushButtonPreset3_clicked()
 {
+    auto_step_timer.stop();
+
     selected_nodes.clear();
     hidePresetsListAnimation->start();
 
@@ -350,6 +387,8 @@ void FrameUiComponetns::on_pushButtonPreset3_clicked()
 
 void FrameUiComponetns::on_pushButtonPreset4_clicked()
 {
+    auto_step_timer.stop();
+
     selected_nodes.clear();
     hidePresetsListAnimation->start();
 
@@ -371,13 +410,16 @@ void FrameUiComponetns::on_pushButtonPreset4_clicked()
     tree->link(nodes[8], nodes[6]);
     tree->link(nodes[9], nodes[7]);
 
-    tree->expose(nodes[8]);
+    tree->expose(nodes[5]);
+    tree->expose(nodes[3]);
 
     graphics_tree.update_scene();
 }
 
 void FrameUiComponetns::on_pushButtonPreset5_clicked()
 {
+    auto_step_timer.stop();
+
     selected_nodes.clear();
     hidePresetsListAnimation->start();
 
@@ -414,8 +456,22 @@ void FrameUiComponetns::on_pushButtonPreset5_clicked()
 
 void FrameUiComponetns::on_pushButtonPreset6_clicked()
 {
+    auto_step_timer.stop();
+
     selected_nodes.clear();
     hidePresetsListAnimation->start();
+
+    graphics_tree.init(100);
+
+    QVector<Node*> &nodes = tree->nodes;
+
+    for (int i = 1; i < nodes.size(); ++i) {
+        int to = qrand() % i;
+        tree->link(nodes[i], nodes[to]);
+    }
+
+
+    graphics_tree.update_scene();
 }
 
 void FrameUiComponetns::on_pushButtonPreset7_clicked()
@@ -499,4 +555,22 @@ void FrameUiComponetns::on_pushButtonPathMax_clicked()
     ui->pushButtonPathSum->setStyleSheet(ButtonStyles::switch_button_off);
     ui->pushButtonPathMin->setStyleSheet(ButtonStyles::switch_button_off);
     ui->pushButtonPathMax->setStyleSheet(ButtonStyles::switch_button_on);
+}
+
+void FrameUiComponetns::on_pushButtonLCA_clicked()
+{
+    if (selected_nodes.size() == 2) {
+        tree->finish_operation();
+        auto_step_timer.stop();
+
+        SequenceLog::clear();
+
+        tree->start_lca(selected_nodes[0], selected_nodes[1]);
+        selected_nodes.clear();
+
+        graphics_tree.update_scene();
+
+        ui->labelSequence->setText(SequenceLog::get_text());
+        disable_operations_buttons();
+    }
 }

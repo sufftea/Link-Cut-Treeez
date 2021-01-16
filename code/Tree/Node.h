@@ -44,12 +44,13 @@ public:
     int max_agg;
     int sum_agg;
 
+
     QStack<QString> current_operations;
 
     /*
      * Stores graphical representation of the node (in the concrete tree)
      *
-     * A problem:
+     * Problem:
      * it's only needed for the GraphicsSolidNodeItem itself (to traverse
      * the tree while drawing it) and it may be deleted without the node
      * being aware of it.
@@ -81,7 +82,6 @@ public:
     void splay();
 
     void update_aggregates(); // updates min/max/sum only for the node
-//    void update_aggregates_up(); // updates aggregates from the node to the root
 
     // [n] -- number of nodes in the path
 

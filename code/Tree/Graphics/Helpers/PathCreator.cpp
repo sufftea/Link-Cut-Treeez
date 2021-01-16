@@ -62,7 +62,7 @@ QPainterPath PathCreator::create_path(QPoint from, QPoint targ, const QGraphicsS
         }
 
 
-        int skew = 7;
+        int skew = 0;
         QVector<QPoint> neighbours = {
             curr.pos + QPoint( step_length_px,   skew),
             curr.pos + QPoint( skew,             step_length_px),

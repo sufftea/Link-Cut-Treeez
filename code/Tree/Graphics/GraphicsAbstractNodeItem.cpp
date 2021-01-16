@@ -137,7 +137,7 @@ void GraphicsAbstractNodeItem::paint(QPainter *painter, const QStyleOptionGraphi
         text += "\nmin: " + QString::number(root->min_agg);
         text += "\nmax: " + QString::number(root->max_agg);
 
-        painter->drawText(QRect(60, -10, 100, 100),
+        painter->drawText(QRect(60, 0, 100, 100),
                           Qt::AlignLeft | Qt::AlignTop,
                           text);
     }

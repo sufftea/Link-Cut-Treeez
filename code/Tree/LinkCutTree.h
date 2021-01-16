@@ -76,7 +76,7 @@ private:
             start_expose_to,
             expose_to,
             link,
-            finished
+            failed
         };
 
         Step current_step = Step::start_expose_v;
@@ -113,6 +113,30 @@ private:
         bool make_step() override;
     };
 
+    class OperationLCA : public StepByStepOperation
+    {
+    private:
+        enum Step {
+            start_expose_a = 0,
+            expose_a,
+            start_expose_b,
+            expose_b,
+            end,
+            finished
+        };
+
+        Node * a;
+        Node * b;
+        Step current_step = start_expose_a;
+        OperationExpose * expose_operation = nullptr;
+
+    public:
+        OperationLCA(Node * a, Node * b);
+        ~OperationLCA() override;
+
+        bool make_step() override;
+    };
+
     StepByStepOperation * current_operation = nullptr;
 
 public:
@@ -140,6 +164,7 @@ public:
     void start_expose(Node * v); // DONE
     void start_link(Node * v, Node * u); // DONE
     void start_cut(Node * v); // DONE
+    void start_lca(Node * a, Node * b);
 
     /*
      * after an operation has been started, call this function

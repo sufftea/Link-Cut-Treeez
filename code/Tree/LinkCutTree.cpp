@@ -17,7 +17,7 @@ LinkCutTree::~LinkCutTree()
 
 void LinkCutTree::link(Node * v, Node * to)
 {
-    if (! v->is_abstract_root()) {
+    if (v == to || ! v->is_abstract_root()) {
         qDebug() << "can't link";
         return;
     }
@@ -111,6 +111,12 @@ void LinkCutTree::start_cut(Node *v)
 {
     finish_operation();
     current_operation = new OperationCut(v);
+}
+
+void LinkCutTree::start_lca(Node *a, Node *b)
+{
+    finish_operation();
+    current_operation = new OperationLCA(a, b);
 }
 
 bool LinkCutTree::make_step()
@@ -221,7 +227,7 @@ LinkCutTree::OperationLink::OperationLink(Node *v, Node *to)
         SequenceLog::add("Cannot link. "
                          + QString::number(v->value)
                          + " must be the root of an abstract tree");
-        current_step = Step::finished;
+        current_step = Step::failed;
 
         return;
     }
@@ -245,6 +251,10 @@ LinkCutTree::OperationLink::OperationLink(Node *v, Node *to)
 
 LinkCutTree::OperationLink::~OperationLink()
 {
+    if (current_step == Step::failed) {
+        return;
+    }
+
     SequenceLog::add("link finished!");
     SequenceLog::step_out();
 
@@ -293,12 +303,10 @@ bool LinkCutTree::OperationLink::make_step()
         to->update_aggregates();
         v->update_aggregates();
 
-        current_step = finished;
-
         return 0;
     }
 
-    else if (current_step == Step::finished) {
+    else if (current_step == Step::failed) {
         return 0;
     }
 
@@ -426,6 +434,62 @@ bool LinkCutTree::OperationSplay::make_step()
     if (v->try_zig_right()) {
         SequenceLog::add("Zig right");
         return 1;
+    }
+
+    return 1;
+}
+
+LinkCutTree::OperationLCA::OperationLCA(Node *a, Node *b)
+{
+    this->a = a;
+    this->b = b;
+
+    SequenceLog::add("LCA("
+                     + QString::number(a->value)
+                     + ", "
+                     + QString::number(b->value)
+                     + "):");
+    SequenceLog::step_in();
+
+    a->current_operations.push("LCA");
+    b->current_operations.push("LCA");
+}
+
+LinkCutTree::OperationLCA::~OperationLCA()
+{
+    SequenceLog::step_out();
+    if (this->expose_operation)
+        delete this->expose_operation;
+}
+
+bool LinkCutTree::OperationLCA::make_step()
+{
+    if (current_step == Step::start_expose_a) {
+        this->expose_operation = new OperationExpose(a);
+        current_step = Step::expose_a;
+    }else if (current_step == Step::expose_a) {
+        if ( ! expose_operation->make_step()) {
+            delete expose_operation;
+            expose_operation = nullptr;
+            current_step = Step::start_expose_b;
+        }
+    } else if (current_step == Step::start_expose_b) {
+        this->expose_operation = new OperationExpose(b);
+        current_step = Step::expose_b;
+    } else if (current_step == Step::expose_b) {
+        if ( ! expose_operation->make_step()) {
+            delete expose_operation;
+            expose_operation = nullptr;
+            current_step = Step::end;
+        }
+    } else if (current_step == Step::end) {
+        SequenceLog::add("The LCA is: "
+                         + QString::number(a->get_path_parent()->value));
+        a->get_path_parent()->concrete_tree_graphics->set_node_view(GraphicsSolidNodeItem::NodeLooks::user_selected);
+        a->get_path_parent()->abstract.graphics->set_view_type(GraphicsAbstractNodeItem::ViewType::user_selected);
+        current_step = Step::finished;
+    } else if (current_step == Step::finished) {
+        return 0;
     }
 
     return 1;

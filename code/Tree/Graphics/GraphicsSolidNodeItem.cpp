@@ -65,13 +65,13 @@ void GraphicsSolidNodeItem::update_pixmap()
 
     text = QString::number(my_node->value);
 
-    if (graphics_tree->get_displayed_data() == NodeData::max) {
-        text += "\n" + QString::number(my_node->max_agg);
-    } else if (graphics_tree->get_displayed_data() == NodeData::min) {
-        text += "\n" + QString::number(my_node->min_agg);
-    } else if (graphics_tree->get_displayed_data() == NodeData::sum) {
-        text += "\n" + QString::number(my_node->sum_agg);
-    }
+//    if (graphics_tree->get_displayed_data() == NodeData::max) {
+//        text += "\n" + QString::number(my_node->max_agg);
+//    } else if (graphics_tree->get_displayed_data() == NodeData::min) {
+//        text += "\n" + QString::number(my_node->min_agg);
+//    } else if (graphics_tree->get_displayed_data() == NodeData::sum) {
+//        text += "\n" + QString::number(my_node->sum_agg);
+//    }
 
     QFont font;
     font.setPixelSize(25);
@@ -197,19 +197,33 @@ void GraphicsSolidNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsI
     // draw the node
     painter->drawPixmap(0, 0, this->pix);
 
+
+    // whrite an aggregate function
+    QString aggregate;
+    if (graphics_tree->get_displayed_data() == NodeData::max) {
+        aggregate += "max: " + QString::number(my_node->max_agg);
+    } else if (graphics_tree->get_displayed_data() == NodeData::min) {
+        aggregate += "min:" + QString::number(my_node->min_agg);
+    } else if (graphics_tree->get_displayed_data() == NodeData::sum) {
+        aggregate += "sum:" + QString::number(my_node->sum_agg);
+    }
+
+    QFont font;
+    font.setPixelSize(20);
+    font.setWeight(5);
+    painter->setFont(font);
+    QPen white_pen(MyColors::white);
+    painter->setPen(white_pen);
+
+    painter->drawText(QRect(node_size_px, 0, 100, 100), aggregate);
+
     // write the operations that are being performed on the node
     QString operations;
     for (QString &o : my_node->current_operations) {
         operations += o + "\n";
     }
 
-    QPen white_pen(MyColors::white);
-    painter->setPen(white_pen);
 
-    QFont font;
-    font.setPixelSize(20);
-    painter->setFont(font);
-
-    painter->drawText(QRect(node_size_px, 0, 100, 100), operations);
+    painter->drawText(QRect(node_size_px, 25, 100, 100), operations);
 }
 

@@ -81,11 +81,13 @@ public:
     QFrame *frameOperationsButtons;
     QGridLayout *gridLayout;
     QPushButton *pushButtonExpose;
-    QPushButton *pushButtonCut;
     QPushButton *pushButtonLink;
+    QPushButton *pushButtonCut;
+    QPushButton *pushButtonLCA;
     QVBoxLayout *verticalLayout_2;
     QLabel *label;
     QSlider *horizontalSliderAnimationSpeed;
+    QPushButton *pushButtonAutoStep;
     QPushButton *pushButtonEndOperation;
     QPushButton *pushButtonMakeStep;
 
@@ -727,7 +729,7 @@ public:
 
         frameOperationsButtons = new QFrame(frame);
         frameOperationsButtons->setObjectName(QString::fromUtf8("frameOperationsButtons"));
-        frameOperationsButtons->setMaximumSize(QSize(207, 16777215));
+        frameOperationsButtons->setMaximumSize(QSize(314, 16777215));
         frameOperationsButtons->setFrameShape(QFrame::StyledPanel);
         frameOperationsButtons->setFrameShadow(QFrame::Raised);
         gridLayout = new QGridLayout(frameOperationsButtons);
@@ -760,36 +762,7 @@ public:
 "background-color: rgba(255, 255, 255, 20);\n"
 "}"));
 
-        gridLayout->addWidget(pushButtonExpose, 0, 0, 2, 1);
-
-        pushButtonCut = new QPushButton(frameOperationsButtons);
-        pushButtonCut->setObjectName(QString::fromUtf8("pushButtonCut"));
-        sizePolicy.setHeightForWidth(pushButtonCut->sizePolicy().hasHeightForWidth());
-        pushButtonCut->setSizePolicy(sizePolicy);
-        pushButtonCut->setMinimumSize(QSize(100, 0));
-        pushButtonCut->setMaximumSize(QSize(100, 16777215));
-        pushButtonCut->setFont(font3);
-        pushButtonCut->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"color: rgb(243, 234, 226);\n"
-"background-color: transparent;\n"
-"\n"
-"border-radius: 5px;\n"
-"border: 2px solid;\n"
-"border-color: rgb(243, 234, 226);\n"
-"}\n"
-"QPushButton:enabled:hover {\n"
-"background-color: rgb(0, 125, 176);\n"
-"}\n"
-"QPushButton:enabled:pressed {\n"
-"background-color:  rgb(0, 105, 156);\n"
-"}\n"
-"QPushButton:disabled {\n"
-"border-color: rgba(243, 234, 226, 100);\n"
-"color:  rgba(243, 234, 226, 100);\n"
-"background-color: rgba(255, 255, 255, 20);\n"
-"}"));
-
-        gridLayout->addWidget(pushButtonCut, 1, 1, 1, 1);
+        gridLayout->addWidget(pushButtonExpose, 0, 1, 2, 1);
 
         pushButtonLink = new QPushButton(frameOperationsButtons);
         pushButtonLink->setObjectName(QString::fromUtf8("pushButtonLink"));
@@ -818,7 +791,65 @@ public:
 "background-color: rgba(255, 255, 255, 20);\n"
 "}"));
 
-        gridLayout->addWidget(pushButtonLink, 0, 1, 1, 1);
+        gridLayout->addWidget(pushButtonLink, 0, 2, 1, 1);
+
+        pushButtonCut = new QPushButton(frameOperationsButtons);
+        pushButtonCut->setObjectName(QString::fromUtf8("pushButtonCut"));
+        sizePolicy.setHeightForWidth(pushButtonCut->sizePolicy().hasHeightForWidth());
+        pushButtonCut->setSizePolicy(sizePolicy);
+        pushButtonCut->setMinimumSize(QSize(100, 0));
+        pushButtonCut->setMaximumSize(QSize(100, 16777215));
+        pushButtonCut->setFont(font3);
+        pushButtonCut->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"color: rgb(243, 234, 226);\n"
+"background-color: transparent;\n"
+"\n"
+"border-radius: 5px;\n"
+"border: 2px solid;\n"
+"border-color: rgb(243, 234, 226);\n"
+"}\n"
+"QPushButton:enabled:hover {\n"
+"background-color: rgb(0, 125, 176);\n"
+"}\n"
+"QPushButton:enabled:pressed {\n"
+"background-color:  rgb(0, 105, 156);\n"
+"}\n"
+"QPushButton:disabled {\n"
+"border-color: rgba(243, 234, 226, 100);\n"
+"color:  rgba(243, 234, 226, 100);\n"
+"background-color: rgba(255, 255, 255, 20);\n"
+"}"));
+
+        gridLayout->addWidget(pushButtonCut, 1, 2, 1, 1);
+
+        pushButtonLCA = new QPushButton(frameOperationsButtons);
+        pushButtonLCA->setObjectName(QString::fromUtf8("pushButtonLCA"));
+        sizePolicy.setHeightForWidth(pushButtonLCA->sizePolicy().hasHeightForWidth());
+        pushButtonLCA->setSizePolicy(sizePolicy);
+        pushButtonLCA->setMinimumSize(QSize(100, 0));
+        pushButtonLCA->setMaximumSize(QSize(100, 16777215));
+        pushButtonLCA->setFont(font3);
+        pushButtonLCA->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"color: rgb(243, 234, 226);\n"
+"background-color: transparent;\n"
+"\n"
+"border-radius: 5px;\n"
+"border: 2px solid;\n"
+"border-color: rgb(243, 234, 226);\n"
+"}\n"
+"QPushButton:enabled:hover {\n"
+"background-color: rgb(0, 125, 176);\n"
+"}\n"
+"QPushButton:enabled:pressed {\n"
+"background-color:  rgb(0, 105, 156);\n"
+"}\n"
+"QPushButton:disabled {\n"
+"border-color: rgba(243, 234, 226, 100);\n"
+"color:  rgba(243, 234, 226, 100);\n"
+"background-color: rgba(255, 255, 255, 20);\n"
+"}"));
+
+        gridLayout->addWidget(pushButtonLCA, 0, 0, 2, 1);
 
 
         horizontalLayout->addWidget(frameOperationsButtons);
@@ -873,6 +904,30 @@ public:
 
 
         horizontalLayout->addLayout(verticalLayout_2);
+
+        pushButtonAutoStep = new QPushButton(frame);
+        pushButtonAutoStep->setObjectName(QString::fromUtf8("pushButtonAutoStep"));
+        sizePolicy.setHeightForWidth(pushButtonAutoStep->sizePolicy().hasHeightForWidth());
+        pushButtonAutoStep->setSizePolicy(sizePolicy);
+        pushButtonAutoStep->setMinimumSize(QSize(100, 0));
+        pushButtonAutoStep->setMaximumSize(QSize(100, 16777215));
+        pushButtonAutoStep->setFont(font3);
+        pushButtonAutoStep->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"color: rgb(243, 234, 226);\n"
+"background-color: transparent;\n"
+"\n"
+"border-radius: 5px;\n"
+"border: 2px solid;\n"
+"border-color: rgb(243, 234, 226);\n"
+"}\n"
+"QPushButton:enabled:hover {\n"
+"background-color: rgb(0, 125, 176);\n"
+"}\n"
+"QPushButton:enabled:pressed {\n"
+"background-color:  rgb(0, 105, 156);\n"
+"}"));
+
+        horizontalLayout->addWidget(pushButtonAutoStep);
 
         pushButtonEndOperation = new QPushButton(frame);
         pushButtonEndOperation->setObjectName(QString::fromUtf8("pushButtonEndOperation"));
@@ -935,7 +990,7 @@ public:
         pushButtonHideLog->setText(QCoreApplication::translate("FrameUiComponetns", "Hide Log", nullptr));
         pushButtonClearLog->setText(QCoreApplication::translate("FrameUiComponetns", "Clear", nullptr));
         pushButtonPreset7->setText(QCoreApplication::translate("FrameUiComponetns", "7", nullptr));
-        pushButtonPreset6->setText(QCoreApplication::translate("FrameUiComponetns", "6", nullptr));
+        pushButtonPreset6->setText(QCoreApplication::translate("FrameUiComponetns", "6 - big pp", nullptr));
         pushButtonPreset5->setText(QCoreApplication::translate("FrameUiComponetns", "5 - expose", nullptr));
         pushButtonPreset4->setText(QCoreApplication::translate("FrameUiComponetns", "4 - simple", nullptr));
         pushButtonPreset3->setText(QCoreApplication::translate("FrameUiComponetns", "3 - octopus", nullptr));
@@ -948,9 +1003,11 @@ public:
         pushButtonPathMax->setText(QCoreApplication::translate("FrameUiComponetns", "Max", nullptr));
         pushButtonPathSum->setText(QCoreApplication::translate("FrameUiComponetns", "Sum", nullptr));
         pushButtonExpose->setText(QCoreApplication::translate("FrameUiComponetns", "Expose", nullptr));
-        pushButtonCut->setText(QCoreApplication::translate("FrameUiComponetns", "Cut", nullptr));
         pushButtonLink->setText(QCoreApplication::translate("FrameUiComponetns", "Link", nullptr));
+        pushButtonCut->setText(QCoreApplication::translate("FrameUiComponetns", "Cut", nullptr));
+        pushButtonLCA->setText(QCoreApplication::translate("FrameUiComponetns", "LCA", nullptr));
         label->setText(QCoreApplication::translate("FrameUiComponetns", "animation speed", nullptr));
+        pushButtonAutoStep->setText(QCoreApplication::translate("FrameUiComponetns", "Auto", nullptr));
         pushButtonEndOperation->setText(QCoreApplication::translate("FrameUiComponetns", "End", nullptr));
         pushButtonMakeStep->setText(QCoreApplication::translate("FrameUiComponetns", "Step", nullptr));
     } // retranslateUi

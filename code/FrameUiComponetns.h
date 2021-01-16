@@ -45,6 +45,7 @@ private slots:
     void on_pushButtonCut_clicked();
     void on_pushButtonLink_clicked();
     void on_pushButtonEndOperation_clicked();
+    void on_pushButtonAutoStep_clicked();
     void on_pushButtonOpenPresets_clicked();
 
     void on_pushButtonPreset1_clicked();
@@ -65,6 +66,8 @@ private slots:
 
     void on_pushButtonPathMax_clicked();
 
+    void on_pushButtonLCA_clicked();
+
 private:
 
     QPropertyAnimation * showPresetsListAnimation;
@@ -84,6 +87,8 @@ private:
     // Abstract tree -- the one we *imagine* when talking about Link-Cut tree
     // Concrete tree -- the way the tree is *actually* stored in the memory
     QString current_tree_view = "concrete";
+
+    QTimer auto_step_timer;
 
     void reset_tree();
 };
