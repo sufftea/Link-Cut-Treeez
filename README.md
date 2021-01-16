@@ -33,7 +33,6 @@
 ![](pics/Update4.gif?raw=true "Title")
 
 # Update5
-delta--полнейший бред. Об этом понял только недавно. После Update7 ее нет.
 ![](pics/Update5.gif?raw=true "Title")
 
 # Update6: Абстрактное дерево
