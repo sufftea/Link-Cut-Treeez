@@ -1,19 +1,7 @@
 ﻿# Link-Cut-Treeez
 
-## На данный момент есть:
-  - Само link-cut дерево
-  - Реализованы функции (с пошаговым выполнением):
-      - expose()
-      - link()
-      - cut()
-      - splay()
-      - sum, min, max
-  - Вывод последовательности операций при выполнении функции
-  - отображение concrete tree
-  - отображение abstract tree
-  - анимация
-  - заготовленные варианты
-
+Link cut trees visualization.
+I'll add some more description later, but for nou you can look at the developement proggress from scratch down below
 
 # Update1: Первые успехи
 ![](pics/progress_so_far.gif?raw=true "Title")
@@ -41,7 +29,7 @@
 
 
 # Update7: почти все!
-тут без гифки
+no gif here :^(
 
 
 
