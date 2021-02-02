@@ -3,6 +3,8 @@
 Link cut trees visualization.
 I'll add some more description later, but for nou you can look at the developement proggress from scratch down below
 
+P.S. I'm terrible at naming variables
+
 # Update1: Первые успехи
 ![](pics/progress_so_far.gif?raw=true "Title")
 
