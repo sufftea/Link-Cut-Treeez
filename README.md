@@ -1,37 +1,31 @@
 ﻿# Link-Cut-Treeez
 
 Link cut trees visualization.
-I'll add some more description later, but for nou you can look at the developement proggress from scratch down below
 
-P.S. I'm terrible at naming variables
+# Abstract/represented tree
+![](pics/abstract_tree.gif)
 
-# Update1: Первые успехи
+# Concrete/auxiliary tree
+![](pics/concrete_tree.gif)
+
+
+You can look at the developement proggress from scratch below
+
+# Update1:
 ![](pics/progress_so_far.gif?raw=true "Title")
 
-# Update2: Улучшил отображение path parent pointer
-Теперь path-parent pointer не пересекает другие элементы.
- + фикс багов
- + организовал файлы (до этого все было в одной куче)
-
+# Update2:
 ![](pics/update2.gif?raw=true "Title")
 
 # Update3
 ![](pics/update3.gif?raw=true "Title")
 
-# Update4: UI (только начал)
+# Update4
 
 ![](pics/Update4.gif?raw=true "Title")
 
 # Update5
 ![](pics/Update5.gif?raw=true "Title")
 
-# Update6: Абстрактное дерево
-
+# Update6
 ![](pics/Update6.gif?raw=true "Title")
-
-
-# Update7: почти все!
-no gif here :^(
-
-
-
