@@ -20,9 +20,10 @@ Link cut tree alows to perform the following operations in O(log(n)) amortized t
 
 ### Abstract or represented tree
 Abstract tree is not stored in the memory; it's just the way we imagine a link-cut tree when working with it. 
-Each node can have an unlimited number of children and one prefered child (has a red edge on the visualizatio).
+Each node can have an unlimited number of children and one prefered child (has a red edge on the visualization).
 A chain of preferred children forms a preferred path. 
-The path-aggregate operations described above are performed on a prefered path.
+splay(v) seelects all the edges on the path from v to its root to make the path prefered.
+The path-aggregate operations described above are performed on a those prefered paths.
 
 ### Concrete or auxiliary tree
 The way link-cut tree is actually storred in the memory.
