@@ -8,24 +8,43 @@ Link cut trees visualization.
 # Concrete/auxiliary tree
 ![](pics/concrete_tree.gif)
 
+# A brief explanation of what it is
+Link cut tree alows to perform the following operations in O(log(n)) amortized time:
+- path-aggregate operations (on the path form a node to its root)
+  - sum(v)
+  - min(v)
+  - max(v)
+- find_root(v)
+- LCA(v, u);
+- add_const(v) (not implemented) - add a constant to each node on the path from v to the root
 
-You can look at the developement proggress from scratch below
+### Abstract or represented tree
+Abstract tree is not stored in the memory; it's just the way we imagine a link-cut tree when working with it; 
+Each node can have an unlimited number of children and one prefered child (has a red edge on the visualizatio).
+A chain of preferred children forms a preferred path. 
+The path-aggregate operations described above are performed on a prefered path.
 
-# Update1:
+### Concrete or auxiliary tree
+The way link-cut tree is actually storred in the memory.
+A forest of splay trees where each splay tree represents a phrefered path in the Abstract tree.
+The root of each splay tree contains a pointer (path-parent pointer) to its predecessor in the abstract tree.
+
+# You can look at the developement proggress from scratch below
+## Update1:
 ![](pics/progress_so_far.gif?raw=true "Title")
 
-# Update2:
+## Update2:
 ![](pics/update2.gif?raw=true "Title")
 
-# Update3
+## Update3
 ![](pics/update3.gif?raw=true "Title")
 
-# Update4
+## Update4
 
 ![](pics/Update4.gif?raw=true "Title")
 
-# Update5
+## Update5
 ![](pics/Update5.gif?raw=true "Title")
 
-# Update6
+## Update6
 ![](pics/Update6.gif?raw=true "Title")
