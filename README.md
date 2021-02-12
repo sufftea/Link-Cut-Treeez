@@ -19,7 +19,7 @@ Link cut tree alows to perform the following operations in O(log(n)) amortized t
 - add_const(v) (not implemented) - add a constant to each node on the path from v to the root
 
 ### Abstract or represented tree
-Abstract tree is not stored in the memory; it's just the way we imagine a link-cut tree when working with it; 
+Abstract tree is not stored in the memory; it's just the way we imagine a link-cut tree when working with it. 
 Each node can have an unlimited number of children and one prefered child (has a red edge on the visualizatio).
 A chain of preferred children forms a preferred path. 
 The path-aggregate operations described above are performed on a prefered path.
