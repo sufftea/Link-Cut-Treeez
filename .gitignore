@@ -56,5 +56,5 @@ compile_commands.json
 # my
 build-*/**
 testForGitignore.txt
-**/*.pro.user
-**/*.pro.user.*
+code/*.pro.user
+code/*.pro.user.*
