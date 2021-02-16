@@ -33,7 +33,7 @@ The root of each splay tree contains a path-parent pointer to the path's predece
 
 
 
-## Gifs I was adding while developing this
+## I waas adding those while developing the program:
 ## Update1:
 ![](pics/progress_so_far.gif?raw=true "Title")
 
@@ -44,7 +44,6 @@ The root of each splay tree contains a path-parent pointer to the path's predece
 ![](pics/update3.gif?raw=true "Title")
 
 ## Update4
-
 ![](pics/Update4.gif?raw=true "Title")
 
 ## Update5
