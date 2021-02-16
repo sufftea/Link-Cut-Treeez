@@ -54,5 +54,5 @@ compile_commands.json
 *_qmlcache.qrc
 
 # my
-build*/
+build-*/**
 testForGitignore.txt
