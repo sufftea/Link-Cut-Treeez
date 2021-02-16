@@ -55,5 +55,10 @@ compile_commands.json
 
 # my
 build-*/**
+
+# WHY DOESN'T THIS WORK???????
 **/*.pro.user
 **/*.pro.user.*
+
+# AT LEAST THIS???
+**/Link-Cut-Tree.pro.user
