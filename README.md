@@ -23,7 +23,7 @@ Abstract tree is not stored in the memory; it's the way we imagine a link-cut tr
 Each node can have an unlimited number of children and one prefered child (has red edge on the visualisation).
 A chain of preferred children forms a preferred path. 
 
-splay(v) seelects all the edges on the path from v to its root to make the path prefered.
+expose(v) seelects all the edges on the path from v to its root to make the path prefered.
 The path-aggregate operations described above are performed on prefered paths.
 
 ### Concrete or auxiliary tree
